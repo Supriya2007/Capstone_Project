@@ -1,0 +1,6 @@
+STATE var_declares
+    IF NAME EQUALTO 'a'
+	    PRINT LINE
+		VIOLATION var name should not be a
+	END_IF
+END_STATE

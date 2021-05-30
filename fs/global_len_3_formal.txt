@@ -1,0 +1,21 @@
+STATE before_parse
+	CREATE global_flag True
+END_STATE
+
+STATE function_header
+	GLOBAL_SET global_flag False
+END_STATE
+
+STATE function_end
+	GLOBAL_SET global_flag True
+END_STATE
+
+STATE var_declares
+	IF global_flag EQUALTO True
+	    LENGTH NAME
+	    IF NAME_len LESS_THAN 3
+	        PRINT LINE
+	        VIOLATION Global Var with len < 3
+	    END_IF
+	END_IF
+END_STATE

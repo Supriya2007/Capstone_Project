@@ -1,0 +1,6 @@
+STATE function_call
+    IF NAME EQUALTO "strcpy"
+	    PRINT LINE
+		VIOLATION Use strncpy instead of strcpy to avoid buffer overflow
+	END_IF
+END_STATE

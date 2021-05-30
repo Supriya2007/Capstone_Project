@@ -1,0 +1,8 @@
+CREATE <var_name> <initial_val>
+Create variable
+
+SET <name> <value>
+Setting value for a variable
+
+PRINT <value>
+Prints a single value.

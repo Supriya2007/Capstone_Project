@@ -1,0 +1,21 @@
+STATE before_parse
+	CREATE max_depth 0
+	CREATE depth 0
+	INPUT allowed_depth
+	CREATE line_nos []
+END_STATE
+
+STATE loop_header
+	GLOBAL_SET depth depth+1
+	GLOBAL_SET max_depth max(depth,max_depth)
+	IF depth GREATER_THAN allowed_depth
+		APPEND line_nos LINE
+		PRINT LINE
+		VIOLATION The depth of looping is greater than  the allowed_depth
+	END_IF
+END_STATE
+
+
+STATE loop_body
+	GLOBAL_SET depth depth-1
+END_STATE

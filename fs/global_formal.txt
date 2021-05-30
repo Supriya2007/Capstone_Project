@@ -1,0 +1,25 @@
+STATE before_parse
+	CREATE var_line_nums []
+END_STATE
+
+STATE var_declares
+	APPEND var_line_nums LINE
+END_STATE
+
+STATE function_parameters
+	GLOBAL_SET var_line_nums []
+END_STATE
+
+STATE function_end
+	GLOBAL_SET var_line_nums []
+END_STATE
+
+STATE declarations
+    USE_GLOBAL var_line_nums
+	FOR l IN var_line_nums
+	    PRINT l
+	    VIOLATION Global Variable Found
+    END_FOR
+    SET var_line_nums []
+END_STATE
+

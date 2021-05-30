@@ -1,0 +1,18 @@
+STATE before_parse
+	CREATE func_decs_l []
+END_STATE
+
+STATE function_call
+	IF NAME NOTIN func_decs_l
+	    PRINT LINE
+		VIOLATION Function called before declaration
+    END_IF
+END_STATE	
+
+STATE function_header
+	APPEND func_decs_l NAME	
+END_STATE
+
+STATE function_prototype
+	APPEND func_decs_l NAME	
+END_STATE

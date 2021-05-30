@@ -1,0 +1,18 @@
+STATE before_parse
+    CREATE in_switch_before_case_flag False
+END_STATE
+
+STATE switch_stmt
+    GLOBAL_SET in_switch_before_case_flag True
+END_STATE
+
+STATE case_stmt
+    GLOBAL_SET in_switch_before_case_flag False
+END_STATE
+
+STATE var_declares
+    IF in_switch_before_case_flag EQUALTO True
+        PRINT LINE
+        VIOLATION Variable declared in switch outside before case statent   
+    END_IF
+END_STATE

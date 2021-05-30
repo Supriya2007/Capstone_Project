@@ -1,0 +1,8 @@
+STATE var_declares
+    LENGTH NAME
+    CREATE n 4
+    IF NAME_len LESS_THAN n
+        PRINT LINE
+        VIOLATION Var has length < n
+    END_IF
+END_STATE

@@ -1,0 +1,87 @@
+STATE before_parse
+    CREATE var_name ""
+    CREATE line_num 0
+    CREATE lhs_var_name ""
+    CREATE lhs_line_num 0
+    CREATE malloc_called_flag False
+    CREATE malloced_variables {}
+    CREATE is_null_flag False
+    CREATE double_equals_lhs_var ""
+    CREATE double_equals_line_num 0
+END_STATE
+
+STATE variable
+    USE_GLOBAL var_name
+    USE_GLOBAL is_null_flag
+    USE_GLOBAL line_num
+    SET var_name NAME
+    SET line_num LINE
+    IF var_name EQUALTO "NULL"
+        SET is_null_flag True
+    END_IF
+END_STATE
+
+STATE function_call
+    USE_GLOBAL malloc_called_flag
+    IF NAME EQUALTO "malloc"
+        SET malloc_called_flag True
+    END_IF
+    IF NAME EQUALTO "calloc"
+        SET malloc_called_flag True
+    END_IF
+END_STATE
+
+STATE equality_cond
+    USE_GLOBAL is_null_flag
+    USE_GLOBAL double_equals_lhs_var
+    USE_GLOBAL malloced_variables
+    USE_GLOBAL double_equals_line_num
+    CREATE min_diff 100000000
+    CREATE min_line_num 0
+    IF is_null_flag EQUALTO True
+        FOR line_num IN malloced_variables
+            INDEX malloced_variables line_num
+            IF double_equals_lhs_var EQUALTO malloced_variables_line_num
+                CREATE diff double_equals_line_num-line_num
+                IF diff LESS_THAN min_diff
+                    SET min_line_num line_num
+                END_IF 
+            END_IF
+        END_FOR
+        DICT_REMOVE malloced_variables min_line_num
+    END_IF  
+    SET is_null_flag False
+END_STATE
+
+STATE equality_cond_lhs
+    USE_GLOBAL double_equals_lhs_var
+    USE_GLOBAL var_name
+    USE_GLOBAL double_equals_line_num
+    SET double_equals_lhs_var var_name 
+    SET double_equals_line_num line_num
+END_STATE
+
+STATE variable_assignments
+    USE_GLOBAL malloced_variables
+    USE_GLOBAL malloc_called_flag
+    USE_GLOBAL lhs_var_name
+    USE_GLOBAL lhs_line_num
+    IF malloc_called_flag EQUALTO True
+        DICT_APPEND malloced_variables lhs_line_num  lhs_var_name        
+    END_IF
+    SET malloc_called_flag False
+END_STATE
+
+STATE assignment_lhs
+    USE_GLOBAL lhs_var_name
+    USE_GLOBAL lhs_line_num
+    SET lhs_var_name var_name
+    SET lhs_line_num line_num
+END_STATE
+
+STATE after_parse
+    FOR key IN malloced_variables
+        PRINT key
+        VIOLATION Return type of malloc/calloc may be NULL
+    END_FOR
+END_STATE

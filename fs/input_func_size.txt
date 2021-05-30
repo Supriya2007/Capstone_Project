@@ -1,0 +1,23 @@
+STATE before_parse
+    CREATE count 0
+END_STATE
+
+STATE function_header
+    GLOBAL_SET count 0
+END_STATE
+
+STATE declaration_stmt
+    GLOBAL_SET count count+1
+END_STATE
+
+STATE func_statements
+    GLOBAL_SET count count+1
+END_STATE
+
+STATE function_end
+    INPUT max_size
+    IF count GREATER_THAN max_size
+        PRINT LINE
+        VIOLATION Too many statements grouped into a function
+    END_IF
+END_STATE

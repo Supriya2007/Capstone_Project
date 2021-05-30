@@ -1,0 +1,1044 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Grammar
+
+Rule 0     S' -> program
+Rule 1     program -> outermost_unit program
+Rule 2     program -> empty
+Rule 3     outermost_unit -> var_declares
+Rule 4     outermost_unit -> proto_or_defn
+Rule 5     proto_or_defn -> common_prefix suffix
+Rule 6     common_prefix -> TYPE ID ( param_list )
+Rule 7     suffix -> prototype
+Rule 8     suffix -> func_defn
+Rule 9     prototype -> ;
+Rule 10    func_defn -> { statements_block }
+Rule 11    param_list -> has_args
+Rule 12    param_list -> empty
+Rule 13    has_args -> TYPE ID , has_args
+Rule 14    has_args -> TYPE ID
+Rule 15    statements_block -> statement statements_block
+Rule 16    statements_block -> statement
+Rule 17    statement -> var_declares
+Rule 18    statement -> operation
+Rule 19    statement -> assignment
+Rule 20    statement -> func_call
+Rule 21    statement -> loop_stmt
+Rule 22    loop_stmt -> loop_header loop_body
+Rule 23    loop_header -> while ( cond )
+Rule 24    loop_header -> for ( cond )
+Rule 25    loop_body -> { statements_block }
+Rule 26    cond -> rval relop rval
+Rule 27    cond -> assignment cond ; operation1
+Rule 28    var_declares -> TYPE ID ;
+Rule 29    assignment -> ID EQUAL rval ;
+Rule 30    operation -> ID EQUAL rval OPER rval ;
+Rule 31    operation1 -> ID EQUAL rval OPER rval
+Rule 32    rval -> ID
+Rule 33    rval -> NUMBER
+Rule 34    empty -> <empty>
+Rule 35    func_call -> call_with_args
+Rule 36    func_call -> call_without_args
+Rule 37    call_with_args -> ID EQUAL ID ( arg_list ) ;
+Rule 38    call_without_args -> ID ( arg_list ) ;
+Rule 39    arg_list -> has_call_args
+Rule 40    arg_list -> empty
+Rule 41    has_call_args -> has_call_args , rval
+Rule 42    has_call_args -> rval
+
+Terminals, with rules where they appear
+
+(                    : 6 23 24 37 38
+)                    : 6 23 24 37 38
+,                    : 13 41
+;                    : 9 27 28 29 30 37 38
+EQUAL                : 29 30 31 37
+ID                   : 6 13 14 28 29 30 31 32 37 37 38
+NUMBER               : 33
+OPER                 : 30 31
+TYPE                 : 6 13 14 28
+error                : 
+for                  : 24
+relop                : 26
+while                : 23
+{                    : 10 25
+}                    : 10 25
+
+Nonterminals, with rules where they appear
+
+arg_list             : 37 38
+assignment           : 19 27
+call_with_args       : 35
+call_without_args    : 36
+common_prefix        : 5
+cond                 : 23 24 27
+empty                : 2 12 40
+func_call            : 20
+func_defn            : 8
+has_args             : 11 13
+has_call_args        : 39 41
+loop_body            : 22
+loop_header          : 22
+loop_stmt            : 21
+operation            : 18
+operation1           : 27
+outermost_unit       : 1
+param_list           : 6
+program              : 1 0
+proto_or_defn        : 4
+prototype            : 7
+rval                 : 26 26 29 30 30 31 31 41 42
+statement            : 15 16
+statements_block     : 10 15 25
+suffix               : 5
+var_declares         : 3 17
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . program
+    (1) program -> . outermost_unit program
+    (2) program -> . empty
+    (3) outermost_unit -> . var_declares
+    (4) outermost_unit -> . proto_or_defn
+    (34) empty -> .
+    (28) var_declares -> . TYPE ID ;
+    (5) proto_or_defn -> . common_prefix suffix
+    (6) common_prefix -> . TYPE ID ( param_list )
+
+    $end            reduce using rule 34 (empty -> .)
+    TYPE            shift and go to state 6
+
+    program                        shift and go to state 1
+    outermost_unit                 shift and go to state 2
+    empty                          shift and go to state 3
+    var_declares                   shift and go to state 4
+    proto_or_defn                  shift and go to state 5
+    common_prefix                  shift and go to state 7
+
+state 1
+
+    (0) S' -> program .
+
+
+
+state 2
+
+    (1) program -> outermost_unit . program
+    (1) program -> . outermost_unit program
+    (2) program -> . empty
+    (3) outermost_unit -> . var_declares
+    (4) outermost_unit -> . proto_or_defn
+    (34) empty -> .
+    (28) var_declares -> . TYPE ID ;
+    (5) proto_or_defn -> . common_prefix suffix
+    (6) common_prefix -> . TYPE ID ( param_list )
+
+    $end            reduce using rule 34 (empty -> .)
+    TYPE            shift and go to state 6
+
+    outermost_unit                 shift and go to state 2
+    program                        shift and go to state 8
+    empty                          shift and go to state 3
+    var_declares                   shift and go to state 4
+    proto_or_defn                  shift and go to state 5
+    common_prefix                  shift and go to state 7
+
+state 3
+
+    (2) program -> empty .
+
+    $end            reduce using rule 2 (program -> empty .)
+
+
+state 4
+
+    (3) outermost_unit -> var_declares .
+
+    TYPE            reduce using rule 3 (outermost_unit -> var_declares .)
+    $end            reduce using rule 3 (outermost_unit -> var_declares .)
+
+
+state 5
+
+    (4) outermost_unit -> proto_or_defn .
+
+    TYPE            reduce using rule 4 (outermost_unit -> proto_or_defn .)
+    $end            reduce using rule 4 (outermost_unit -> proto_or_defn .)
+
+
+state 6
+
+    (28) var_declares -> TYPE . ID ;
+    (6) common_prefix -> TYPE . ID ( param_list )
+
+    ID              shift and go to state 9
+
+
+state 7
+
+    (5) proto_or_defn -> common_prefix . suffix
+    (7) suffix -> . prototype
+    (8) suffix -> . func_defn
+    (9) prototype -> . ;
+    (10) func_defn -> . { statements_block }
+
+    ;               shift and go to state 13
+    {               shift and go to state 14
+
+    suffix                         shift and go to state 10
+    prototype                      shift and go to state 11
+    func_defn                      shift and go to state 12
+
+state 8
+
+    (1) program -> outermost_unit program .
+
+    $end            reduce using rule 1 (program -> outermost_unit program .)
+
+
+state 9
+
+    (28) var_declares -> TYPE ID . ;
+    (6) common_prefix -> TYPE ID . ( param_list )
+
+    ;               shift and go to state 15
+    (               shift and go to state 16
+
+
+state 10
+
+    (5) proto_or_defn -> common_prefix suffix .
+
+    TYPE            reduce using rule 5 (proto_or_defn -> common_prefix suffix .)
+    $end            reduce using rule 5 (proto_or_defn -> common_prefix suffix .)
+
+
+state 11
+
+    (7) suffix -> prototype .
+
+    TYPE            reduce using rule 7 (suffix -> prototype .)
+    $end            reduce using rule 7 (suffix -> prototype .)
+
+
+state 12
+
+    (8) suffix -> func_defn .
+
+    TYPE            reduce using rule 8 (suffix -> func_defn .)
+    $end            reduce using rule 8 (suffix -> func_defn .)
+
+
+state 13
+
+    (9) prototype -> ; .
+
+    TYPE            reduce using rule 9 (prototype -> ; .)
+    $end            reduce using rule 9 (prototype -> ; .)
+
+
+state 14
+
+    (10) func_defn -> { . statements_block }
+    (15) statements_block -> . statement statements_block
+    (16) statements_block -> . statement
+    (17) statement -> . var_declares
+    (18) statement -> . operation
+    (19) statement -> . assignment
+    (20) statement -> . func_call
+    (21) statement -> . loop_stmt
+    (28) var_declares -> . TYPE ID ;
+    (30) operation -> . ID EQUAL rval OPER rval ;
+    (29) assignment -> . ID EQUAL rval ;
+    (35) func_call -> . call_with_args
+    (36) func_call -> . call_without_args
+    (22) loop_stmt -> . loop_header loop_body
+    (37) call_with_args -> . ID EQUAL ID ( arg_list ) ;
+    (38) call_without_args -> . ID ( arg_list ) ;
+    (23) loop_header -> . while ( cond )
+    (24) loop_header -> . for ( cond )
+
+    TYPE            shift and go to state 24
+    ID              shift and go to state 25
+    while           shift and go to state 29
+    for             shift and go to state 30
+
+    statements_block               shift and go to state 17
+    statement                      shift and go to state 18
+    var_declares                   shift and go to state 19
+    operation                      shift and go to state 20
+    assignment                     shift and go to state 21
+    func_call                      shift and go to state 22
+    loop_stmt                      shift and go to state 23
+    call_with_args                 shift and go to state 26
+    call_without_args              shift and go to state 27
+    loop_header                    shift and go to state 28
+
+state 15
+
+    (28) var_declares -> TYPE ID ; .
+
+    TYPE            reduce using rule 28 (var_declares -> TYPE ID ; .)
+    $end            reduce using rule 28 (var_declares -> TYPE ID ; .)
+    ID              reduce using rule 28 (var_declares -> TYPE ID ; .)
+    while           reduce using rule 28 (var_declares -> TYPE ID ; .)
+    for             reduce using rule 28 (var_declares -> TYPE ID ; .)
+    }               reduce using rule 28 (var_declares -> TYPE ID ; .)
+
+
+state 16
+
+    (6) common_prefix -> TYPE ID ( . param_list )
+    (11) param_list -> . has_args
+    (12) param_list -> . empty
+    (13) has_args -> . TYPE ID , has_args
+    (14) has_args -> . TYPE ID
+    (34) empty -> .
+
+    TYPE            shift and go to state 31
+    )               reduce using rule 34 (empty -> .)
+
+    param_list                     shift and go to state 32
+    has_args                       shift and go to state 33
+    empty                          shift and go to state 34
+
+state 17
+
+    (10) func_defn -> { statements_block . }
+
+    }               shift and go to state 35
+
+
+state 18
+
+    (15) statements_block -> statement . statements_block
+    (16) statements_block -> statement .
+    (15) statements_block -> . statement statements_block
+    (16) statements_block -> . statement
+    (17) statement -> . var_declares
+    (18) statement -> . operation
+    (19) statement -> . assignment
+    (20) statement -> . func_call
+    (21) statement -> . loop_stmt
+    (28) var_declares -> . TYPE ID ;
+    (30) operation -> . ID EQUAL rval OPER rval ;
+    (29) assignment -> . ID EQUAL rval ;
+    (35) func_call -> . call_with_args
+    (36) func_call -> . call_without_args
+    (22) loop_stmt -> . loop_header loop_body
+    (37) call_with_args -> . ID EQUAL ID ( arg_list ) ;
+    (38) call_without_args -> . ID ( arg_list ) ;
+    (23) loop_header -> . while ( cond )
+    (24) loop_header -> . for ( cond )
+
+    }               reduce using rule 16 (statements_block -> statement .)
+    TYPE            shift and go to state 24
+    ID              shift and go to state 25
+    while           shift and go to state 29
+    for             shift and go to state 30
+
+    statement                      shift and go to state 18
+    statements_block               shift and go to state 36
+    var_declares                   shift and go to state 19
+    operation                      shift and go to state 20
+    assignment                     shift and go to state 21
+    func_call                      shift and go to state 22
+    loop_stmt                      shift and go to state 23
+    call_with_args                 shift and go to state 26
+    call_without_args              shift and go to state 27
+    loop_header                    shift and go to state 28
+
+state 19
+
+    (17) statement -> var_declares .
+
+    TYPE            reduce using rule 17 (statement -> var_declares .)
+    ID              reduce using rule 17 (statement -> var_declares .)
+    while           reduce using rule 17 (statement -> var_declares .)
+    for             reduce using rule 17 (statement -> var_declares .)
+    }               reduce using rule 17 (statement -> var_declares .)
+
+
+state 20
+
+    (18) statement -> operation .
+
+    TYPE            reduce using rule 18 (statement -> operation .)
+    ID              reduce using rule 18 (statement -> operation .)
+    while           reduce using rule 18 (statement -> operation .)
+    for             reduce using rule 18 (statement -> operation .)
+    }               reduce using rule 18 (statement -> operation .)
+
+
+state 21
+
+    (19) statement -> assignment .
+
+    TYPE            reduce using rule 19 (statement -> assignment .)
+    ID              reduce using rule 19 (statement -> assignment .)
+    while           reduce using rule 19 (statement -> assignment .)
+    for             reduce using rule 19 (statement -> assignment .)
+    }               reduce using rule 19 (statement -> assignment .)
+
+
+state 22
+
+    (20) statement -> func_call .
+
+    TYPE            reduce using rule 20 (statement -> func_call .)
+    ID              reduce using rule 20 (statement -> func_call .)
+    while           reduce using rule 20 (statement -> func_call .)
+    for             reduce using rule 20 (statement -> func_call .)
+    }               reduce using rule 20 (statement -> func_call .)
+
+
+state 23
+
+    (21) statement -> loop_stmt .
+
+    TYPE            reduce using rule 21 (statement -> loop_stmt .)
+    ID              reduce using rule 21 (statement -> loop_stmt .)
+    while           reduce using rule 21 (statement -> loop_stmt .)
+    for             reduce using rule 21 (statement -> loop_stmt .)
+    }               reduce using rule 21 (statement -> loop_stmt .)
+
+
+state 24
+
+    (28) var_declares -> TYPE . ID ;
+
+    ID              shift and go to state 37
+
+
+state 25
+
+    (30) operation -> ID . EQUAL rval OPER rval ;
+    (29) assignment -> ID . EQUAL rval ;
+    (37) call_with_args -> ID . EQUAL ID ( arg_list ) ;
+    (38) call_without_args -> ID . ( arg_list ) ;
+
+    EQUAL           shift and go to state 38
+    (               shift and go to state 39
+
+
+state 26
+
+    (35) func_call -> call_with_args .
+
+    TYPE            reduce using rule 35 (func_call -> call_with_args .)
+    ID              reduce using rule 35 (func_call -> call_with_args .)
+    while           reduce using rule 35 (func_call -> call_with_args .)
+    for             reduce using rule 35 (func_call -> call_with_args .)
+    }               reduce using rule 35 (func_call -> call_with_args .)
+
+
+state 27
+
+    (36) func_call -> call_without_args .
+
+    TYPE            reduce using rule 36 (func_call -> call_without_args .)
+    ID              reduce using rule 36 (func_call -> call_without_args .)
+    while           reduce using rule 36 (func_call -> call_without_args .)
+    for             reduce using rule 36 (func_call -> call_without_args .)
+    }               reduce using rule 36 (func_call -> call_without_args .)
+
+
+state 28
+
+    (22) loop_stmt -> loop_header . loop_body
+    (25) loop_body -> . { statements_block }
+
+    {               shift and go to state 41
+
+    loop_body                      shift and go to state 40
+
+state 29
+
+    (23) loop_header -> while . ( cond )
+
+    (               shift and go to state 42
+
+
+state 30
+
+    (24) loop_header -> for . ( cond )
+
+    (               shift and go to state 43
+
+
+state 31
+
+    (13) has_args -> TYPE . ID , has_args
+    (14) has_args -> TYPE . ID
+
+    ID              shift and go to state 44
+
+
+state 32
+
+    (6) common_prefix -> TYPE ID ( param_list . )
+
+    )               shift and go to state 45
+
+
+state 33
+
+    (11) param_list -> has_args .
+
+    )               reduce using rule 11 (param_list -> has_args .)
+
+
+state 34
+
+    (12) param_list -> empty .
+
+    )               reduce using rule 12 (param_list -> empty .)
+
+
+state 35
+
+    (10) func_defn -> { statements_block } .
+
+    TYPE            reduce using rule 10 (func_defn -> { statements_block } .)
+    $end            reduce using rule 10 (func_defn -> { statements_block } .)
+
+
+state 36
+
+    (15) statements_block -> statement statements_block .
+
+    }               reduce using rule 15 (statements_block -> statement statements_block .)
+
+
+state 37
+
+    (28) var_declares -> TYPE ID . ;
+
+    ;               shift and go to state 15
+
+
+state 38
+
+    (30) operation -> ID EQUAL . rval OPER rval ;
+    (29) assignment -> ID EQUAL . rval ;
+    (37) call_with_args -> ID EQUAL . ID ( arg_list ) ;
+    (32) rval -> . ID
+    (33) rval -> . NUMBER
+
+    ID              shift and go to state 46
+    NUMBER          shift and go to state 48
+
+    rval                           shift and go to state 47
+
+state 39
+
+    (38) call_without_args -> ID ( . arg_list ) ;
+    (39) arg_list -> . has_call_args
+    (40) arg_list -> . empty
+    (41) has_call_args -> . has_call_args , rval
+    (42) has_call_args -> . rval
+    (34) empty -> .
+    (32) rval -> . ID
+    (33) rval -> . NUMBER
+
+    )               reduce using rule 34 (empty -> .)
+    ID              shift and go to state 49
+    NUMBER          shift and go to state 48
+
+    arg_list                       shift and go to state 50
+    has_call_args                  shift and go to state 51
+    empty                          shift and go to state 52
+    rval                           shift and go to state 53
+
+state 40
+
+    (22) loop_stmt -> loop_header loop_body .
+
+    TYPE            reduce using rule 22 (loop_stmt -> loop_header loop_body .)
+    ID              reduce using rule 22 (loop_stmt -> loop_header loop_body .)
+    while           reduce using rule 22 (loop_stmt -> loop_header loop_body .)
+    for             reduce using rule 22 (loop_stmt -> loop_header loop_body .)
+    }               reduce using rule 22 (loop_stmt -> loop_header loop_body .)
+
+
+state 41
+
+    (25) loop_body -> { . statements_block }
+    (15) statements_block -> . statement statements_block
+    (16) statements_block -> . statement
+    (17) statement -> . var_declares
+    (18) statement -> . operation
+    (19) statement -> . assignment
+    (20) statement -> . func_call
+    (21) statement -> . loop_stmt
+    (28) var_declares -> . TYPE ID ;
+    (30) operation -> . ID EQUAL rval OPER rval ;
+    (29) assignment -> . ID EQUAL rval ;
+    (35) func_call -> . call_with_args
+    (36) func_call -> . call_without_args
+    (22) loop_stmt -> . loop_header loop_body
+    (37) call_with_args -> . ID EQUAL ID ( arg_list ) ;
+    (38) call_without_args -> . ID ( arg_list ) ;
+    (23) loop_header -> . while ( cond )
+    (24) loop_header -> . for ( cond )
+
+    TYPE            shift and go to state 24
+    ID              shift and go to state 25
+    while           shift and go to state 29
+    for             shift and go to state 30
+
+    statements_block               shift and go to state 54
+    statement                      shift and go to state 18
+    var_declares                   shift and go to state 19
+    operation                      shift and go to state 20
+    assignment                     shift and go to state 21
+    func_call                      shift and go to state 22
+    loop_stmt                      shift and go to state 23
+    call_with_args                 shift and go to state 26
+    call_without_args              shift and go to state 27
+    loop_header                    shift and go to state 28
+
+state 42
+
+    (23) loop_header -> while ( . cond )
+    (26) cond -> . rval relop rval
+    (27) cond -> . assignment cond ; operation1
+    (32) rval -> . ID
+    (33) rval -> . NUMBER
+    (29) assignment -> . ID EQUAL rval ;
+
+    ID              shift and go to state 58
+    NUMBER          shift and go to state 48
+
+    cond                           shift and go to state 55
+    rval                           shift and go to state 56
+    assignment                     shift and go to state 57
+
+state 43
+
+    (24) loop_header -> for ( . cond )
+    (26) cond -> . rval relop rval
+    (27) cond -> . assignment cond ; operation1
+    (32) rval -> . ID
+    (33) rval -> . NUMBER
+    (29) assignment -> . ID EQUAL rval ;
+
+    ID              shift and go to state 58
+    NUMBER          shift and go to state 48
+
+    cond                           shift and go to state 59
+    rval                           shift and go to state 56
+    assignment                     shift and go to state 57
+
+state 44
+
+    (13) has_args -> TYPE ID . , has_args
+    (14) has_args -> TYPE ID .
+
+    ,               shift and go to state 60
+    )               reduce using rule 14 (has_args -> TYPE ID .)
+
+
+state 45
+
+    (6) common_prefix -> TYPE ID ( param_list ) .
+
+    ;               reduce using rule 6 (common_prefix -> TYPE ID ( param_list ) .)
+    {               reduce using rule 6 (common_prefix -> TYPE ID ( param_list ) .)
+
+
+state 46
+
+    (37) call_with_args -> ID EQUAL ID . ( arg_list ) ;
+    (32) rval -> ID .
+
+    (               shift and go to state 61
+    OPER            reduce using rule 32 (rval -> ID .)
+    ;               reduce using rule 32 (rval -> ID .)
+
+
+state 47
+
+    (30) operation -> ID EQUAL rval . OPER rval ;
+    (29) assignment -> ID EQUAL rval . ;
+
+    OPER            shift and go to state 62
+    ;               shift and go to state 63
+
+
+state 48
+
+    (33) rval -> NUMBER .
+
+    OPER            reduce using rule 33 (rval -> NUMBER .)
+    ;               reduce using rule 33 (rval -> NUMBER .)
+    ,               reduce using rule 33 (rval -> NUMBER .)
+    )               reduce using rule 33 (rval -> NUMBER .)
+    relop           reduce using rule 33 (rval -> NUMBER .)
+
+
+state 49
+
+    (32) rval -> ID .
+
+    ,               reduce using rule 32 (rval -> ID .)
+    )               reduce using rule 32 (rval -> ID .)
+    ;               reduce using rule 32 (rval -> ID .)
+    OPER            reduce using rule 32 (rval -> ID .)
+
+
+state 50
+
+    (38) call_without_args -> ID ( arg_list . ) ;
+
+    )               shift and go to state 64
+
+
+state 51
+
+    (39) arg_list -> has_call_args .
+    (41) has_call_args -> has_call_args . , rval
+
+    )               reduce using rule 39 (arg_list -> has_call_args .)
+    ,               shift and go to state 65
+
+
+state 52
+
+    (40) arg_list -> empty .
+
+    )               reduce using rule 40 (arg_list -> empty .)
+
+
+state 53
+
+    (42) has_call_args -> rval .
+
+    ,               reduce using rule 42 (has_call_args -> rval .)
+    )               reduce using rule 42 (has_call_args -> rval .)
+
+
+state 54
+
+    (25) loop_body -> { statements_block . }
+
+    }               shift and go to state 66
+
+
+state 55
+
+    (23) loop_header -> while ( cond . )
+
+    )               shift and go to state 67
+
+
+state 56
+
+    (26) cond -> rval . relop rval
+
+    relop           shift and go to state 68
+
+
+state 57
+
+    (27) cond -> assignment . cond ; operation1
+    (26) cond -> . rval relop rval
+    (27) cond -> . assignment cond ; operation1
+    (32) rval -> . ID
+    (33) rval -> . NUMBER
+    (29) assignment -> . ID EQUAL rval ;
+
+    ID              shift and go to state 58
+    NUMBER          shift and go to state 48
+
+    assignment                     shift and go to state 57
+    cond                           shift and go to state 69
+    rval                           shift and go to state 56
+
+state 58
+
+    (32) rval -> ID .
+    (29) assignment -> ID . EQUAL rval ;
+
+    relop           reduce using rule 32 (rval -> ID .)
+    EQUAL           shift and go to state 70
+
+
+state 59
+
+    (24) loop_header -> for ( cond . )
+
+    )               shift and go to state 71
+
+
+state 60
+
+    (13) has_args -> TYPE ID , . has_args
+    (13) has_args -> . TYPE ID , has_args
+    (14) has_args -> . TYPE ID
+
+    TYPE            shift and go to state 31
+
+    has_args                       shift and go to state 72
+
+state 61
+
+    (37) call_with_args -> ID EQUAL ID ( . arg_list ) ;
+    (39) arg_list -> . has_call_args
+    (40) arg_list -> . empty
+    (41) has_call_args -> . has_call_args , rval
+    (42) has_call_args -> . rval
+    (34) empty -> .
+    (32) rval -> . ID
+    (33) rval -> . NUMBER
+
+    )               reduce using rule 34 (empty -> .)
+    ID              shift and go to state 49
+    NUMBER          shift and go to state 48
+
+    arg_list                       shift and go to state 73
+    has_call_args                  shift and go to state 51
+    empty                          shift and go to state 52
+    rval                           shift and go to state 53
+
+state 62
+
+    (30) operation -> ID EQUAL rval OPER . rval ;
+    (32) rval -> . ID
+    (33) rval -> . NUMBER
+
+    ID              shift and go to state 49
+    NUMBER          shift and go to state 48
+
+    rval                           shift and go to state 74
+
+state 63
+
+    (29) assignment -> ID EQUAL rval ; .
+
+    TYPE            reduce using rule 29 (assignment -> ID EQUAL rval ; .)
+    ID              reduce using rule 29 (assignment -> ID EQUAL rval ; .)
+    while           reduce using rule 29 (assignment -> ID EQUAL rval ; .)
+    for             reduce using rule 29 (assignment -> ID EQUAL rval ; .)
+    }               reduce using rule 29 (assignment -> ID EQUAL rval ; .)
+    NUMBER          reduce using rule 29 (assignment -> ID EQUAL rval ; .)
+
+
+state 64
+
+    (38) call_without_args -> ID ( arg_list ) . ;
+
+    ;               shift and go to state 75
+
+
+state 65
+
+    (41) has_call_args -> has_call_args , . rval
+    (32) rval -> . ID
+    (33) rval -> . NUMBER
+
+    ID              shift and go to state 49
+    NUMBER          shift and go to state 48
+
+    rval                           shift and go to state 76
+
+state 66
+
+    (25) loop_body -> { statements_block } .
+
+    TYPE            reduce using rule 25 (loop_body -> { statements_block } .)
+    ID              reduce using rule 25 (loop_body -> { statements_block } .)
+    while           reduce using rule 25 (loop_body -> { statements_block } .)
+    for             reduce using rule 25 (loop_body -> { statements_block } .)
+    }               reduce using rule 25 (loop_body -> { statements_block } .)
+
+
+state 67
+
+    (23) loop_header -> while ( cond ) .
+
+    {               reduce using rule 23 (loop_header -> while ( cond ) .)
+
+
+state 68
+
+    (26) cond -> rval relop . rval
+    (32) rval -> . ID
+    (33) rval -> . NUMBER
+
+    ID              shift and go to state 49
+    NUMBER          shift and go to state 48
+
+    rval                           shift and go to state 77
+
+state 69
+
+    (27) cond -> assignment cond . ; operation1
+
+    ;               shift and go to state 78
+
+
+state 70
+
+    (29) assignment -> ID EQUAL . rval ;
+    (32) rval -> . ID
+    (33) rval -> . NUMBER
+
+    ID              shift and go to state 49
+    NUMBER          shift and go to state 48
+
+    rval                           shift and go to state 79
+
+state 71
+
+    (24) loop_header -> for ( cond ) .
+
+    {               reduce using rule 24 (loop_header -> for ( cond ) .)
+
+
+state 72
+
+    (13) has_args -> TYPE ID , has_args .
+
+    )               reduce using rule 13 (has_args -> TYPE ID , has_args .)
+
+
+state 73
+
+    (37) call_with_args -> ID EQUAL ID ( arg_list . ) ;
+
+    )               shift and go to state 80
+
+
+state 74
+
+    (30) operation -> ID EQUAL rval OPER rval . ;
+
+    ;               shift and go to state 81
+
+
+state 75
+
+    (38) call_without_args -> ID ( arg_list ) ; .
+
+    TYPE            reduce using rule 38 (call_without_args -> ID ( arg_list ) ; .)
+    ID              reduce using rule 38 (call_without_args -> ID ( arg_list ) ; .)
+    while           reduce using rule 38 (call_without_args -> ID ( arg_list ) ; .)
+    for             reduce using rule 38 (call_without_args -> ID ( arg_list ) ; .)
+    }               reduce using rule 38 (call_without_args -> ID ( arg_list ) ; .)
+
+
+state 76
+
+    (41) has_call_args -> has_call_args , rval .
+
+    ,               reduce using rule 41 (has_call_args -> has_call_args , rval .)
+    )               reduce using rule 41 (has_call_args -> has_call_args , rval .)
+
+
+state 77
+
+    (26) cond -> rval relop rval .
+
+    )               reduce using rule 26 (cond -> rval relop rval .)
+    ;               reduce using rule 26 (cond -> rval relop rval .)
+
+
+state 78
+
+    (27) cond -> assignment cond ; . operation1
+    (31) operation1 -> . ID EQUAL rval OPER rval
+
+    ID              shift and go to state 83
+
+    operation1                     shift and go to state 82
+
+state 79
+
+    (29) assignment -> ID EQUAL rval . ;
+
+    ;               shift and go to state 63
+
+
+state 80
+
+    (37) call_with_args -> ID EQUAL ID ( arg_list ) . ;
+
+    ;               shift and go to state 84
+
+
+state 81
+
+    (30) operation -> ID EQUAL rval OPER rval ; .
+
+    TYPE            reduce using rule 30 (operation -> ID EQUAL rval OPER rval ; .)
+    ID              reduce using rule 30 (operation -> ID EQUAL rval OPER rval ; .)
+    while           reduce using rule 30 (operation -> ID EQUAL rval OPER rval ; .)
+    for             reduce using rule 30 (operation -> ID EQUAL rval OPER rval ; .)
+    }               reduce using rule 30 (operation -> ID EQUAL rval OPER rval ; .)
+
+
+state 82
+
+    (27) cond -> assignment cond ; operation1 .
+
+    )               reduce using rule 27 (cond -> assignment cond ; operation1 .)
+    ;               reduce using rule 27 (cond -> assignment cond ; operation1 .)
+
+
+state 83
+
+    (31) operation1 -> ID . EQUAL rval OPER rval
+
+    EQUAL           shift and go to state 85
+
+
+state 84
+
+    (37) call_with_args -> ID EQUAL ID ( arg_list ) ; .
+
+    TYPE            reduce using rule 37 (call_with_args -> ID EQUAL ID ( arg_list ) ; .)
+    ID              reduce using rule 37 (call_with_args -> ID EQUAL ID ( arg_list ) ; .)
+    while           reduce using rule 37 (call_with_args -> ID EQUAL ID ( arg_list ) ; .)
+    for             reduce using rule 37 (call_with_args -> ID EQUAL ID ( arg_list ) ; .)
+    }               reduce using rule 37 (call_with_args -> ID EQUAL ID ( arg_list ) ; .)
+
+
+state 85
+
+    (31) operation1 -> ID EQUAL . rval OPER rval
+    (32) rval -> . ID
+    (33) rval -> . NUMBER
+
+    ID              shift and go to state 49
+    NUMBER          shift and go to state 48
+
+    rval                           shift and go to state 86
+
+state 86
+
+    (31) operation1 -> ID EQUAL rval . OPER rval
+
+    OPER            shift and go to state 87
+
+
+state 87
+
+    (31) operation1 -> ID EQUAL rval OPER . rval
+    (32) rval -> . ID
+    (33) rval -> . NUMBER
+
+    ID              shift and go to state 49
+    NUMBER          shift and go to state 48
+
+    rval                           shift and go to state 88
+
+state 88
+
+    (31) operation1 -> ID EQUAL rval OPER rval .
+
+    )               reduce using rule 31 (operation1 -> ID EQUAL rval OPER rval .)
+    ;               reduce using rule 31 (operation1 -> ID EQUAL rval OPER rval .)
+

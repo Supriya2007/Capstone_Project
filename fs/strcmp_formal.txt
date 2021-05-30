@@ -1,0 +1,6 @@
+STATE function_call
+    IF NAME EQUALTO "strcmp"
+	    PRINT LINE
+		VIOLATION Use strncmp instead of strcmp to avoid buffer overflow
+	END_IF 
+END_STATE

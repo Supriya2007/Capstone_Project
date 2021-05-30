@@ -1,0 +1,6 @@
+STATE function_call
+    IF NAME EQUALTO "rewind"
+	    PRINT LINE
+		VIOLATION Use fseek instead of rewind
+	END_IF 
+END_STATE
