@@ -1,0 +1,22 @@
+STATE before_parse
+    CREATE uninitialized_vars []
+END_STATE
+
+STATE unintialized_declaration
+    APPEND uninitialized_vars NAME
+END_STATE
+
+STATE variable_assignments
+    IF LHS IN uninitialized_vars
+        REMOVE uninitialized_vars LHS
+    END_IF    
+END_STATE
+
+STATE expressions
+    FOR term IN EXPR
+        IF term IN uninitialized_vars
+            PRINT LINE
+            VIOLATION Uninitialized variable used
+        END_IF
+    END_FOR
+END_STATE
