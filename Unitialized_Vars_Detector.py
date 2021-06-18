@@ -9,6 +9,7 @@ start = 'translation_unit' #Sets the Start Symbol
 # Attributes can be added to any grammar symbol
 
 #def before_parse_main():
+uninitialized_vars = []
 #ADD
 
 def p_primary_expression(p):
@@ -17,7 +18,7 @@ def p_primary_expression(p):
     | const_or_parenthesis
     '''
     p[0] = p[1]
-    print("p_primary_expression", p[0])
+    #print("p_primary_expression", p[0])
     
 def p_const_or_parenthesis(p): 
     '''
@@ -34,7 +35,7 @@ def p_const_or_parenthesis(p):
     elif(len(p)==4):
         LINE = p.lineno(1)
         p[0]['line'] = p[2]['line']
-        p[0]['exp'] = [ p[1] ] + p[0]['exp'] + [ p[3] ]
+        p[0]['exp'] = [ p[1] ] + p[2]['exp'] + [ p[3] ]
     else:
         print("ERROR in p_const_or_parenthesis")
 
@@ -48,7 +49,7 @@ def p_variable_use(p):
     p[0]['name'] = NAME
     p[0]['line'] = LINE
     p[0]['exp'] = [ NAME ]
-    print("variable_use:", p[0])
+    #print("variable_use:", p[0])
        
 def p_function_call(p):
     '''
@@ -89,7 +90,7 @@ def p_postfix_expression(p):
         p[0]['line'] = LINE
     else:
         print("ERROR in p_postfix_expression")
-    print("postfix exp:", p[0])
+    #print("postfix exp:", p[0])
     #ADD
     
 
@@ -123,7 +124,7 @@ def p_unary_expression(p):
         p[0]['exp'] = [ p[1] ] + [ p[2] ] + p[3]['exp'] + [ p[4] ]
     else:
         print("ERROR in p_unary_expression")
-    print("p_unary_expression:", p[0])    
+    #print("p_unary_expression:", p[0])    
         
     NAME = p[1] 
     #Can handle name better, now that we have attribute grammar - check
@@ -184,7 +185,7 @@ def p_multiplicative_expression(p):
         p[0]['exp'] = p[0]['lhs'] + [ p[2] ] + p[0]['rhs']
     else:
         print("ERROR in p_multiplicative_expression")
-    print("p_multiplicative_expression:", p[0])
+    #print("p_multiplicative_expression:", p[0])
 
 
 def p_additive_expression(p):
@@ -203,7 +204,7 @@ def p_additive_expression(p):
         p[0]['exp'] = p[0]['lhs'] + [ p[2] ] + p[0]['rhs']
     else:
         print("ERROR in p_additive_expression")
-    print("In p_additive_expression:", p[0])
+    #print("In p_additive_expression:", p[0])
 
 def p_shift_expression(p):
     '''
@@ -317,10 +318,15 @@ def p_assignment_expression(p):
         p[0]['lhs'] = p[1]['exp']
         p[0]['rhs'] = p[3]['exp']
         p[0]['exp'] = p[1]['exp']+ p[2]['exp'] + p[3]['exp']
+        
+        LHS = p[0]['lhs'][0]
+        if(LHS in uninitialized_vars):
+            uninitialized_vars.remove(LHS);
+        
     else:
         print("ERROR in p_assignment_expression")
         
-    print("assignment_expression:", p[0])
+    #print("assignment_expression:", p[0])
     
 def p_assignment_lhs(p):
     '''
@@ -354,7 +360,30 @@ def p_expression(p):
     expression : assignment_expression
     | expression COMMA assignment_expression
     '''
-    pass
+    if(len(p)==2):
+        p[0] = p[1]
+    elif(len(p)==4):
+        p[0]['line'] = p[1]['line']
+        p[0]['exp'] = p[1]['exp'] + [p[2]] + p[3]['exp']
+    #print("In p_expression: ", p[0])
+    #print("In p_expression: ", p[0]['exp'])
+    EXP = p[0]['exp']
+    '''
+    is_rhs = False
+    for term in p[0]['exp']: #Assign EXP = p[0]['exp'], LINE = p[0]['line']
+        if(is_rhs):
+            if(term in uninitialized_vars):
+                print("VIOLATION: %s used on line-%d, but has garbage value"%(term, p[0]['line']))
+        else:
+            if(term == '='): #RHS starts after = 
+                is_rhs = True
+    '''
+    #Other than LHS of assignment_expression, if var used anywhere - violation
+    '''
+    for term in EXP:
+        if(term in uninitialized_vars):
+            print("VIOLATION: %s used on line-%d, but has garbage value"%(term, p[0]['line']))
+    '''
 
 def p_constant_expression(p):
     '''
@@ -393,7 +422,7 @@ def p_init_declarator_list(p):
         p[0]['exp'] = p[1]['exp'] + [ p[2] ] + p[3]['exp']
     else:
         print("ERROR in p_init_declarator_list")
-    print("p_init_declarator_list", p[0])    
+    #print("p_init_declarator_list", p[0])    
     
 def p_init_declarator(p):
     '''
@@ -401,7 +430,7 @@ def p_init_declarator(p):
     | initialized_declaration
     '''
     p[0] = p[1]
-    print("p_init_declarator", p[0])
+    #print("p_init_declarator", p[0])
     #ADD
     
 def p_initialized_declaration(p):
@@ -414,7 +443,7 @@ def p_initialized_declaration(p):
     p[0]['rhs'] = p[3]['exp']
     p[0]['exp'] = p[1]['exp'] + [ p[2] ] + p[3]['exp']
     #p[] = dict with 2 keys lhs, rhs
-    print("p_initialized_declaration", p[0])
+    #print("p_initialized_declaration", p[0])
     #ADD 
        
       
@@ -424,7 +453,8 @@ def p_uninitialized_declaration(p):
     '''  
     NAME = p[1]['name']
     p[0] = p[1]
-    print("p_uninitialized_declaration", p[0])
+    #print("p_uninitialized_declaration", p[0])
+    uninitialized_vars.append(NAME)
     #ADD  
 
 def p_storage_class_specifier(p):
@@ -549,7 +579,7 @@ def p_declarator(p):
         p[0]['exp'] = p[1]['exp']+p[2]['exp']
     else:
         print("ERROR in p_declarator: len of p neither 1 nor 3")
-    print("p_declarator:", p[0])
+    #print("p_declarator:", p[0])
     
 def p_direct_declarator(p):
     '''
@@ -557,7 +587,7 @@ def p_direct_declarator(p):
     | function_declaration
     '''
     p[0] = p[1] 
-    print("p_direct_declarator:", p[0])
+    #print("p_direct_declarator:", p[0])
     
 def  p_variable_declaration(p):
     '''
@@ -565,7 +595,7 @@ def  p_variable_declaration(p):
     | variable_declaration2
     '''    
     p[0] = p[1]
-    print("variable_declaration:", p[0])
+    #print("variable_declaration:", p[0])
     
 def p_variable_declaration1(p):
     '''
@@ -586,7 +616,7 @@ def p_variable_declaration1(p):
         p[0]['exp'] = [ p[1] ] + [ p[2] ] + [ p[3] ]
     else:
         print("ERROR in p_variable_declaration1")
-    print("variable_declaration1:", p[0])
+    #print("variable_declaration1:", p[0])
     #2nd & 3rd rules - arrays, 4th rule - function pointers
     #ADD   
     
@@ -597,7 +627,7 @@ def p_variable_declaration2(p):
    p[0] = {}
    p[0]['name'] = p[1]['name']
    p[0]['exp'] = [ p[1] ] + p[2]['exp'] + [ p[3] ]
-   print("p_variable_declaration2: ", p[0])
+   #print("p_variable_declaration2: ", p[0])
    #ADD
        
 def p_function_declaration(p):
@@ -612,7 +642,7 @@ def p_function_declaration(p):
     p[0] = {}
     p[0]['name'] = NAME
     p[0]['line'] = LINE
-    print("function declaration: ", p[0])
+    #print("function declaration: ", p[0])
     #ADD   
 
 def p_pointer(p):
@@ -632,7 +662,7 @@ def p_pointer(p):
         p[0]['exp'] = [ p[1] ] + p[2]['exp'] + p[3]['exp']
     else:
         print("ERROR in p_pointer:")
-    print("p_pointer:", p[0])
+    #print("p_pointer:", p[0])
     
 
 def p_type_qualifier_list(p):
@@ -767,7 +797,20 @@ def p_expression_statement(p):
     expression_statement : SEMI
     | expression SEMI
     '''
-    pass
+    #ADD
+    p[0] = {}
+    if(len(p)==2):
+        p[0]['line'] = p.lineno(1)
+        p[0]['exp'] = [ p[1] ]
+    elif(len(p)==3):
+        p[0]['line'] = p[1]['line']
+        p[0]['exp'] = p[1]['exp'] + [ p[2] ]
+    else:
+        print("ERROR in p_expression_statement")
+    EXPR = p[0]['exp']
+    for term in EXPR:
+        if(term in uninitialized_vars):
+            print("VIOLATION: %s used on line-%d, but has garbage value"%(term, p[0]['line']))
 
 def p_selection_statement(p):
     '''
