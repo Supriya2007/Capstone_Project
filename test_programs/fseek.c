@@ -1,10 +1,3 @@
-int v;
-int w;
-
-int f1();
-int f2();
-int f3(int a, int b);
-
 int f3(int a, int b){
     int a;
     int b;

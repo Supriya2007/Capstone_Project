@@ -1,28 +1,27 @@
-//For both malloc() and calloc()
+int f3(int a, int b){
+    int a;
+    int b;
+    int c;
+    c = a + b;
+    rewind(fp);
+    fseek(fp);
+}
 
-void *malloc(int size);
-void *calloc(int nmemb, int size);
+int f4(int a){
+    int d;
+    int e;
+    e = d+e;
+}
 
 int main(){
-    int *ptr1;
-    int *ptr2;
-    int *ptr3;
-    int *ptr4;
-    int *ptr5;
-    int var=10;
-    ptr1 = malloc(sizeof(int)*10);
-    if(ptr1 == NULL){
-        //printf("malloc failed\n");
-        exit(1);
-    }
-    ptr2 = &var;
-    ptr3 = malloc(sizeof(int)*10);
+    int a;
+    int b;
+    f1();
+    f3(a, b);
+    f4(1);
     
-    ptr4 = calloc(10, sizeof(int));
-    if(ptr4 == NULL){
-        //printf("malloc failed\n");
-        exit(1);
-    }
-    ptr5 = calloc(10, sizeof(int));
+    f5(a, b, c);
+    a = f6(1, 3, 4, a, b, c);
     
 }
+

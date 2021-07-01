@@ -67,9 +67,6 @@ def p_function_call(p):
     #FUNC_ARGS = [(type, arg_name)...] - for user to be able to use it in this production
     #p[0]['func_args'] = FUNC_ARGS - for user to be able to use it in parent productions
     #print("Function_call:", p[0])
-    if (NAME == "rewind") :
-        print(LINE)
-        print(' Use fseek instead of rewind')
     #ADD    
 
 def p_postfix_expression(p):

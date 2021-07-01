@@ -1,10 +1,6 @@
 STATE var_declares
-
 IF NAME.upper() EQUALTO NAME
-
-
     PRINT LINE
     VIOLATION Var is uppercase
 END_IF
-
 END_STATE
