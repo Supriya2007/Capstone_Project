@@ -4,6 +4,10 @@ from C_Lex import tokens
 start = 'translation_unit' #Sets the Start Symbol
 
 #def before_parse_main():
+found_calloc_flag = 0
+found_malloc_flag = 0
+line = 0
+found_sizeof_flag = 0
 #ADD
 
 def p_primary_expression(p):
@@ -47,7 +51,6 @@ def p_variable_use(p):
     #print("variable_use:", p[0])
     #ADD
 
-#TO BE DONE 
 def p_function_call(p):
     '''
     function_call : IDENTIFIER L_PAREN R_PAREN
@@ -67,9 +70,27 @@ def p_function_call(p):
     #FUNC_ARGS = [(type, arg_name)...] - for user to be able to use it in this production
     #p[0]['func_args'] = FUNC_ARGS - for user to be able to use it in parent productions
     #print("Function_call:", p[0])
-    if (NAME == "rewind") :
-        print(LINE)
-        print(' Use fseek instead of rewind')
+    global line
+    global found_calloc_flag
+    global found_malloc_flag
+    if (NAME == "calloc") :
+        found_calloc_flag = 1
+        line = LINE
+    if (NAME == "malloc") :
+        found_malloc_flag = 1
+        line = LINE
+    global found_sizeof_flag
+    if (found_calloc_flag == 1) :
+        if (found_sizeof_flag == 0) :
+            print(line)
+            print(' Use sizeof to determine the size of variable')
+    if (found_malloc_flag == 1) :
+        if (found_sizeof_flag == 0) :
+            print(line)
+            print(' Use sizeof to determine the size of variable')
+    found_calloc_flag = 0
+    found_malloc_flag = 0
+    found_sizeof_flag = 0
     #ADD    
 
 def p_postfix_expression(p):
@@ -143,6 +164,9 @@ def p_unary_expression(p):
         
     NAME = p[1] 
     #Can handle name better, now that we have attribute grammar - check
+    global found_sizeof_flag
+    if (NAME == "sizeof") :
+        found_sizeof_flag = 1
     #ADD
     
 def p_unary_op_before_cast_exp(p):
@@ -168,7 +192,6 @@ def p_unary_operator(p):
     p['exp'] = [ p[1] ]
     #print("p_unary_operator:", p[0])
 
-#TO BE DONE
 def p_cast_expression(p):
     '''
     cast_expression : unary_expression
@@ -367,7 +390,6 @@ def p_logical_or_expression(p):
     #print("p_logical_and_expression:", p[0])
     #ADD
 
-#TO BE DONE
 def p_conditional_expression(p):
     '''
     conditional_expression : logical_or_expression
@@ -442,24 +464,7 @@ def p_expression(p):
         p[0]['line'] = p[1]['line']
         p[0]['exp'] = p[1]['exp'] + [p[2]] + p[3]['exp']
     #print("In p_expression: ", p[0])
-    #print("In p_expression: ", p[0]['exp'])
     EXP = p[0]['exp']
-    '''
-    is_rhs = False
-    for term in p[0]['exp']: #Assign EXP = p[0]['exp'], LINE = p[0]['line']
-        if(is_rhs):
-            if(term in uninitialized_vars):
-                print("VIOLATION: %s used on line-%d, but has garbage value"%(term, p[0]['line']))
-        else:
-            if(term == '='): #RHS starts after = 
-                is_rhs = True
-    '''
-    #Other than LHS of assignment_expression, if var used anywhere - violation
-    '''
-    for term in EXP:
-        if(term in uninitialized_vars):
-            print("VIOLATION: %s used on line-%d, but has garbage value"%(term, p[0]['line']))
-    '''
     #ADD
 
 def p_constant_expression(p):
@@ -563,11 +568,9 @@ def p_storage_class_specifier(p):
     #print("p_storage_class_specifier:", p[0])
     #ADD
 
-#TO BE CHECKED
-#type(p[1]) == 'dict()':
-def p_type_specifier(p):
+def p_type(p):
     '''
-    type_specifier : VOID
+    type : VOID
     | CHAR
     | SHORT
     | INT
@@ -576,24 +579,23 @@ def p_type_specifier(p):
     | DOUBLE
     | SIGNED
     | UNSIGNED
-    | TYPE_NAME
+    '''
+    p[0] = {}
+    p[0]['line'] = p.lineno(1)
+    p[0]['type'] = p[1]
+    TYPE =p[1]
+    p[0]['exp'] = [ p[1] ]
+
+def p_type_specifier(p):
+    '''
+    type_specifier : type
     | struct_or_union_specifier
     | enum_specifier
     '''
-    p[0] = {}
-    if(p[1] == 'void' or p[1] == 'char' or p[1] == 'short' or p[1] == 'int' or p[1] == 'long' or p[1] == 'float' or p[1] == 'double' or \
-        p[1] == 'signed' or p[1] == 'unsigned' or p[1] == 'TYPE_NAME'):
-        p[0] = {}
-        p[0]['line'] = p.lineno(1)
-        p[0]['type'] = p[1]
-        TYPE =p[1]
-        p[0]['exp'] = [ p[1] ]
-    else:
-       p[0] = p[1]
+    p[0] = p[1]
     #print("p_type_specifier:", p[0])
     #ADD
 
-#TO BE CHECKED -- IDENTIFIER AS NAME ?
 def p_struct_or_union_specifier(p):
     '''
     struct_or_union_specifier : struct_or_union IDENTIFIER L_BRACE struct_declaration_list R_BRACE
@@ -922,7 +924,6 @@ def p_parameter_declaration(p):
     #print("p_parameter_declaration:", p[0])
     #ADD
 
-#TO BE CHECKED - IDENTIFIER - NAME or []
 def p_identifier_list(p):
     '''
     identifier_list : IDENTIFIER
@@ -994,7 +995,6 @@ def p_direct_abstract_declarator(p):
     #print("p_direct_abstract_declarator:", p[0])
     pass
 
-#TO BE DONE
 def p_initializer(p):
     '''
     initializer : assignment_expression
@@ -1056,7 +1056,6 @@ def p_labeled_statement(p):
     #print("p_labeled_statement:", p[0])
     #ADD
 
-   
 #C 89 allows variable declarations at the beginning of the block only. 
 def p_compound_statement(p):
     '''
@@ -1220,37 +1219,6 @@ def p_other_declarations(p):
     #print("Other declaration:",p[0])
     #ADD
 
-#def p_function_definition(p):
-#    '''
-#    function_definition : declaration_specifiers declarator declaration_list compound_statement
-#    | declaration_specifiers declarator compound_statement
-#    | declarator declaration_list compound_statement
-#    | declarator compound_statement
-#    '''
-#    pass
-
-#def p_function_header(p):
-#    '''
-#    function_header : declaration_specifiers declarator declaration_list
-#    | declaration_specifiers declarator
-#    | declarator declaration_list 
-#    | declarator
-#    '''
-#    pass
-    
-#def p_function_definition(p):
-#    '''
-#    function_definition : function_header compound_statement
-#    '''
-#    #ADD
-    
-#def p_function_header(p):
-#    '''
-#    function_header : declaration_specifiers declarator 
-#    | declarator  
-#    '''
-#    pass
-
 def p_function_header(p):
     '''
     function_header : fheader_type1
@@ -1275,7 +1243,6 @@ def p_fheader_type1(p):
     #print("p_fheader_type1:",p[0])
     #ADD
 
-#SHOULD ASK THIS  
 def p_fheader_type2(p):   
     '''
     fheader_type2 : function_declaration
@@ -1300,11 +1267,7 @@ def p_function_definition(p):
     elif(len(p) == 4):
         p[0]['exp'] = p[1]['exp'] + p[2]['exp'] + p[3]['exp']
     #print("p_function_definition:",p[0])
-    #ADD    
-      
-#def p_empty(p):
-#    'empty : '
-#    pass    
+    #ADD      
     
 def p_error(p):
     if p:

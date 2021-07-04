@@ -102,16 +102,16 @@ Rule 96    storage_class_specifier -> EXTERN
 Rule 97    storage_class_specifier -> STATIC
 Rule 98    storage_class_specifier -> AUTO
 Rule 99    storage_class_specifier -> REGISTER
-Rule 100   type_specifier -> VOID
-Rule 101   type_specifier -> CHAR
-Rule 102   type_specifier -> SHORT
-Rule 103   type_specifier -> INT
-Rule 104   type_specifier -> LONG
-Rule 105   type_specifier -> FLOAT
-Rule 106   type_specifier -> DOUBLE
-Rule 107   type_specifier -> SIGNED
-Rule 108   type_specifier -> UNSIGNED
-Rule 109   type_specifier -> TYPE_NAME
+Rule 100   type -> VOID
+Rule 101   type -> CHAR
+Rule 102   type -> SHORT
+Rule 103   type -> INT
+Rule 104   type -> LONG
+Rule 105   type -> FLOAT
+Rule 106   type -> DOUBLE
+Rule 107   type -> SIGNED
+Rule 108   type -> UNSIGNED
+Rule 109   type_specifier -> type
 Rule 110   type_specifier -> struct_or_union_specifier
 Rule 111   type_specifier -> enum_specifier
 Rule 112   struct_or_union_specifier -> struct_or_union IDENTIFIER L_BRACE struct_declaration_list R_BRACE
@@ -307,7 +307,6 @@ SUB_ASSIGN           : 72
 SWITCH               : 206
 TILDA                : 29
 TYPEDEF              : 95
-TYPE_NAME            : 109
 UNION                : 116
 UNSIGNED             : 108
 VOID                 : 100
@@ -387,6 +386,7 @@ struct_declarator_list : 119 125
 struct_or_union      : 112 113 114
 struct_or_union_specifier : 110
 translation_unit     : 218 0
+type                 : 109
 type_name            : 23 32
 type_qualifier       : 87 88 122 123 155 156
 type_qualifier_list  : 152 154 156
@@ -432,20 +432,20 @@ state 0
     (97) storage_class_specifier -> . STATIC
     (98) storage_class_specifier -> . AUTO
     (99) storage_class_specifier -> . REGISTER
-    (100) type_specifier -> . VOID
-    (101) type_specifier -> . CHAR
-    (102) type_specifier -> . SHORT
-    (103) type_specifier -> . INT
-    (104) type_specifier -> . LONG
-    (105) type_specifier -> . FLOAT
-    (106) type_specifier -> . DOUBLE
-    (107) type_specifier -> . SIGNED
-    (108) type_specifier -> . UNSIGNED
-    (109) type_specifier -> . TYPE_NAME
+    (109) type_specifier -> . type
     (110) type_specifier -> . struct_or_union_specifier
     (111) type_specifier -> . enum_specifier
     (136) type_qualifier -> . CONST
     (137) type_qualifier -> . VOLATILE
+    (100) type -> . VOID
+    (101) type -> . CHAR
+    (102) type -> . SHORT
+    (103) type -> . INT
+    (104) type -> . LONG
+    (105) type -> . FLOAT
+    (106) type -> . DOUBLE
+    (107) type -> . SIGNED
+    (108) type -> . UNSIGNED
     (112) struct_or_union_specifier -> . struct_or_union IDENTIFIER L_BRACE struct_declaration_list R_BRACE
     (113) struct_or_union_specifier -> . struct_or_union L_BRACE struct_declaration_list R_BRACE
     (114) struct_or_union_specifier -> . struct_or_union IDENTIFIER
@@ -461,18 +461,17 @@ state 0
     STATIC          shift and go to state 17
     AUTO            shift and go to state 18
     REGISTER        shift and go to state 19
-    VOID            shift and go to state 20
-    CHAR            shift and go to state 21
-    SHORT           shift and go to state 22
-    INT             shift and go to state 23
-    LONG            shift and go to state 24
-    FLOAT           shift and go to state 25
-    DOUBLE          shift and go to state 26
-    SIGNED          shift and go to state 27
-    UNSIGNED        shift and go to state 28
-    TYPE_NAME       shift and go to state 29
-    CONST           shift and go to state 32
-    VOLATILE        shift and go to state 33
+    CONST           shift and go to state 23
+    VOLATILE        shift and go to state 24
+    VOID            shift and go to state 25
+    CHAR            shift and go to state 26
+    SHORT           shift and go to state 27
+    INT             shift and go to state 28
+    LONG            shift and go to state 29
+    FLOAT           shift and go to state 30
+    DOUBLE          shift and go to state 31
+    SIGNED          shift and go to state 32
+    UNSIGNED        shift and go to state 33
     ENUM            shift and go to state 35
     STRUCT          shift and go to state 36
     UNION           shift and go to state 37
@@ -490,8 +489,9 @@ state 0
     storage_class_specifier        shift and go to state 11
     type_specifier                 shift and go to state 12
     type_qualifier                 shift and go to state 13
-    struct_or_union_specifier      shift and go to state 30
-    enum_specifier                 shift and go to state 31
+    type                           shift and go to state 20
+    struct_or_union_specifier      shift and go to state 21
+    enum_specifier                 shift and go to state 22
     struct_or_union                shift and go to state 34
 
 state 1
@@ -523,20 +523,20 @@ state 1
     (97) storage_class_specifier -> . STATIC
     (98) storage_class_specifier -> . AUTO
     (99) storage_class_specifier -> . REGISTER
-    (100) type_specifier -> . VOID
-    (101) type_specifier -> . CHAR
-    (102) type_specifier -> . SHORT
-    (103) type_specifier -> . INT
-    (104) type_specifier -> . LONG
-    (105) type_specifier -> . FLOAT
-    (106) type_specifier -> . DOUBLE
-    (107) type_specifier -> . SIGNED
-    (108) type_specifier -> . UNSIGNED
-    (109) type_specifier -> . TYPE_NAME
+    (109) type_specifier -> . type
     (110) type_specifier -> . struct_or_union_specifier
     (111) type_specifier -> . enum_specifier
     (136) type_qualifier -> . CONST
     (137) type_qualifier -> . VOLATILE
+    (100) type -> . VOID
+    (101) type -> . CHAR
+    (102) type -> . SHORT
+    (103) type -> . INT
+    (104) type -> . LONG
+    (105) type -> . FLOAT
+    (106) type -> . DOUBLE
+    (107) type -> . SIGNED
+    (108) type -> . UNSIGNED
     (112) struct_or_union_specifier -> . struct_or_union IDENTIFIER L_BRACE struct_declaration_list R_BRACE
     (113) struct_or_union_specifier -> . struct_or_union L_BRACE struct_declaration_list R_BRACE
     (114) struct_or_union_specifier -> . struct_or_union IDENTIFIER
@@ -552,18 +552,17 @@ state 1
     STATIC          shift and go to state 17
     AUTO            shift and go to state 18
     REGISTER        shift and go to state 19
-    VOID            shift and go to state 20
-    CHAR            shift and go to state 21
-    SHORT           shift and go to state 22
-    INT             shift and go to state 23
-    LONG            shift and go to state 24
-    FLOAT           shift and go to state 25
-    DOUBLE          shift and go to state 26
-    SIGNED          shift and go to state 27
-    UNSIGNED        shift and go to state 28
-    TYPE_NAME       shift and go to state 29
-    CONST           shift and go to state 32
-    VOLATILE        shift and go to state 33
+    CONST           shift and go to state 23
+    VOLATILE        shift and go to state 24
+    VOID            shift and go to state 25
+    CHAR            shift and go to state 26
+    SHORT           shift and go to state 27
+    INT             shift and go to state 28
+    LONG            shift and go to state 29
+    FLOAT           shift and go to state 30
+    DOUBLE          shift and go to state 31
+    SIGNED          shift and go to state 32
+    UNSIGNED        shift and go to state 33
     ENUM            shift and go to state 35
     STRUCT          shift and go to state 36
     UNION           shift and go to state 37
@@ -580,8 +579,9 @@ state 1
     storage_class_specifier        shift and go to state 11
     type_specifier                 shift and go to state 12
     type_qualifier                 shift and go to state 13
-    struct_or_union_specifier      shift and go to state 30
-    enum_specifier                 shift and go to state 31
+    type                           shift and go to state 20
+    struct_or_union_specifier      shift and go to state 21
+    enum_specifier                 shift and go to state 22
     struct_or_union                shift and go to state 34
 
 state 2
@@ -594,6 +594,8 @@ state 2
     STATIC          reduce using rule 217 (translation_unit -> external_declaration .)
     AUTO            reduce using rule 217 (translation_unit -> external_declaration .)
     REGISTER        reduce using rule 217 (translation_unit -> external_declaration .)
+    CONST           reduce using rule 217 (translation_unit -> external_declaration .)
+    VOLATILE        reduce using rule 217 (translation_unit -> external_declaration .)
     VOID            reduce using rule 217 (translation_unit -> external_declaration .)
     CHAR            reduce using rule 217 (translation_unit -> external_declaration .)
     SHORT           reduce using rule 217 (translation_unit -> external_declaration .)
@@ -603,9 +605,6 @@ state 2
     DOUBLE          reduce using rule 217 (translation_unit -> external_declaration .)
     SIGNED          reduce using rule 217 (translation_unit -> external_declaration .)
     UNSIGNED        reduce using rule 217 (translation_unit -> external_declaration .)
-    TYPE_NAME       reduce using rule 217 (translation_unit -> external_declaration .)
-    CONST           reduce using rule 217 (translation_unit -> external_declaration .)
-    VOLATILE        reduce using rule 217 (translation_unit -> external_declaration .)
     ENUM            reduce using rule 217 (translation_unit -> external_declaration .)
     STRUCT          reduce using rule 217 (translation_unit -> external_declaration .)
     UNION           reduce using rule 217 (translation_unit -> external_declaration .)
@@ -622,6 +621,8 @@ state 3
     STATIC          reduce using rule 219 (external_declaration -> function_definition .)
     AUTO            reduce using rule 219 (external_declaration -> function_definition .)
     REGISTER        reduce using rule 219 (external_declaration -> function_definition .)
+    CONST           reduce using rule 219 (external_declaration -> function_definition .)
+    VOLATILE        reduce using rule 219 (external_declaration -> function_definition .)
     VOID            reduce using rule 219 (external_declaration -> function_definition .)
     CHAR            reduce using rule 219 (external_declaration -> function_definition .)
     SHORT           reduce using rule 219 (external_declaration -> function_definition .)
@@ -631,9 +632,6 @@ state 3
     DOUBLE          reduce using rule 219 (external_declaration -> function_definition .)
     SIGNED          reduce using rule 219 (external_declaration -> function_definition .)
     UNSIGNED        reduce using rule 219 (external_declaration -> function_definition .)
-    TYPE_NAME       reduce using rule 219 (external_declaration -> function_definition .)
-    CONST           reduce using rule 219 (external_declaration -> function_definition .)
-    VOLATILE        reduce using rule 219 (external_declaration -> function_definition .)
     ENUM            reduce using rule 219 (external_declaration -> function_definition .)
     STRUCT          reduce using rule 219 (external_declaration -> function_definition .)
     UNION           reduce using rule 219 (external_declaration -> function_definition .)
@@ -650,6 +648,8 @@ state 4
     STATIC          reduce using rule 220 (external_declaration -> other_declarations .)
     AUTO            reduce using rule 220 (external_declaration -> other_declarations .)
     REGISTER        reduce using rule 220 (external_declaration -> other_declarations .)
+    CONST           reduce using rule 220 (external_declaration -> other_declarations .)
+    VOLATILE        reduce using rule 220 (external_declaration -> other_declarations .)
     VOID            reduce using rule 220 (external_declaration -> other_declarations .)
     CHAR            reduce using rule 220 (external_declaration -> other_declarations .)
     SHORT           reduce using rule 220 (external_declaration -> other_declarations .)
@@ -659,9 +659,6 @@ state 4
     DOUBLE          reduce using rule 220 (external_declaration -> other_declarations .)
     SIGNED          reduce using rule 220 (external_declaration -> other_declarations .)
     UNSIGNED        reduce using rule 220 (external_declaration -> other_declarations .)
-    TYPE_NAME       reduce using rule 220 (external_declaration -> other_declarations .)
-    CONST           reduce using rule 220 (external_declaration -> other_declarations .)
-    VOLATILE        reduce using rule 220 (external_declaration -> other_declarations .)
     ENUM            reduce using rule 220 (external_declaration -> other_declarations .)
     STRUCT          reduce using rule 220 (external_declaration -> other_declarations .)
     UNION           reduce using rule 220 (external_declaration -> other_declarations .)
@@ -691,20 +688,20 @@ state 5
     (97) storage_class_specifier -> . STATIC
     (98) storage_class_specifier -> . AUTO
     (99) storage_class_specifier -> . REGISTER
-    (100) type_specifier -> . VOID
-    (101) type_specifier -> . CHAR
-    (102) type_specifier -> . SHORT
-    (103) type_specifier -> . INT
-    (104) type_specifier -> . LONG
-    (105) type_specifier -> . FLOAT
-    (106) type_specifier -> . DOUBLE
-    (107) type_specifier -> . SIGNED
-    (108) type_specifier -> . UNSIGNED
-    (109) type_specifier -> . TYPE_NAME
+    (109) type_specifier -> . type
     (110) type_specifier -> . struct_or_union_specifier
     (111) type_specifier -> . enum_specifier
     (136) type_qualifier -> . CONST
     (137) type_qualifier -> . VOLATILE
+    (100) type -> . VOID
+    (101) type -> . CHAR
+    (102) type -> . SHORT
+    (103) type -> . INT
+    (104) type -> . LONG
+    (105) type -> . FLOAT
+    (106) type -> . DOUBLE
+    (107) type -> . SIGNED
+    (108) type -> . UNSIGNED
     (112) struct_or_union_specifier -> . struct_or_union IDENTIFIER L_BRACE struct_declaration_list R_BRACE
     (113) struct_or_union_specifier -> . struct_or_union L_BRACE struct_declaration_list R_BRACE
     (114) struct_or_union_specifier -> . struct_or_union IDENTIFIER
@@ -720,18 +717,17 @@ state 5
     STATIC          shift and go to state 17
     AUTO            shift and go to state 18
     REGISTER        shift and go to state 19
-    VOID            shift and go to state 20
-    CHAR            shift and go to state 21
-    SHORT           shift and go to state 22
-    INT             shift and go to state 23
-    LONG            shift and go to state 24
-    FLOAT           shift and go to state 25
-    DOUBLE          shift and go to state 26
-    SIGNED          shift and go to state 27
-    UNSIGNED        shift and go to state 28
-    TYPE_NAME       shift and go to state 29
-    CONST           shift and go to state 32
-    VOLATILE        shift and go to state 33
+    CONST           shift and go to state 23
+    VOLATILE        shift and go to state 24
+    VOID            shift and go to state 25
+    CHAR            shift and go to state 26
+    SHORT           shift and go to state 27
+    INT             shift and go to state 28
+    LONG            shift and go to state 29
+    FLOAT           shift and go to state 30
+    DOUBLE          shift and go to state 31
+    SIGNED          shift and go to state 32
+    UNSIGNED        shift and go to state 33
     ENUM            shift and go to state 35
     STRUCT          shift and go to state 36
     UNION           shift and go to state 37
@@ -743,8 +739,9 @@ state 5
     storage_class_specifier        shift and go to state 11
     type_specifier                 shift and go to state 12
     type_qualifier                 shift and go to state 13
-    struct_or_union_specifier      shift and go to state 30
-    enum_specifier                 shift and go to state 31
+    type                           shift and go to state 20
+    struct_or_union_specifier      shift and go to state 21
+    enum_specifier                 shift and go to state 22
     struct_or_union                shift and go to state 34
 
 state 6
@@ -757,6 +754,8 @@ state 6
     STATIC          reduce using rule 221 (other_declarations -> declaration .)
     AUTO            reduce using rule 221 (other_declarations -> declaration .)
     REGISTER        reduce using rule 221 (other_declarations -> declaration .)
+    CONST           reduce using rule 221 (other_declarations -> declaration .)
+    VOLATILE        reduce using rule 221 (other_declarations -> declaration .)
     VOID            reduce using rule 221 (other_declarations -> declaration .)
     CHAR            reduce using rule 221 (other_declarations -> declaration .)
     SHORT           reduce using rule 221 (other_declarations -> declaration .)
@@ -766,9 +765,6 @@ state 6
     DOUBLE          reduce using rule 221 (other_declarations -> declaration .)
     SIGNED          reduce using rule 221 (other_declarations -> declaration .)
     UNSIGNED        reduce using rule 221 (other_declarations -> declaration .)
-    TYPE_NAME       reduce using rule 221 (other_declarations -> declaration .)
-    CONST           reduce using rule 221 (other_declarations -> declaration .)
-    VOLATILE        reduce using rule 221 (other_declarations -> declaration .)
     ENUM            reduce using rule 221 (other_declarations -> declaration .)
     STRUCT          reduce using rule 221 (other_declarations -> declaration .)
     UNION           reduce using rule 221 (other_declarations -> declaration .)
@@ -785,6 +781,8 @@ state 7
     STATIC          reduce using rule 222 (function_header -> fheader_type1 .)
     AUTO            reduce using rule 222 (function_header -> fheader_type1 .)
     REGISTER        reduce using rule 222 (function_header -> fheader_type1 .)
+    CONST           reduce using rule 222 (function_header -> fheader_type1 .)
+    VOLATILE        reduce using rule 222 (function_header -> fheader_type1 .)
     VOID            reduce using rule 222 (function_header -> fheader_type1 .)
     CHAR            reduce using rule 222 (function_header -> fheader_type1 .)
     SHORT           reduce using rule 222 (function_header -> fheader_type1 .)
@@ -794,9 +792,6 @@ state 7
     DOUBLE          reduce using rule 222 (function_header -> fheader_type1 .)
     SIGNED          reduce using rule 222 (function_header -> fheader_type1 .)
     UNSIGNED        reduce using rule 222 (function_header -> fheader_type1 .)
-    TYPE_NAME       reduce using rule 222 (function_header -> fheader_type1 .)
-    CONST           reduce using rule 222 (function_header -> fheader_type1 .)
-    VOLATILE        reduce using rule 222 (function_header -> fheader_type1 .)
     ENUM            reduce using rule 222 (function_header -> fheader_type1 .)
     STRUCT          reduce using rule 222 (function_header -> fheader_type1 .)
     UNION           reduce using rule 222 (function_header -> fheader_type1 .)
@@ -812,6 +807,8 @@ state 8
     STATIC          reduce using rule 223 (function_header -> fheader_type2 .)
     AUTO            reduce using rule 223 (function_header -> fheader_type2 .)
     REGISTER        reduce using rule 223 (function_header -> fheader_type2 .)
+    CONST           reduce using rule 223 (function_header -> fheader_type2 .)
+    VOLATILE        reduce using rule 223 (function_header -> fheader_type2 .)
     VOID            reduce using rule 223 (function_header -> fheader_type2 .)
     CHAR            reduce using rule 223 (function_header -> fheader_type2 .)
     SHORT           reduce using rule 223 (function_header -> fheader_type2 .)
@@ -821,9 +818,6 @@ state 8
     DOUBLE          reduce using rule 223 (function_header -> fheader_type2 .)
     SIGNED          reduce using rule 223 (function_header -> fheader_type2 .)
     UNSIGNED        reduce using rule 223 (function_header -> fheader_type2 .)
-    TYPE_NAME       reduce using rule 223 (function_header -> fheader_type2 .)
-    CONST           reduce using rule 223 (function_header -> fheader_type2 .)
-    VOLATILE        reduce using rule 223 (function_header -> fheader_type2 .)
     ENUM            reduce using rule 223 (function_header -> fheader_type2 .)
     STRUCT          reduce using rule 223 (function_header -> fheader_type2 .)
     UNION           reduce using rule 223 (function_header -> fheader_type2 .)
@@ -885,6 +879,8 @@ state 10
     STATIC          reduce using rule 225 (fheader_type2 -> function_declaration .)
     AUTO            reduce using rule 225 (fheader_type2 -> function_declaration .)
     REGISTER        reduce using rule 225 (fheader_type2 -> function_declaration .)
+    CONST           reduce using rule 225 (fheader_type2 -> function_declaration .)
+    VOLATILE        reduce using rule 225 (fheader_type2 -> function_declaration .)
     VOID            reduce using rule 225 (fheader_type2 -> function_declaration .)
     CHAR            reduce using rule 225 (fheader_type2 -> function_declaration .)
     SHORT           reduce using rule 225 (fheader_type2 -> function_declaration .)
@@ -894,9 +890,6 @@ state 10
     DOUBLE          reduce using rule 225 (fheader_type2 -> function_declaration .)
     SIGNED          reduce using rule 225 (fheader_type2 -> function_declaration .)
     UNSIGNED        reduce using rule 225 (fheader_type2 -> function_declaration .)
-    TYPE_NAME       reduce using rule 225 (fheader_type2 -> function_declaration .)
-    CONST           reduce using rule 225 (fheader_type2 -> function_declaration .)
-    VOLATILE        reduce using rule 225 (fheader_type2 -> function_declaration .)
     ENUM            reduce using rule 225 (fheader_type2 -> function_declaration .)
     STRUCT          reduce using rule 225 (fheader_type2 -> function_declaration .)
     UNION           reduce using rule 225 (fheader_type2 -> function_declaration .)
@@ -917,20 +910,20 @@ state 11
     (97) storage_class_specifier -> . STATIC
     (98) storage_class_specifier -> . AUTO
     (99) storage_class_specifier -> . REGISTER
-    (100) type_specifier -> . VOID
-    (101) type_specifier -> . CHAR
-    (102) type_specifier -> . SHORT
-    (103) type_specifier -> . INT
-    (104) type_specifier -> . LONG
-    (105) type_specifier -> . FLOAT
-    (106) type_specifier -> . DOUBLE
-    (107) type_specifier -> . SIGNED
-    (108) type_specifier -> . UNSIGNED
-    (109) type_specifier -> . TYPE_NAME
+    (109) type_specifier -> . type
     (110) type_specifier -> . struct_or_union_specifier
     (111) type_specifier -> . enum_specifier
     (136) type_qualifier -> . CONST
     (137) type_qualifier -> . VOLATILE
+    (100) type -> . VOID
+    (101) type -> . CHAR
+    (102) type -> . SHORT
+    (103) type -> . INT
+    (104) type -> . LONG
+    (105) type -> . FLOAT
+    (106) type -> . DOUBLE
+    (107) type -> . SIGNED
+    (108) type -> . UNSIGNED
     (112) struct_or_union_specifier -> . struct_or_union IDENTIFIER L_BRACE struct_declaration_list R_BRACE
     (113) struct_or_union_specifier -> . struct_or_union L_BRACE struct_declaration_list R_BRACE
     (114) struct_or_union_specifier -> . struct_or_union IDENTIFIER
@@ -952,18 +945,17 @@ state 11
     STATIC          shift and go to state 17
     AUTO            shift and go to state 18
     REGISTER        shift and go to state 19
-    VOID            shift and go to state 20
-    CHAR            shift and go to state 21
-    SHORT           shift and go to state 22
-    INT             shift and go to state 23
-    LONG            shift and go to state 24
-    FLOAT           shift and go to state 25
-    DOUBLE          shift and go to state 26
-    SIGNED          shift and go to state 27
-    UNSIGNED        shift and go to state 28
-    TYPE_NAME       shift and go to state 29
-    CONST           shift and go to state 32
-    VOLATILE        shift and go to state 33
+    CONST           shift and go to state 23
+    VOLATILE        shift and go to state 24
+    VOID            shift and go to state 25
+    CHAR            shift and go to state 26
+    SHORT           shift and go to state 27
+    INT             shift and go to state 28
+    LONG            shift and go to state 29
+    FLOAT           shift and go to state 30
+    DOUBLE          shift and go to state 31
+    SIGNED          shift and go to state 32
+    UNSIGNED        shift and go to state 33
     ENUM            shift and go to state 35
     STRUCT          shift and go to state 36
     UNION           shift and go to state 37
@@ -972,8 +964,9 @@ state 11
     declaration_specifiers         shift and go to state 59
     type_specifier                 shift and go to state 12
     type_qualifier                 shift and go to state 13
-    struct_or_union_specifier      shift and go to state 30
-    enum_specifier                 shift and go to state 31
+    type                           shift and go to state 20
+    struct_or_union_specifier      shift and go to state 21
+    enum_specifier                 shift and go to state 22
     struct_or_union                shift and go to state 34
 
 state 12
@@ -991,20 +984,20 @@ state 12
     (97) storage_class_specifier -> . STATIC
     (98) storage_class_specifier -> . AUTO
     (99) storage_class_specifier -> . REGISTER
-    (100) type_specifier -> . VOID
-    (101) type_specifier -> . CHAR
-    (102) type_specifier -> . SHORT
-    (103) type_specifier -> . INT
-    (104) type_specifier -> . LONG
-    (105) type_specifier -> . FLOAT
-    (106) type_specifier -> . DOUBLE
-    (107) type_specifier -> . SIGNED
-    (108) type_specifier -> . UNSIGNED
-    (109) type_specifier -> . TYPE_NAME
+    (109) type_specifier -> . type
     (110) type_specifier -> . struct_or_union_specifier
     (111) type_specifier -> . enum_specifier
     (136) type_qualifier -> . CONST
     (137) type_qualifier -> . VOLATILE
+    (100) type -> . VOID
+    (101) type -> . CHAR
+    (102) type -> . SHORT
+    (103) type -> . INT
+    (104) type -> . LONG
+    (105) type -> . FLOAT
+    (106) type -> . DOUBLE
+    (107) type -> . SIGNED
+    (108) type -> . UNSIGNED
     (112) struct_or_union_specifier -> . struct_or_union IDENTIFIER L_BRACE struct_declaration_list R_BRACE
     (113) struct_or_union_specifier -> . struct_or_union L_BRACE struct_declaration_list R_BRACE
     (114) struct_or_union_specifier -> . struct_or_union IDENTIFIER
@@ -1026,18 +1019,17 @@ state 12
     STATIC          shift and go to state 17
     AUTO            shift and go to state 18
     REGISTER        shift and go to state 19
-    VOID            shift and go to state 20
-    CHAR            shift and go to state 21
-    SHORT           shift and go to state 22
-    INT             shift and go to state 23
-    LONG            shift and go to state 24
-    FLOAT           shift and go to state 25
-    DOUBLE          shift and go to state 26
-    SIGNED          shift and go to state 27
-    UNSIGNED        shift and go to state 28
-    TYPE_NAME       shift and go to state 29
-    CONST           shift and go to state 32
-    VOLATILE        shift and go to state 33
+    CONST           shift and go to state 23
+    VOLATILE        shift and go to state 24
+    VOID            shift and go to state 25
+    CHAR            shift and go to state 26
+    SHORT           shift and go to state 27
+    INT             shift and go to state 28
+    LONG            shift and go to state 29
+    FLOAT           shift and go to state 30
+    DOUBLE          shift and go to state 31
+    SIGNED          shift and go to state 32
+    UNSIGNED        shift and go to state 33
     ENUM            shift and go to state 35
     STRUCT          shift and go to state 36
     UNION           shift and go to state 37
@@ -1046,8 +1038,9 @@ state 12
     declaration_specifiers         shift and go to state 60
     storage_class_specifier        shift and go to state 11
     type_qualifier                 shift and go to state 13
-    struct_or_union_specifier      shift and go to state 30
-    enum_specifier                 shift and go to state 31
+    type                           shift and go to state 20
+    struct_or_union_specifier      shift and go to state 21
+    enum_specifier                 shift and go to state 22
     struct_or_union                shift and go to state 34
 
 state 13
@@ -1065,20 +1058,20 @@ state 13
     (97) storage_class_specifier -> . STATIC
     (98) storage_class_specifier -> . AUTO
     (99) storage_class_specifier -> . REGISTER
-    (100) type_specifier -> . VOID
-    (101) type_specifier -> . CHAR
-    (102) type_specifier -> . SHORT
-    (103) type_specifier -> . INT
-    (104) type_specifier -> . LONG
-    (105) type_specifier -> . FLOAT
-    (106) type_specifier -> . DOUBLE
-    (107) type_specifier -> . SIGNED
-    (108) type_specifier -> . UNSIGNED
-    (109) type_specifier -> . TYPE_NAME
+    (109) type_specifier -> . type
     (110) type_specifier -> . struct_or_union_specifier
     (111) type_specifier -> . enum_specifier
     (136) type_qualifier -> . CONST
     (137) type_qualifier -> . VOLATILE
+    (100) type -> . VOID
+    (101) type -> . CHAR
+    (102) type -> . SHORT
+    (103) type -> . INT
+    (104) type -> . LONG
+    (105) type -> . FLOAT
+    (106) type -> . DOUBLE
+    (107) type -> . SIGNED
+    (108) type -> . UNSIGNED
     (112) struct_or_union_specifier -> . struct_or_union IDENTIFIER L_BRACE struct_declaration_list R_BRACE
     (113) struct_or_union_specifier -> . struct_or_union L_BRACE struct_declaration_list R_BRACE
     (114) struct_or_union_specifier -> . struct_or_union IDENTIFIER
@@ -1100,18 +1093,17 @@ state 13
     STATIC          shift and go to state 17
     AUTO            shift and go to state 18
     REGISTER        shift and go to state 19
-    VOID            shift and go to state 20
-    CHAR            shift and go to state 21
-    SHORT           shift and go to state 22
-    INT             shift and go to state 23
-    LONG            shift and go to state 24
-    FLOAT           shift and go to state 25
-    DOUBLE          shift and go to state 26
-    SIGNED          shift and go to state 27
-    UNSIGNED        shift and go to state 28
-    TYPE_NAME       shift and go to state 29
-    CONST           shift and go to state 32
-    VOLATILE        shift and go to state 33
+    CONST           shift and go to state 23
+    VOLATILE        shift and go to state 24
+    VOID            shift and go to state 25
+    CHAR            shift and go to state 26
+    SHORT           shift and go to state 27
+    INT             shift and go to state 28
+    LONG            shift and go to state 29
+    FLOAT           shift and go to state 30
+    DOUBLE          shift and go to state 31
+    SIGNED          shift and go to state 32
+    UNSIGNED        shift and go to state 33
     ENUM            shift and go to state 35
     STRUCT          shift and go to state 36
     UNION           shift and go to state 37
@@ -1120,8 +1112,9 @@ state 13
     declaration_specifiers         shift and go to state 61
     storage_class_specifier        shift and go to state 11
     type_specifier                 shift and go to state 12
-    struct_or_union_specifier      shift and go to state 30
-    enum_specifier                 shift and go to state 31
+    type                           shift and go to state 20
+    struct_or_union_specifier      shift and go to state 21
+    enum_specifier                 shift and go to state 22
     struct_or_union                shift and go to state 34
 
 state 14
@@ -1142,6 +1135,8 @@ state 15
     STATIC          reduce using rule 95 (storage_class_specifier -> TYPEDEF .)
     AUTO            reduce using rule 95 (storage_class_specifier -> TYPEDEF .)
     REGISTER        reduce using rule 95 (storage_class_specifier -> TYPEDEF .)
+    CONST           reduce using rule 95 (storage_class_specifier -> TYPEDEF .)
+    VOLATILE        reduce using rule 95 (storage_class_specifier -> TYPEDEF .)
     VOID            reduce using rule 95 (storage_class_specifier -> TYPEDEF .)
     CHAR            reduce using rule 95 (storage_class_specifier -> TYPEDEF .)
     SHORT           reduce using rule 95 (storage_class_specifier -> TYPEDEF .)
@@ -1151,9 +1146,6 @@ state 15
     DOUBLE          reduce using rule 95 (storage_class_specifier -> TYPEDEF .)
     SIGNED          reduce using rule 95 (storage_class_specifier -> TYPEDEF .)
     UNSIGNED        reduce using rule 95 (storage_class_specifier -> TYPEDEF .)
-    TYPE_NAME       reduce using rule 95 (storage_class_specifier -> TYPEDEF .)
-    CONST           reduce using rule 95 (storage_class_specifier -> TYPEDEF .)
-    VOLATILE        reduce using rule 95 (storage_class_specifier -> TYPEDEF .)
     ENUM            reduce using rule 95 (storage_class_specifier -> TYPEDEF .)
     STRUCT          reduce using rule 95 (storage_class_specifier -> TYPEDEF .)
     UNION           reduce using rule 95 (storage_class_specifier -> TYPEDEF .)
@@ -1175,6 +1167,8 @@ state 16
     STATIC          reduce using rule 96 (storage_class_specifier -> EXTERN .)
     AUTO            reduce using rule 96 (storage_class_specifier -> EXTERN .)
     REGISTER        reduce using rule 96 (storage_class_specifier -> EXTERN .)
+    CONST           reduce using rule 96 (storage_class_specifier -> EXTERN .)
+    VOLATILE        reduce using rule 96 (storage_class_specifier -> EXTERN .)
     VOID            reduce using rule 96 (storage_class_specifier -> EXTERN .)
     CHAR            reduce using rule 96 (storage_class_specifier -> EXTERN .)
     SHORT           reduce using rule 96 (storage_class_specifier -> EXTERN .)
@@ -1184,9 +1178,6 @@ state 16
     DOUBLE          reduce using rule 96 (storage_class_specifier -> EXTERN .)
     SIGNED          reduce using rule 96 (storage_class_specifier -> EXTERN .)
     UNSIGNED        reduce using rule 96 (storage_class_specifier -> EXTERN .)
-    TYPE_NAME       reduce using rule 96 (storage_class_specifier -> EXTERN .)
-    CONST           reduce using rule 96 (storage_class_specifier -> EXTERN .)
-    VOLATILE        reduce using rule 96 (storage_class_specifier -> EXTERN .)
     ENUM            reduce using rule 96 (storage_class_specifier -> EXTERN .)
     STRUCT          reduce using rule 96 (storage_class_specifier -> EXTERN .)
     UNION           reduce using rule 96 (storage_class_specifier -> EXTERN .)
@@ -1208,6 +1199,8 @@ state 17
     STATIC          reduce using rule 97 (storage_class_specifier -> STATIC .)
     AUTO            reduce using rule 97 (storage_class_specifier -> STATIC .)
     REGISTER        reduce using rule 97 (storage_class_specifier -> STATIC .)
+    CONST           reduce using rule 97 (storage_class_specifier -> STATIC .)
+    VOLATILE        reduce using rule 97 (storage_class_specifier -> STATIC .)
     VOID            reduce using rule 97 (storage_class_specifier -> STATIC .)
     CHAR            reduce using rule 97 (storage_class_specifier -> STATIC .)
     SHORT           reduce using rule 97 (storage_class_specifier -> STATIC .)
@@ -1217,9 +1210,6 @@ state 17
     DOUBLE          reduce using rule 97 (storage_class_specifier -> STATIC .)
     SIGNED          reduce using rule 97 (storage_class_specifier -> STATIC .)
     UNSIGNED        reduce using rule 97 (storage_class_specifier -> STATIC .)
-    TYPE_NAME       reduce using rule 97 (storage_class_specifier -> STATIC .)
-    CONST           reduce using rule 97 (storage_class_specifier -> STATIC .)
-    VOLATILE        reduce using rule 97 (storage_class_specifier -> STATIC .)
     ENUM            reduce using rule 97 (storage_class_specifier -> STATIC .)
     STRUCT          reduce using rule 97 (storage_class_specifier -> STATIC .)
     UNION           reduce using rule 97 (storage_class_specifier -> STATIC .)
@@ -1241,6 +1231,8 @@ state 18
     STATIC          reduce using rule 98 (storage_class_specifier -> AUTO .)
     AUTO            reduce using rule 98 (storage_class_specifier -> AUTO .)
     REGISTER        reduce using rule 98 (storage_class_specifier -> AUTO .)
+    CONST           reduce using rule 98 (storage_class_specifier -> AUTO .)
+    VOLATILE        reduce using rule 98 (storage_class_specifier -> AUTO .)
     VOID            reduce using rule 98 (storage_class_specifier -> AUTO .)
     CHAR            reduce using rule 98 (storage_class_specifier -> AUTO .)
     SHORT           reduce using rule 98 (storage_class_specifier -> AUTO .)
@@ -1250,9 +1242,6 @@ state 18
     DOUBLE          reduce using rule 98 (storage_class_specifier -> AUTO .)
     SIGNED          reduce using rule 98 (storage_class_specifier -> AUTO .)
     UNSIGNED        reduce using rule 98 (storage_class_specifier -> AUTO .)
-    TYPE_NAME       reduce using rule 98 (storage_class_specifier -> AUTO .)
-    CONST           reduce using rule 98 (storage_class_specifier -> AUTO .)
-    VOLATILE        reduce using rule 98 (storage_class_specifier -> AUTO .)
     ENUM            reduce using rule 98 (storage_class_specifier -> AUTO .)
     STRUCT          reduce using rule 98 (storage_class_specifier -> AUTO .)
     UNION           reduce using rule 98 (storage_class_specifier -> AUTO .)
@@ -1274,6 +1263,8 @@ state 19
     STATIC          reduce using rule 99 (storage_class_specifier -> REGISTER .)
     AUTO            reduce using rule 99 (storage_class_specifier -> REGISTER .)
     REGISTER        reduce using rule 99 (storage_class_specifier -> REGISTER .)
+    CONST           reduce using rule 99 (storage_class_specifier -> REGISTER .)
+    VOLATILE        reduce using rule 99 (storage_class_specifier -> REGISTER .)
     VOID            reduce using rule 99 (storage_class_specifier -> REGISTER .)
     CHAR            reduce using rule 99 (storage_class_specifier -> REGISTER .)
     SHORT           reduce using rule 99 (storage_class_specifier -> REGISTER .)
@@ -1283,9 +1274,6 @@ state 19
     DOUBLE          reduce using rule 99 (storage_class_specifier -> REGISTER .)
     SIGNED          reduce using rule 99 (storage_class_specifier -> REGISTER .)
     UNSIGNED        reduce using rule 99 (storage_class_specifier -> REGISTER .)
-    TYPE_NAME       reduce using rule 99 (storage_class_specifier -> REGISTER .)
-    CONST           reduce using rule 99 (storage_class_specifier -> REGISTER .)
-    VOLATILE        reduce using rule 99 (storage_class_specifier -> REGISTER .)
     ENUM            reduce using rule 99 (storage_class_specifier -> REGISTER .)
     STRUCT          reduce using rule 99 (storage_class_specifier -> REGISTER .)
     UNION           reduce using rule 99 (storage_class_specifier -> REGISTER .)
@@ -1300,345 +1288,38 @@ state 19
 
 state 20
 
-    (100) type_specifier -> VOID .
+    (109) type_specifier -> type .
 
-    TYPEDEF         reduce using rule 100 (type_specifier -> VOID .)
-    EXTERN          reduce using rule 100 (type_specifier -> VOID .)
-    STATIC          reduce using rule 100 (type_specifier -> VOID .)
-    AUTO            reduce using rule 100 (type_specifier -> VOID .)
-    REGISTER        reduce using rule 100 (type_specifier -> VOID .)
-    VOID            reduce using rule 100 (type_specifier -> VOID .)
-    CHAR            reduce using rule 100 (type_specifier -> VOID .)
-    SHORT           reduce using rule 100 (type_specifier -> VOID .)
-    INT             reduce using rule 100 (type_specifier -> VOID .)
-    LONG            reduce using rule 100 (type_specifier -> VOID .)
-    FLOAT           reduce using rule 100 (type_specifier -> VOID .)
-    DOUBLE          reduce using rule 100 (type_specifier -> VOID .)
-    SIGNED          reduce using rule 100 (type_specifier -> VOID .)
-    UNSIGNED        reduce using rule 100 (type_specifier -> VOID .)
-    TYPE_NAME       reduce using rule 100 (type_specifier -> VOID .)
-    CONST           reduce using rule 100 (type_specifier -> VOID .)
-    VOLATILE        reduce using rule 100 (type_specifier -> VOID .)
-    ENUM            reduce using rule 100 (type_specifier -> VOID .)
-    STRUCT          reduce using rule 100 (type_specifier -> VOID .)
-    UNION           reduce using rule 100 (type_specifier -> VOID .)
-    SEMI            reduce using rule 100 (type_specifier -> VOID .)
-    IDENTIFIER      reduce using rule 100 (type_specifier -> VOID .)
-    STAR            reduce using rule 100 (type_specifier -> VOID .)
-    L_PAREN         reduce using rule 100 (type_specifier -> VOID .)
-    L_SQUARE        reduce using rule 100 (type_specifier -> VOID .)
-    COMMA           reduce using rule 100 (type_specifier -> VOID .)
-    R_PAREN         reduce using rule 100 (type_specifier -> VOID .)
-    COLON           reduce using rule 100 (type_specifier -> VOID .)
+    TYPEDEF         reduce using rule 109 (type_specifier -> type .)
+    EXTERN          reduce using rule 109 (type_specifier -> type .)
+    STATIC          reduce using rule 109 (type_specifier -> type .)
+    AUTO            reduce using rule 109 (type_specifier -> type .)
+    REGISTER        reduce using rule 109 (type_specifier -> type .)
+    CONST           reduce using rule 109 (type_specifier -> type .)
+    VOLATILE        reduce using rule 109 (type_specifier -> type .)
+    VOID            reduce using rule 109 (type_specifier -> type .)
+    CHAR            reduce using rule 109 (type_specifier -> type .)
+    SHORT           reduce using rule 109 (type_specifier -> type .)
+    INT             reduce using rule 109 (type_specifier -> type .)
+    LONG            reduce using rule 109 (type_specifier -> type .)
+    FLOAT           reduce using rule 109 (type_specifier -> type .)
+    DOUBLE          reduce using rule 109 (type_specifier -> type .)
+    SIGNED          reduce using rule 109 (type_specifier -> type .)
+    UNSIGNED        reduce using rule 109 (type_specifier -> type .)
+    ENUM            reduce using rule 109 (type_specifier -> type .)
+    STRUCT          reduce using rule 109 (type_specifier -> type .)
+    UNION           reduce using rule 109 (type_specifier -> type .)
+    SEMI            reduce using rule 109 (type_specifier -> type .)
+    IDENTIFIER      reduce using rule 109 (type_specifier -> type .)
+    STAR            reduce using rule 109 (type_specifier -> type .)
+    L_PAREN         reduce using rule 109 (type_specifier -> type .)
+    L_SQUARE        reduce using rule 109 (type_specifier -> type .)
+    COMMA           reduce using rule 109 (type_specifier -> type .)
+    R_PAREN         reduce using rule 109 (type_specifier -> type .)
+    COLON           reduce using rule 109 (type_specifier -> type .)
 
 
 state 21
-
-    (101) type_specifier -> CHAR .
-
-    TYPEDEF         reduce using rule 101 (type_specifier -> CHAR .)
-    EXTERN          reduce using rule 101 (type_specifier -> CHAR .)
-    STATIC          reduce using rule 101 (type_specifier -> CHAR .)
-    AUTO            reduce using rule 101 (type_specifier -> CHAR .)
-    REGISTER        reduce using rule 101 (type_specifier -> CHAR .)
-    VOID            reduce using rule 101 (type_specifier -> CHAR .)
-    CHAR            reduce using rule 101 (type_specifier -> CHAR .)
-    SHORT           reduce using rule 101 (type_specifier -> CHAR .)
-    INT             reduce using rule 101 (type_specifier -> CHAR .)
-    LONG            reduce using rule 101 (type_specifier -> CHAR .)
-    FLOAT           reduce using rule 101 (type_specifier -> CHAR .)
-    DOUBLE          reduce using rule 101 (type_specifier -> CHAR .)
-    SIGNED          reduce using rule 101 (type_specifier -> CHAR .)
-    UNSIGNED        reduce using rule 101 (type_specifier -> CHAR .)
-    TYPE_NAME       reduce using rule 101 (type_specifier -> CHAR .)
-    CONST           reduce using rule 101 (type_specifier -> CHAR .)
-    VOLATILE        reduce using rule 101 (type_specifier -> CHAR .)
-    ENUM            reduce using rule 101 (type_specifier -> CHAR .)
-    STRUCT          reduce using rule 101 (type_specifier -> CHAR .)
-    UNION           reduce using rule 101 (type_specifier -> CHAR .)
-    SEMI            reduce using rule 101 (type_specifier -> CHAR .)
-    IDENTIFIER      reduce using rule 101 (type_specifier -> CHAR .)
-    STAR            reduce using rule 101 (type_specifier -> CHAR .)
-    L_PAREN         reduce using rule 101 (type_specifier -> CHAR .)
-    L_SQUARE        reduce using rule 101 (type_specifier -> CHAR .)
-    COMMA           reduce using rule 101 (type_specifier -> CHAR .)
-    R_PAREN         reduce using rule 101 (type_specifier -> CHAR .)
-    COLON           reduce using rule 101 (type_specifier -> CHAR .)
-
-
-state 22
-
-    (102) type_specifier -> SHORT .
-
-    TYPEDEF         reduce using rule 102 (type_specifier -> SHORT .)
-    EXTERN          reduce using rule 102 (type_specifier -> SHORT .)
-    STATIC          reduce using rule 102 (type_specifier -> SHORT .)
-    AUTO            reduce using rule 102 (type_specifier -> SHORT .)
-    REGISTER        reduce using rule 102 (type_specifier -> SHORT .)
-    VOID            reduce using rule 102 (type_specifier -> SHORT .)
-    CHAR            reduce using rule 102 (type_specifier -> SHORT .)
-    SHORT           reduce using rule 102 (type_specifier -> SHORT .)
-    INT             reduce using rule 102 (type_specifier -> SHORT .)
-    LONG            reduce using rule 102 (type_specifier -> SHORT .)
-    FLOAT           reduce using rule 102 (type_specifier -> SHORT .)
-    DOUBLE          reduce using rule 102 (type_specifier -> SHORT .)
-    SIGNED          reduce using rule 102 (type_specifier -> SHORT .)
-    UNSIGNED        reduce using rule 102 (type_specifier -> SHORT .)
-    TYPE_NAME       reduce using rule 102 (type_specifier -> SHORT .)
-    CONST           reduce using rule 102 (type_specifier -> SHORT .)
-    VOLATILE        reduce using rule 102 (type_specifier -> SHORT .)
-    ENUM            reduce using rule 102 (type_specifier -> SHORT .)
-    STRUCT          reduce using rule 102 (type_specifier -> SHORT .)
-    UNION           reduce using rule 102 (type_specifier -> SHORT .)
-    SEMI            reduce using rule 102 (type_specifier -> SHORT .)
-    IDENTIFIER      reduce using rule 102 (type_specifier -> SHORT .)
-    STAR            reduce using rule 102 (type_specifier -> SHORT .)
-    L_PAREN         reduce using rule 102 (type_specifier -> SHORT .)
-    L_SQUARE        reduce using rule 102 (type_specifier -> SHORT .)
-    COMMA           reduce using rule 102 (type_specifier -> SHORT .)
-    R_PAREN         reduce using rule 102 (type_specifier -> SHORT .)
-    COLON           reduce using rule 102 (type_specifier -> SHORT .)
-
-
-state 23
-
-    (103) type_specifier -> INT .
-
-    TYPEDEF         reduce using rule 103 (type_specifier -> INT .)
-    EXTERN          reduce using rule 103 (type_specifier -> INT .)
-    STATIC          reduce using rule 103 (type_specifier -> INT .)
-    AUTO            reduce using rule 103 (type_specifier -> INT .)
-    REGISTER        reduce using rule 103 (type_specifier -> INT .)
-    VOID            reduce using rule 103 (type_specifier -> INT .)
-    CHAR            reduce using rule 103 (type_specifier -> INT .)
-    SHORT           reduce using rule 103 (type_specifier -> INT .)
-    INT             reduce using rule 103 (type_specifier -> INT .)
-    LONG            reduce using rule 103 (type_specifier -> INT .)
-    FLOAT           reduce using rule 103 (type_specifier -> INT .)
-    DOUBLE          reduce using rule 103 (type_specifier -> INT .)
-    SIGNED          reduce using rule 103 (type_specifier -> INT .)
-    UNSIGNED        reduce using rule 103 (type_specifier -> INT .)
-    TYPE_NAME       reduce using rule 103 (type_specifier -> INT .)
-    CONST           reduce using rule 103 (type_specifier -> INT .)
-    VOLATILE        reduce using rule 103 (type_specifier -> INT .)
-    ENUM            reduce using rule 103 (type_specifier -> INT .)
-    STRUCT          reduce using rule 103 (type_specifier -> INT .)
-    UNION           reduce using rule 103 (type_specifier -> INT .)
-    SEMI            reduce using rule 103 (type_specifier -> INT .)
-    IDENTIFIER      reduce using rule 103 (type_specifier -> INT .)
-    STAR            reduce using rule 103 (type_specifier -> INT .)
-    L_PAREN         reduce using rule 103 (type_specifier -> INT .)
-    L_SQUARE        reduce using rule 103 (type_specifier -> INT .)
-    COMMA           reduce using rule 103 (type_specifier -> INT .)
-    R_PAREN         reduce using rule 103 (type_specifier -> INT .)
-    COLON           reduce using rule 103 (type_specifier -> INT .)
-
-
-state 24
-
-    (104) type_specifier -> LONG .
-
-    TYPEDEF         reduce using rule 104 (type_specifier -> LONG .)
-    EXTERN          reduce using rule 104 (type_specifier -> LONG .)
-    STATIC          reduce using rule 104 (type_specifier -> LONG .)
-    AUTO            reduce using rule 104 (type_specifier -> LONG .)
-    REGISTER        reduce using rule 104 (type_specifier -> LONG .)
-    VOID            reduce using rule 104 (type_specifier -> LONG .)
-    CHAR            reduce using rule 104 (type_specifier -> LONG .)
-    SHORT           reduce using rule 104 (type_specifier -> LONG .)
-    INT             reduce using rule 104 (type_specifier -> LONG .)
-    LONG            reduce using rule 104 (type_specifier -> LONG .)
-    FLOAT           reduce using rule 104 (type_specifier -> LONG .)
-    DOUBLE          reduce using rule 104 (type_specifier -> LONG .)
-    SIGNED          reduce using rule 104 (type_specifier -> LONG .)
-    UNSIGNED        reduce using rule 104 (type_specifier -> LONG .)
-    TYPE_NAME       reduce using rule 104 (type_specifier -> LONG .)
-    CONST           reduce using rule 104 (type_specifier -> LONG .)
-    VOLATILE        reduce using rule 104 (type_specifier -> LONG .)
-    ENUM            reduce using rule 104 (type_specifier -> LONG .)
-    STRUCT          reduce using rule 104 (type_specifier -> LONG .)
-    UNION           reduce using rule 104 (type_specifier -> LONG .)
-    SEMI            reduce using rule 104 (type_specifier -> LONG .)
-    IDENTIFIER      reduce using rule 104 (type_specifier -> LONG .)
-    STAR            reduce using rule 104 (type_specifier -> LONG .)
-    L_PAREN         reduce using rule 104 (type_specifier -> LONG .)
-    L_SQUARE        reduce using rule 104 (type_specifier -> LONG .)
-    COMMA           reduce using rule 104 (type_specifier -> LONG .)
-    R_PAREN         reduce using rule 104 (type_specifier -> LONG .)
-    COLON           reduce using rule 104 (type_specifier -> LONG .)
-
-
-state 25
-
-    (105) type_specifier -> FLOAT .
-
-    TYPEDEF         reduce using rule 105 (type_specifier -> FLOAT .)
-    EXTERN          reduce using rule 105 (type_specifier -> FLOAT .)
-    STATIC          reduce using rule 105 (type_specifier -> FLOAT .)
-    AUTO            reduce using rule 105 (type_specifier -> FLOAT .)
-    REGISTER        reduce using rule 105 (type_specifier -> FLOAT .)
-    VOID            reduce using rule 105 (type_specifier -> FLOAT .)
-    CHAR            reduce using rule 105 (type_specifier -> FLOAT .)
-    SHORT           reduce using rule 105 (type_specifier -> FLOAT .)
-    INT             reduce using rule 105 (type_specifier -> FLOAT .)
-    LONG            reduce using rule 105 (type_specifier -> FLOAT .)
-    FLOAT           reduce using rule 105 (type_specifier -> FLOAT .)
-    DOUBLE          reduce using rule 105 (type_specifier -> FLOAT .)
-    SIGNED          reduce using rule 105 (type_specifier -> FLOAT .)
-    UNSIGNED        reduce using rule 105 (type_specifier -> FLOAT .)
-    TYPE_NAME       reduce using rule 105 (type_specifier -> FLOAT .)
-    CONST           reduce using rule 105 (type_specifier -> FLOAT .)
-    VOLATILE        reduce using rule 105 (type_specifier -> FLOAT .)
-    ENUM            reduce using rule 105 (type_specifier -> FLOAT .)
-    STRUCT          reduce using rule 105 (type_specifier -> FLOAT .)
-    UNION           reduce using rule 105 (type_specifier -> FLOAT .)
-    SEMI            reduce using rule 105 (type_specifier -> FLOAT .)
-    IDENTIFIER      reduce using rule 105 (type_specifier -> FLOAT .)
-    STAR            reduce using rule 105 (type_specifier -> FLOAT .)
-    L_PAREN         reduce using rule 105 (type_specifier -> FLOAT .)
-    L_SQUARE        reduce using rule 105 (type_specifier -> FLOAT .)
-    COMMA           reduce using rule 105 (type_specifier -> FLOAT .)
-    R_PAREN         reduce using rule 105 (type_specifier -> FLOAT .)
-    COLON           reduce using rule 105 (type_specifier -> FLOAT .)
-
-
-state 26
-
-    (106) type_specifier -> DOUBLE .
-
-    TYPEDEF         reduce using rule 106 (type_specifier -> DOUBLE .)
-    EXTERN          reduce using rule 106 (type_specifier -> DOUBLE .)
-    STATIC          reduce using rule 106 (type_specifier -> DOUBLE .)
-    AUTO            reduce using rule 106 (type_specifier -> DOUBLE .)
-    REGISTER        reduce using rule 106 (type_specifier -> DOUBLE .)
-    VOID            reduce using rule 106 (type_specifier -> DOUBLE .)
-    CHAR            reduce using rule 106 (type_specifier -> DOUBLE .)
-    SHORT           reduce using rule 106 (type_specifier -> DOUBLE .)
-    INT             reduce using rule 106 (type_specifier -> DOUBLE .)
-    LONG            reduce using rule 106 (type_specifier -> DOUBLE .)
-    FLOAT           reduce using rule 106 (type_specifier -> DOUBLE .)
-    DOUBLE          reduce using rule 106 (type_specifier -> DOUBLE .)
-    SIGNED          reduce using rule 106 (type_specifier -> DOUBLE .)
-    UNSIGNED        reduce using rule 106 (type_specifier -> DOUBLE .)
-    TYPE_NAME       reduce using rule 106 (type_specifier -> DOUBLE .)
-    CONST           reduce using rule 106 (type_specifier -> DOUBLE .)
-    VOLATILE        reduce using rule 106 (type_specifier -> DOUBLE .)
-    ENUM            reduce using rule 106 (type_specifier -> DOUBLE .)
-    STRUCT          reduce using rule 106 (type_specifier -> DOUBLE .)
-    UNION           reduce using rule 106 (type_specifier -> DOUBLE .)
-    SEMI            reduce using rule 106 (type_specifier -> DOUBLE .)
-    IDENTIFIER      reduce using rule 106 (type_specifier -> DOUBLE .)
-    STAR            reduce using rule 106 (type_specifier -> DOUBLE .)
-    L_PAREN         reduce using rule 106 (type_specifier -> DOUBLE .)
-    L_SQUARE        reduce using rule 106 (type_specifier -> DOUBLE .)
-    COMMA           reduce using rule 106 (type_specifier -> DOUBLE .)
-    R_PAREN         reduce using rule 106 (type_specifier -> DOUBLE .)
-    COLON           reduce using rule 106 (type_specifier -> DOUBLE .)
-
-
-state 27
-
-    (107) type_specifier -> SIGNED .
-
-    TYPEDEF         reduce using rule 107 (type_specifier -> SIGNED .)
-    EXTERN          reduce using rule 107 (type_specifier -> SIGNED .)
-    STATIC          reduce using rule 107 (type_specifier -> SIGNED .)
-    AUTO            reduce using rule 107 (type_specifier -> SIGNED .)
-    REGISTER        reduce using rule 107 (type_specifier -> SIGNED .)
-    VOID            reduce using rule 107 (type_specifier -> SIGNED .)
-    CHAR            reduce using rule 107 (type_specifier -> SIGNED .)
-    SHORT           reduce using rule 107 (type_specifier -> SIGNED .)
-    INT             reduce using rule 107 (type_specifier -> SIGNED .)
-    LONG            reduce using rule 107 (type_specifier -> SIGNED .)
-    FLOAT           reduce using rule 107 (type_specifier -> SIGNED .)
-    DOUBLE          reduce using rule 107 (type_specifier -> SIGNED .)
-    SIGNED          reduce using rule 107 (type_specifier -> SIGNED .)
-    UNSIGNED        reduce using rule 107 (type_specifier -> SIGNED .)
-    TYPE_NAME       reduce using rule 107 (type_specifier -> SIGNED .)
-    CONST           reduce using rule 107 (type_specifier -> SIGNED .)
-    VOLATILE        reduce using rule 107 (type_specifier -> SIGNED .)
-    ENUM            reduce using rule 107 (type_specifier -> SIGNED .)
-    STRUCT          reduce using rule 107 (type_specifier -> SIGNED .)
-    UNION           reduce using rule 107 (type_specifier -> SIGNED .)
-    SEMI            reduce using rule 107 (type_specifier -> SIGNED .)
-    IDENTIFIER      reduce using rule 107 (type_specifier -> SIGNED .)
-    STAR            reduce using rule 107 (type_specifier -> SIGNED .)
-    L_PAREN         reduce using rule 107 (type_specifier -> SIGNED .)
-    L_SQUARE        reduce using rule 107 (type_specifier -> SIGNED .)
-    COMMA           reduce using rule 107 (type_specifier -> SIGNED .)
-    R_PAREN         reduce using rule 107 (type_specifier -> SIGNED .)
-    COLON           reduce using rule 107 (type_specifier -> SIGNED .)
-
-
-state 28
-
-    (108) type_specifier -> UNSIGNED .
-
-    TYPEDEF         reduce using rule 108 (type_specifier -> UNSIGNED .)
-    EXTERN          reduce using rule 108 (type_specifier -> UNSIGNED .)
-    STATIC          reduce using rule 108 (type_specifier -> UNSIGNED .)
-    AUTO            reduce using rule 108 (type_specifier -> UNSIGNED .)
-    REGISTER        reduce using rule 108 (type_specifier -> UNSIGNED .)
-    VOID            reduce using rule 108 (type_specifier -> UNSIGNED .)
-    CHAR            reduce using rule 108 (type_specifier -> UNSIGNED .)
-    SHORT           reduce using rule 108 (type_specifier -> UNSIGNED .)
-    INT             reduce using rule 108 (type_specifier -> UNSIGNED .)
-    LONG            reduce using rule 108 (type_specifier -> UNSIGNED .)
-    FLOAT           reduce using rule 108 (type_specifier -> UNSIGNED .)
-    DOUBLE          reduce using rule 108 (type_specifier -> UNSIGNED .)
-    SIGNED          reduce using rule 108 (type_specifier -> UNSIGNED .)
-    UNSIGNED        reduce using rule 108 (type_specifier -> UNSIGNED .)
-    TYPE_NAME       reduce using rule 108 (type_specifier -> UNSIGNED .)
-    CONST           reduce using rule 108 (type_specifier -> UNSIGNED .)
-    VOLATILE        reduce using rule 108 (type_specifier -> UNSIGNED .)
-    ENUM            reduce using rule 108 (type_specifier -> UNSIGNED .)
-    STRUCT          reduce using rule 108 (type_specifier -> UNSIGNED .)
-    UNION           reduce using rule 108 (type_specifier -> UNSIGNED .)
-    SEMI            reduce using rule 108 (type_specifier -> UNSIGNED .)
-    IDENTIFIER      reduce using rule 108 (type_specifier -> UNSIGNED .)
-    STAR            reduce using rule 108 (type_specifier -> UNSIGNED .)
-    L_PAREN         reduce using rule 108 (type_specifier -> UNSIGNED .)
-    L_SQUARE        reduce using rule 108 (type_specifier -> UNSIGNED .)
-    COMMA           reduce using rule 108 (type_specifier -> UNSIGNED .)
-    R_PAREN         reduce using rule 108 (type_specifier -> UNSIGNED .)
-    COLON           reduce using rule 108 (type_specifier -> UNSIGNED .)
-
-
-state 29
-
-    (109) type_specifier -> TYPE_NAME .
-
-    TYPEDEF         reduce using rule 109 (type_specifier -> TYPE_NAME .)
-    EXTERN          reduce using rule 109 (type_specifier -> TYPE_NAME .)
-    STATIC          reduce using rule 109 (type_specifier -> TYPE_NAME .)
-    AUTO            reduce using rule 109 (type_specifier -> TYPE_NAME .)
-    REGISTER        reduce using rule 109 (type_specifier -> TYPE_NAME .)
-    VOID            reduce using rule 109 (type_specifier -> TYPE_NAME .)
-    CHAR            reduce using rule 109 (type_specifier -> TYPE_NAME .)
-    SHORT           reduce using rule 109 (type_specifier -> TYPE_NAME .)
-    INT             reduce using rule 109 (type_specifier -> TYPE_NAME .)
-    LONG            reduce using rule 109 (type_specifier -> TYPE_NAME .)
-    FLOAT           reduce using rule 109 (type_specifier -> TYPE_NAME .)
-    DOUBLE          reduce using rule 109 (type_specifier -> TYPE_NAME .)
-    SIGNED          reduce using rule 109 (type_specifier -> TYPE_NAME .)
-    UNSIGNED        reduce using rule 109 (type_specifier -> TYPE_NAME .)
-    TYPE_NAME       reduce using rule 109 (type_specifier -> TYPE_NAME .)
-    CONST           reduce using rule 109 (type_specifier -> TYPE_NAME .)
-    VOLATILE        reduce using rule 109 (type_specifier -> TYPE_NAME .)
-    ENUM            reduce using rule 109 (type_specifier -> TYPE_NAME .)
-    STRUCT          reduce using rule 109 (type_specifier -> TYPE_NAME .)
-    UNION           reduce using rule 109 (type_specifier -> TYPE_NAME .)
-    SEMI            reduce using rule 109 (type_specifier -> TYPE_NAME .)
-    IDENTIFIER      reduce using rule 109 (type_specifier -> TYPE_NAME .)
-    STAR            reduce using rule 109 (type_specifier -> TYPE_NAME .)
-    L_PAREN         reduce using rule 109 (type_specifier -> TYPE_NAME .)
-    L_SQUARE        reduce using rule 109 (type_specifier -> TYPE_NAME .)
-    COMMA           reduce using rule 109 (type_specifier -> TYPE_NAME .)
-    R_PAREN         reduce using rule 109 (type_specifier -> TYPE_NAME .)
-    COLON           reduce using rule 109 (type_specifier -> TYPE_NAME .)
-
-
-state 30
 
     (110) type_specifier -> struct_or_union_specifier .
 
@@ -1647,6 +1328,8 @@ state 30
     STATIC          reduce using rule 110 (type_specifier -> struct_or_union_specifier .)
     AUTO            reduce using rule 110 (type_specifier -> struct_or_union_specifier .)
     REGISTER        reduce using rule 110 (type_specifier -> struct_or_union_specifier .)
+    CONST           reduce using rule 110 (type_specifier -> struct_or_union_specifier .)
+    VOLATILE        reduce using rule 110 (type_specifier -> struct_or_union_specifier .)
     VOID            reduce using rule 110 (type_specifier -> struct_or_union_specifier .)
     CHAR            reduce using rule 110 (type_specifier -> struct_or_union_specifier .)
     SHORT           reduce using rule 110 (type_specifier -> struct_or_union_specifier .)
@@ -1656,9 +1339,6 @@ state 30
     DOUBLE          reduce using rule 110 (type_specifier -> struct_or_union_specifier .)
     SIGNED          reduce using rule 110 (type_specifier -> struct_or_union_specifier .)
     UNSIGNED        reduce using rule 110 (type_specifier -> struct_or_union_specifier .)
-    TYPE_NAME       reduce using rule 110 (type_specifier -> struct_or_union_specifier .)
-    CONST           reduce using rule 110 (type_specifier -> struct_or_union_specifier .)
-    VOLATILE        reduce using rule 110 (type_specifier -> struct_or_union_specifier .)
     ENUM            reduce using rule 110 (type_specifier -> struct_or_union_specifier .)
     STRUCT          reduce using rule 110 (type_specifier -> struct_or_union_specifier .)
     UNION           reduce using rule 110 (type_specifier -> struct_or_union_specifier .)
@@ -1672,7 +1352,7 @@ state 30
     COLON           reduce using rule 110 (type_specifier -> struct_or_union_specifier .)
 
 
-state 31
+state 22
 
     (111) type_specifier -> enum_specifier .
 
@@ -1681,6 +1361,8 @@ state 31
     STATIC          reduce using rule 111 (type_specifier -> enum_specifier .)
     AUTO            reduce using rule 111 (type_specifier -> enum_specifier .)
     REGISTER        reduce using rule 111 (type_specifier -> enum_specifier .)
+    CONST           reduce using rule 111 (type_specifier -> enum_specifier .)
+    VOLATILE        reduce using rule 111 (type_specifier -> enum_specifier .)
     VOID            reduce using rule 111 (type_specifier -> enum_specifier .)
     CHAR            reduce using rule 111 (type_specifier -> enum_specifier .)
     SHORT           reduce using rule 111 (type_specifier -> enum_specifier .)
@@ -1690,9 +1372,6 @@ state 31
     DOUBLE          reduce using rule 111 (type_specifier -> enum_specifier .)
     SIGNED          reduce using rule 111 (type_specifier -> enum_specifier .)
     UNSIGNED        reduce using rule 111 (type_specifier -> enum_specifier .)
-    TYPE_NAME       reduce using rule 111 (type_specifier -> enum_specifier .)
-    CONST           reduce using rule 111 (type_specifier -> enum_specifier .)
-    VOLATILE        reduce using rule 111 (type_specifier -> enum_specifier .)
     ENUM            reduce using rule 111 (type_specifier -> enum_specifier .)
     STRUCT          reduce using rule 111 (type_specifier -> enum_specifier .)
     UNION           reduce using rule 111 (type_specifier -> enum_specifier .)
@@ -1706,7 +1385,7 @@ state 31
     COLON           reduce using rule 111 (type_specifier -> enum_specifier .)
 
 
-state 32
+state 23
 
     (136) type_qualifier -> CONST .
 
@@ -1715,6 +1394,8 @@ state 32
     STATIC          reduce using rule 136 (type_qualifier -> CONST .)
     AUTO            reduce using rule 136 (type_qualifier -> CONST .)
     REGISTER        reduce using rule 136 (type_qualifier -> CONST .)
+    CONST           reduce using rule 136 (type_qualifier -> CONST .)
+    VOLATILE        reduce using rule 136 (type_qualifier -> CONST .)
     VOID            reduce using rule 136 (type_qualifier -> CONST .)
     CHAR            reduce using rule 136 (type_qualifier -> CONST .)
     SHORT           reduce using rule 136 (type_qualifier -> CONST .)
@@ -1724,9 +1405,6 @@ state 32
     DOUBLE          reduce using rule 136 (type_qualifier -> CONST .)
     SIGNED          reduce using rule 136 (type_qualifier -> CONST .)
     UNSIGNED        reduce using rule 136 (type_qualifier -> CONST .)
-    TYPE_NAME       reduce using rule 136 (type_qualifier -> CONST .)
-    CONST           reduce using rule 136 (type_qualifier -> CONST .)
-    VOLATILE        reduce using rule 136 (type_qualifier -> CONST .)
     ENUM            reduce using rule 136 (type_qualifier -> CONST .)
     STRUCT          reduce using rule 136 (type_qualifier -> CONST .)
     UNION           reduce using rule 136 (type_qualifier -> CONST .)
@@ -1740,7 +1418,7 @@ state 32
     COLON           reduce using rule 136 (type_qualifier -> CONST .)
 
 
-state 33
+state 24
 
     (137) type_qualifier -> VOLATILE .
 
@@ -1749,6 +1427,8 @@ state 33
     STATIC          reduce using rule 137 (type_qualifier -> VOLATILE .)
     AUTO            reduce using rule 137 (type_qualifier -> VOLATILE .)
     REGISTER        reduce using rule 137 (type_qualifier -> VOLATILE .)
+    CONST           reduce using rule 137 (type_qualifier -> VOLATILE .)
+    VOLATILE        reduce using rule 137 (type_qualifier -> VOLATILE .)
     VOID            reduce using rule 137 (type_qualifier -> VOLATILE .)
     CHAR            reduce using rule 137 (type_qualifier -> VOLATILE .)
     SHORT           reduce using rule 137 (type_qualifier -> VOLATILE .)
@@ -1758,9 +1438,6 @@ state 33
     DOUBLE          reduce using rule 137 (type_qualifier -> VOLATILE .)
     SIGNED          reduce using rule 137 (type_qualifier -> VOLATILE .)
     UNSIGNED        reduce using rule 137 (type_qualifier -> VOLATILE .)
-    TYPE_NAME       reduce using rule 137 (type_qualifier -> VOLATILE .)
-    CONST           reduce using rule 137 (type_qualifier -> VOLATILE .)
-    VOLATILE        reduce using rule 137 (type_qualifier -> VOLATILE .)
     ENUM            reduce using rule 137 (type_qualifier -> VOLATILE .)
     STRUCT          reduce using rule 137 (type_qualifier -> VOLATILE .)
     UNION           reduce using rule 137 (type_qualifier -> VOLATILE .)
@@ -1772,6 +1449,303 @@ state 33
     COMMA           reduce using rule 137 (type_qualifier -> VOLATILE .)
     R_PAREN         reduce using rule 137 (type_qualifier -> VOLATILE .)
     COLON           reduce using rule 137 (type_qualifier -> VOLATILE .)
+
+
+state 25
+
+    (100) type -> VOID .
+
+    TYPEDEF         reduce using rule 100 (type -> VOID .)
+    EXTERN          reduce using rule 100 (type -> VOID .)
+    STATIC          reduce using rule 100 (type -> VOID .)
+    AUTO            reduce using rule 100 (type -> VOID .)
+    REGISTER        reduce using rule 100 (type -> VOID .)
+    CONST           reduce using rule 100 (type -> VOID .)
+    VOLATILE        reduce using rule 100 (type -> VOID .)
+    VOID            reduce using rule 100 (type -> VOID .)
+    CHAR            reduce using rule 100 (type -> VOID .)
+    SHORT           reduce using rule 100 (type -> VOID .)
+    INT             reduce using rule 100 (type -> VOID .)
+    LONG            reduce using rule 100 (type -> VOID .)
+    FLOAT           reduce using rule 100 (type -> VOID .)
+    DOUBLE          reduce using rule 100 (type -> VOID .)
+    SIGNED          reduce using rule 100 (type -> VOID .)
+    UNSIGNED        reduce using rule 100 (type -> VOID .)
+    ENUM            reduce using rule 100 (type -> VOID .)
+    STRUCT          reduce using rule 100 (type -> VOID .)
+    UNION           reduce using rule 100 (type -> VOID .)
+    SEMI            reduce using rule 100 (type -> VOID .)
+    IDENTIFIER      reduce using rule 100 (type -> VOID .)
+    STAR            reduce using rule 100 (type -> VOID .)
+    L_PAREN         reduce using rule 100 (type -> VOID .)
+    L_SQUARE        reduce using rule 100 (type -> VOID .)
+    COMMA           reduce using rule 100 (type -> VOID .)
+    R_PAREN         reduce using rule 100 (type -> VOID .)
+    COLON           reduce using rule 100 (type -> VOID .)
+
+
+state 26
+
+    (101) type -> CHAR .
+
+    TYPEDEF         reduce using rule 101 (type -> CHAR .)
+    EXTERN          reduce using rule 101 (type -> CHAR .)
+    STATIC          reduce using rule 101 (type -> CHAR .)
+    AUTO            reduce using rule 101 (type -> CHAR .)
+    REGISTER        reduce using rule 101 (type -> CHAR .)
+    CONST           reduce using rule 101 (type -> CHAR .)
+    VOLATILE        reduce using rule 101 (type -> CHAR .)
+    VOID            reduce using rule 101 (type -> CHAR .)
+    CHAR            reduce using rule 101 (type -> CHAR .)
+    SHORT           reduce using rule 101 (type -> CHAR .)
+    INT             reduce using rule 101 (type -> CHAR .)
+    LONG            reduce using rule 101 (type -> CHAR .)
+    FLOAT           reduce using rule 101 (type -> CHAR .)
+    DOUBLE          reduce using rule 101 (type -> CHAR .)
+    SIGNED          reduce using rule 101 (type -> CHAR .)
+    UNSIGNED        reduce using rule 101 (type -> CHAR .)
+    ENUM            reduce using rule 101 (type -> CHAR .)
+    STRUCT          reduce using rule 101 (type -> CHAR .)
+    UNION           reduce using rule 101 (type -> CHAR .)
+    SEMI            reduce using rule 101 (type -> CHAR .)
+    IDENTIFIER      reduce using rule 101 (type -> CHAR .)
+    STAR            reduce using rule 101 (type -> CHAR .)
+    L_PAREN         reduce using rule 101 (type -> CHAR .)
+    L_SQUARE        reduce using rule 101 (type -> CHAR .)
+    COMMA           reduce using rule 101 (type -> CHAR .)
+    R_PAREN         reduce using rule 101 (type -> CHAR .)
+    COLON           reduce using rule 101 (type -> CHAR .)
+
+
+state 27
+
+    (102) type -> SHORT .
+
+    TYPEDEF         reduce using rule 102 (type -> SHORT .)
+    EXTERN          reduce using rule 102 (type -> SHORT .)
+    STATIC          reduce using rule 102 (type -> SHORT .)
+    AUTO            reduce using rule 102 (type -> SHORT .)
+    REGISTER        reduce using rule 102 (type -> SHORT .)
+    CONST           reduce using rule 102 (type -> SHORT .)
+    VOLATILE        reduce using rule 102 (type -> SHORT .)
+    VOID            reduce using rule 102 (type -> SHORT .)
+    CHAR            reduce using rule 102 (type -> SHORT .)
+    SHORT           reduce using rule 102 (type -> SHORT .)
+    INT             reduce using rule 102 (type -> SHORT .)
+    LONG            reduce using rule 102 (type -> SHORT .)
+    FLOAT           reduce using rule 102 (type -> SHORT .)
+    DOUBLE          reduce using rule 102 (type -> SHORT .)
+    SIGNED          reduce using rule 102 (type -> SHORT .)
+    UNSIGNED        reduce using rule 102 (type -> SHORT .)
+    ENUM            reduce using rule 102 (type -> SHORT .)
+    STRUCT          reduce using rule 102 (type -> SHORT .)
+    UNION           reduce using rule 102 (type -> SHORT .)
+    SEMI            reduce using rule 102 (type -> SHORT .)
+    IDENTIFIER      reduce using rule 102 (type -> SHORT .)
+    STAR            reduce using rule 102 (type -> SHORT .)
+    L_PAREN         reduce using rule 102 (type -> SHORT .)
+    L_SQUARE        reduce using rule 102 (type -> SHORT .)
+    COMMA           reduce using rule 102 (type -> SHORT .)
+    R_PAREN         reduce using rule 102 (type -> SHORT .)
+    COLON           reduce using rule 102 (type -> SHORT .)
+
+
+state 28
+
+    (103) type -> INT .
+
+    TYPEDEF         reduce using rule 103 (type -> INT .)
+    EXTERN          reduce using rule 103 (type -> INT .)
+    STATIC          reduce using rule 103 (type -> INT .)
+    AUTO            reduce using rule 103 (type -> INT .)
+    REGISTER        reduce using rule 103 (type -> INT .)
+    CONST           reduce using rule 103 (type -> INT .)
+    VOLATILE        reduce using rule 103 (type -> INT .)
+    VOID            reduce using rule 103 (type -> INT .)
+    CHAR            reduce using rule 103 (type -> INT .)
+    SHORT           reduce using rule 103 (type -> INT .)
+    INT             reduce using rule 103 (type -> INT .)
+    LONG            reduce using rule 103 (type -> INT .)
+    FLOAT           reduce using rule 103 (type -> INT .)
+    DOUBLE          reduce using rule 103 (type -> INT .)
+    SIGNED          reduce using rule 103 (type -> INT .)
+    UNSIGNED        reduce using rule 103 (type -> INT .)
+    ENUM            reduce using rule 103 (type -> INT .)
+    STRUCT          reduce using rule 103 (type -> INT .)
+    UNION           reduce using rule 103 (type -> INT .)
+    SEMI            reduce using rule 103 (type -> INT .)
+    IDENTIFIER      reduce using rule 103 (type -> INT .)
+    STAR            reduce using rule 103 (type -> INT .)
+    L_PAREN         reduce using rule 103 (type -> INT .)
+    L_SQUARE        reduce using rule 103 (type -> INT .)
+    COMMA           reduce using rule 103 (type -> INT .)
+    R_PAREN         reduce using rule 103 (type -> INT .)
+    COLON           reduce using rule 103 (type -> INT .)
+
+
+state 29
+
+    (104) type -> LONG .
+
+    TYPEDEF         reduce using rule 104 (type -> LONG .)
+    EXTERN          reduce using rule 104 (type -> LONG .)
+    STATIC          reduce using rule 104 (type -> LONG .)
+    AUTO            reduce using rule 104 (type -> LONG .)
+    REGISTER        reduce using rule 104 (type -> LONG .)
+    CONST           reduce using rule 104 (type -> LONG .)
+    VOLATILE        reduce using rule 104 (type -> LONG .)
+    VOID            reduce using rule 104 (type -> LONG .)
+    CHAR            reduce using rule 104 (type -> LONG .)
+    SHORT           reduce using rule 104 (type -> LONG .)
+    INT             reduce using rule 104 (type -> LONG .)
+    LONG            reduce using rule 104 (type -> LONG .)
+    FLOAT           reduce using rule 104 (type -> LONG .)
+    DOUBLE          reduce using rule 104 (type -> LONG .)
+    SIGNED          reduce using rule 104 (type -> LONG .)
+    UNSIGNED        reduce using rule 104 (type -> LONG .)
+    ENUM            reduce using rule 104 (type -> LONG .)
+    STRUCT          reduce using rule 104 (type -> LONG .)
+    UNION           reduce using rule 104 (type -> LONG .)
+    SEMI            reduce using rule 104 (type -> LONG .)
+    IDENTIFIER      reduce using rule 104 (type -> LONG .)
+    STAR            reduce using rule 104 (type -> LONG .)
+    L_PAREN         reduce using rule 104 (type -> LONG .)
+    L_SQUARE        reduce using rule 104 (type -> LONG .)
+    COMMA           reduce using rule 104 (type -> LONG .)
+    R_PAREN         reduce using rule 104 (type -> LONG .)
+    COLON           reduce using rule 104 (type -> LONG .)
+
+
+state 30
+
+    (105) type -> FLOAT .
+
+    TYPEDEF         reduce using rule 105 (type -> FLOAT .)
+    EXTERN          reduce using rule 105 (type -> FLOAT .)
+    STATIC          reduce using rule 105 (type -> FLOAT .)
+    AUTO            reduce using rule 105 (type -> FLOAT .)
+    REGISTER        reduce using rule 105 (type -> FLOAT .)
+    CONST           reduce using rule 105 (type -> FLOAT .)
+    VOLATILE        reduce using rule 105 (type -> FLOAT .)
+    VOID            reduce using rule 105 (type -> FLOAT .)
+    CHAR            reduce using rule 105 (type -> FLOAT .)
+    SHORT           reduce using rule 105 (type -> FLOAT .)
+    INT             reduce using rule 105 (type -> FLOAT .)
+    LONG            reduce using rule 105 (type -> FLOAT .)
+    FLOAT           reduce using rule 105 (type -> FLOAT .)
+    DOUBLE          reduce using rule 105 (type -> FLOAT .)
+    SIGNED          reduce using rule 105 (type -> FLOAT .)
+    UNSIGNED        reduce using rule 105 (type -> FLOAT .)
+    ENUM            reduce using rule 105 (type -> FLOAT .)
+    STRUCT          reduce using rule 105 (type -> FLOAT .)
+    UNION           reduce using rule 105 (type -> FLOAT .)
+    SEMI            reduce using rule 105 (type -> FLOAT .)
+    IDENTIFIER      reduce using rule 105 (type -> FLOAT .)
+    STAR            reduce using rule 105 (type -> FLOAT .)
+    L_PAREN         reduce using rule 105 (type -> FLOAT .)
+    L_SQUARE        reduce using rule 105 (type -> FLOAT .)
+    COMMA           reduce using rule 105 (type -> FLOAT .)
+    R_PAREN         reduce using rule 105 (type -> FLOAT .)
+    COLON           reduce using rule 105 (type -> FLOAT .)
+
+
+state 31
+
+    (106) type -> DOUBLE .
+
+    TYPEDEF         reduce using rule 106 (type -> DOUBLE .)
+    EXTERN          reduce using rule 106 (type -> DOUBLE .)
+    STATIC          reduce using rule 106 (type -> DOUBLE .)
+    AUTO            reduce using rule 106 (type -> DOUBLE .)
+    REGISTER        reduce using rule 106 (type -> DOUBLE .)
+    CONST           reduce using rule 106 (type -> DOUBLE .)
+    VOLATILE        reduce using rule 106 (type -> DOUBLE .)
+    VOID            reduce using rule 106 (type -> DOUBLE .)
+    CHAR            reduce using rule 106 (type -> DOUBLE .)
+    SHORT           reduce using rule 106 (type -> DOUBLE .)
+    INT             reduce using rule 106 (type -> DOUBLE .)
+    LONG            reduce using rule 106 (type -> DOUBLE .)
+    FLOAT           reduce using rule 106 (type -> DOUBLE .)
+    DOUBLE          reduce using rule 106 (type -> DOUBLE .)
+    SIGNED          reduce using rule 106 (type -> DOUBLE .)
+    UNSIGNED        reduce using rule 106 (type -> DOUBLE .)
+    ENUM            reduce using rule 106 (type -> DOUBLE .)
+    STRUCT          reduce using rule 106 (type -> DOUBLE .)
+    UNION           reduce using rule 106 (type -> DOUBLE .)
+    SEMI            reduce using rule 106 (type -> DOUBLE .)
+    IDENTIFIER      reduce using rule 106 (type -> DOUBLE .)
+    STAR            reduce using rule 106 (type -> DOUBLE .)
+    L_PAREN         reduce using rule 106 (type -> DOUBLE .)
+    L_SQUARE        reduce using rule 106 (type -> DOUBLE .)
+    COMMA           reduce using rule 106 (type -> DOUBLE .)
+    R_PAREN         reduce using rule 106 (type -> DOUBLE .)
+    COLON           reduce using rule 106 (type -> DOUBLE .)
+
+
+state 32
+
+    (107) type -> SIGNED .
+
+    TYPEDEF         reduce using rule 107 (type -> SIGNED .)
+    EXTERN          reduce using rule 107 (type -> SIGNED .)
+    STATIC          reduce using rule 107 (type -> SIGNED .)
+    AUTO            reduce using rule 107 (type -> SIGNED .)
+    REGISTER        reduce using rule 107 (type -> SIGNED .)
+    CONST           reduce using rule 107 (type -> SIGNED .)
+    VOLATILE        reduce using rule 107 (type -> SIGNED .)
+    VOID            reduce using rule 107 (type -> SIGNED .)
+    CHAR            reduce using rule 107 (type -> SIGNED .)
+    SHORT           reduce using rule 107 (type -> SIGNED .)
+    INT             reduce using rule 107 (type -> SIGNED .)
+    LONG            reduce using rule 107 (type -> SIGNED .)
+    FLOAT           reduce using rule 107 (type -> SIGNED .)
+    DOUBLE          reduce using rule 107 (type -> SIGNED .)
+    SIGNED          reduce using rule 107 (type -> SIGNED .)
+    UNSIGNED        reduce using rule 107 (type -> SIGNED .)
+    ENUM            reduce using rule 107 (type -> SIGNED .)
+    STRUCT          reduce using rule 107 (type -> SIGNED .)
+    UNION           reduce using rule 107 (type -> SIGNED .)
+    SEMI            reduce using rule 107 (type -> SIGNED .)
+    IDENTIFIER      reduce using rule 107 (type -> SIGNED .)
+    STAR            reduce using rule 107 (type -> SIGNED .)
+    L_PAREN         reduce using rule 107 (type -> SIGNED .)
+    L_SQUARE        reduce using rule 107 (type -> SIGNED .)
+    COMMA           reduce using rule 107 (type -> SIGNED .)
+    R_PAREN         reduce using rule 107 (type -> SIGNED .)
+    COLON           reduce using rule 107 (type -> SIGNED .)
+
+
+state 33
+
+    (108) type -> UNSIGNED .
+
+    TYPEDEF         reduce using rule 108 (type -> UNSIGNED .)
+    EXTERN          reduce using rule 108 (type -> UNSIGNED .)
+    STATIC          reduce using rule 108 (type -> UNSIGNED .)
+    AUTO            reduce using rule 108 (type -> UNSIGNED .)
+    REGISTER        reduce using rule 108 (type -> UNSIGNED .)
+    CONST           reduce using rule 108 (type -> UNSIGNED .)
+    VOLATILE        reduce using rule 108 (type -> UNSIGNED .)
+    VOID            reduce using rule 108 (type -> UNSIGNED .)
+    CHAR            reduce using rule 108 (type -> UNSIGNED .)
+    SHORT           reduce using rule 108 (type -> UNSIGNED .)
+    INT             reduce using rule 108 (type -> UNSIGNED .)
+    LONG            reduce using rule 108 (type -> UNSIGNED .)
+    FLOAT           reduce using rule 108 (type -> UNSIGNED .)
+    DOUBLE          reduce using rule 108 (type -> UNSIGNED .)
+    SIGNED          reduce using rule 108 (type -> UNSIGNED .)
+    UNSIGNED        reduce using rule 108 (type -> UNSIGNED .)
+    ENUM            reduce using rule 108 (type -> UNSIGNED .)
+    STRUCT          reduce using rule 108 (type -> UNSIGNED .)
+    UNION           reduce using rule 108 (type -> UNSIGNED .)
+    SEMI            reduce using rule 108 (type -> UNSIGNED .)
+    IDENTIFIER      reduce using rule 108 (type -> UNSIGNED .)
+    STAR            reduce using rule 108 (type -> UNSIGNED .)
+    L_PAREN         reduce using rule 108 (type -> UNSIGNED .)
+    L_SQUARE        reduce using rule 108 (type -> UNSIGNED .)
+    COMMA           reduce using rule 108 (type -> UNSIGNED .)
+    R_PAREN         reduce using rule 108 (type -> UNSIGNED .)
+    COLON           reduce using rule 108 (type -> UNSIGNED .)
 
 
 state 34
@@ -1820,6 +1794,8 @@ state 38
     STATIC          reduce using rule 218 (translation_unit -> translation_unit external_declaration .)
     AUTO            reduce using rule 218 (translation_unit -> translation_unit external_declaration .)
     REGISTER        reduce using rule 218 (translation_unit -> translation_unit external_declaration .)
+    CONST           reduce using rule 218 (translation_unit -> translation_unit external_declaration .)
+    VOLATILE        reduce using rule 218 (translation_unit -> translation_unit external_declaration .)
     VOID            reduce using rule 218 (translation_unit -> translation_unit external_declaration .)
     CHAR            reduce using rule 218 (translation_unit -> translation_unit external_declaration .)
     SHORT           reduce using rule 218 (translation_unit -> translation_unit external_declaration .)
@@ -1829,9 +1805,6 @@ state 38
     DOUBLE          reduce using rule 218 (translation_unit -> translation_unit external_declaration .)
     SIGNED          reduce using rule 218 (translation_unit -> translation_unit external_declaration .)
     UNSIGNED        reduce using rule 218 (translation_unit -> translation_unit external_declaration .)
-    TYPE_NAME       reduce using rule 218 (translation_unit -> translation_unit external_declaration .)
-    CONST           reduce using rule 218 (translation_unit -> translation_unit external_declaration .)
-    VOLATILE        reduce using rule 218 (translation_unit -> translation_unit external_declaration .)
     ENUM            reduce using rule 218 (translation_unit -> translation_unit external_declaration .)
     STRUCT          reduce using rule 218 (translation_unit -> translation_unit external_declaration .)
     UNION           reduce using rule 218 (translation_unit -> translation_unit external_declaration .)
@@ -1848,6 +1821,8 @@ state 39
     STATIC          reduce using rule 226 (function_definition -> function_header compound_statement .)
     AUTO            reduce using rule 226 (function_definition -> function_header compound_statement .)
     REGISTER        reduce using rule 226 (function_definition -> function_header compound_statement .)
+    CONST           reduce using rule 226 (function_definition -> function_header compound_statement .)
+    VOLATILE        reduce using rule 226 (function_definition -> function_header compound_statement .)
     VOID            reduce using rule 226 (function_definition -> function_header compound_statement .)
     CHAR            reduce using rule 226 (function_definition -> function_header compound_statement .)
     SHORT           reduce using rule 226 (function_definition -> function_header compound_statement .)
@@ -1857,9 +1832,6 @@ state 39
     DOUBLE          reduce using rule 226 (function_definition -> function_header compound_statement .)
     SIGNED          reduce using rule 226 (function_definition -> function_header compound_statement .)
     UNSIGNED        reduce using rule 226 (function_definition -> function_header compound_statement .)
-    TYPE_NAME       reduce using rule 226 (function_definition -> function_header compound_statement .)
-    CONST           reduce using rule 226 (function_definition -> function_header compound_statement .)
-    VOLATILE        reduce using rule 226 (function_definition -> function_header compound_statement .)
     ENUM            reduce using rule 226 (function_definition -> function_header compound_statement .)
     STRUCT          reduce using rule 226 (function_definition -> function_header compound_statement .)
     UNION           reduce using rule 226 (function_definition -> function_header compound_statement .)
@@ -1887,20 +1859,20 @@ state 40
     (97) storage_class_specifier -> . STATIC
     (98) storage_class_specifier -> . AUTO
     (99) storage_class_specifier -> . REGISTER
-    (100) type_specifier -> . VOID
-    (101) type_specifier -> . CHAR
-    (102) type_specifier -> . SHORT
-    (103) type_specifier -> . INT
-    (104) type_specifier -> . LONG
-    (105) type_specifier -> . FLOAT
-    (106) type_specifier -> . DOUBLE
-    (107) type_specifier -> . SIGNED
-    (108) type_specifier -> . UNSIGNED
-    (109) type_specifier -> . TYPE_NAME
+    (109) type_specifier -> . type
     (110) type_specifier -> . struct_or_union_specifier
     (111) type_specifier -> . enum_specifier
     (136) type_qualifier -> . CONST
     (137) type_qualifier -> . VOLATILE
+    (100) type -> . VOID
+    (101) type -> . CHAR
+    (102) type -> . SHORT
+    (103) type -> . INT
+    (104) type -> . LONG
+    (105) type -> . FLOAT
+    (106) type -> . DOUBLE
+    (107) type -> . SIGNED
+    (108) type -> . UNSIGNED
     (112) struct_or_union_specifier -> . struct_or_union IDENTIFIER L_BRACE struct_declaration_list R_BRACE
     (113) struct_or_union_specifier -> . struct_or_union L_BRACE struct_declaration_list R_BRACE
     (114) struct_or_union_specifier -> . struct_or_union IDENTIFIER
@@ -1916,18 +1888,17 @@ state 40
     STATIC          shift and go to state 17
     AUTO            shift and go to state 18
     REGISTER        shift and go to state 19
-    VOID            shift and go to state 20
-    CHAR            shift and go to state 21
-    SHORT           shift and go to state 22
-    INT             shift and go to state 23
-    LONG            shift and go to state 24
-    FLOAT           shift and go to state 25
-    DOUBLE          shift and go to state 26
-    SIGNED          shift and go to state 27
-    UNSIGNED        shift and go to state 28
-    TYPE_NAME       shift and go to state 29
-    CONST           shift and go to state 32
-    VOLATILE        shift and go to state 33
+    CONST           shift and go to state 23
+    VOLATILE        shift and go to state 24
+    VOID            shift and go to state 25
+    CHAR            shift and go to state 26
+    SHORT           shift and go to state 27
+    INT             shift and go to state 28
+    LONG            shift and go to state 29
+    FLOAT           shift and go to state 30
+    DOUBLE          shift and go to state 31
+    SIGNED          shift and go to state 32
+    UNSIGNED        shift and go to state 33
     ENUM            shift and go to state 35
     STRUCT          shift and go to state 36
     UNION           shift and go to state 37
@@ -1938,8 +1909,9 @@ state 40
     storage_class_specifier        shift and go to state 11
     type_specifier                 shift and go to state 12
     type_qualifier                 shift and go to state 13
-    struct_or_union_specifier      shift and go to state 30
-    enum_specifier                 shift and go to state 31
+    type                           shift and go to state 20
+    struct_or_union_specifier      shift and go to state 21
+    enum_specifier                 shift and go to state 22
     struct_or_union                shift and go to state 34
 
 state 41
@@ -1994,22 +1966,22 @@ state 41
     (97) storage_class_specifier -> . STATIC
     (98) storage_class_specifier -> . AUTO
     (99) storage_class_specifier -> . REGISTER
-    (100) type_specifier -> . VOID
-    (101) type_specifier -> . CHAR
-    (102) type_specifier -> . SHORT
-    (103) type_specifier -> . INT
-    (104) type_specifier -> . LONG
-    (105) type_specifier -> . FLOAT
-    (106) type_specifier -> . DOUBLE
-    (107) type_specifier -> . SIGNED
-    (108) type_specifier -> . UNSIGNED
-    (109) type_specifier -> . TYPE_NAME
+    (109) type_specifier -> . type
     (110) type_specifier -> . struct_or_union_specifier
     (111) type_specifier -> . enum_specifier
     (136) type_qualifier -> . CONST
     (137) type_qualifier -> . VOLATILE
     (64) assignment_expression -> . conditional_expression
     (65) assignment_expression -> . assignment_lhs assignment_operator assignment_expression
+    (100) type -> . VOID
+    (101) type -> . CHAR
+    (102) type -> . SHORT
+    (103) type -> . INT
+    (104) type -> . LONG
+    (105) type -> . FLOAT
+    (106) type -> . DOUBLE
+    (107) type -> . SIGNED
+    (108) type -> . UNSIGNED
     (112) struct_or_union_specifier -> . struct_or_union IDENTIFIER L_BRACE struct_declaration_list R_BRACE
     (113) struct_or_union_specifier -> . struct_or_union L_BRACE struct_declaration_list R_BRACE
     (114) struct_or_union_specifier -> . struct_or_union IDENTIFIER
@@ -2100,18 +2072,17 @@ state 41
     STATIC          shift and go to state 17
     AUTO            shift and go to state 18
     REGISTER        shift and go to state 19
-    VOID            shift and go to state 20
-    CHAR            shift and go to state 21
-    SHORT           shift and go to state 22
-    INT             shift and go to state 23
-    LONG            shift and go to state 24
-    FLOAT           shift and go to state 25
-    DOUBLE          shift and go to state 26
-    SIGNED          shift and go to state 27
-    UNSIGNED        shift and go to state 28
-    TYPE_NAME       shift and go to state 29
-    CONST           shift and go to state 32
-    VOLATILE        shift and go to state 33
+    CONST           shift and go to state 23
+    VOLATILE        shift and go to state 24
+    VOID            shift and go to state 25
+    CHAR            shift and go to state 26
+    SHORT           shift and go to state 27
+    INT             shift and go to state 28
+    LONG            shift and go to state 29
+    FLOAT           shift and go to state 30
+    DOUBLE          shift and go to state 31
+    SIGNED          shift and go to state 32
+    UNSIGNED        shift and go to state 33
     ENUM            shift and go to state 35
     STRUCT          shift and go to state 36
     UNION           shift and go to state 37
@@ -2145,8 +2116,9 @@ state 41
     type_specifier                 shift and go to state 12
     type_qualifier                 shift and go to state 13
     assignment_expression          shift and go to state 92
-    struct_or_union_specifier      shift and go to state 30
-    enum_specifier                 shift and go to state 31
+    type                           shift and go to state 20
+    struct_or_union_specifier      shift and go to state 21
+    enum_specifier                 shift and go to state 22
     conditional_expression         shift and go to state 95
     assignment_lhs                 shift and go to state 96
     struct_or_union                shift and go to state 34
@@ -2181,6 +2153,8 @@ state 42
     STATIC          reduce using rule 198 (declaration_list -> declaration .)
     AUTO            reduce using rule 198 (declaration_list -> declaration .)
     REGISTER        reduce using rule 198 (declaration_list -> declaration .)
+    CONST           reduce using rule 198 (declaration_list -> declaration .)
+    VOLATILE        reduce using rule 198 (declaration_list -> declaration .)
     VOID            reduce using rule 198 (declaration_list -> declaration .)
     CHAR            reduce using rule 198 (declaration_list -> declaration .)
     SHORT           reduce using rule 198 (declaration_list -> declaration .)
@@ -2190,9 +2164,6 @@ state 42
     DOUBLE          reduce using rule 198 (declaration_list -> declaration .)
     SIGNED          reduce using rule 198 (declaration_list -> declaration .)
     UNSIGNED        reduce using rule 198 (declaration_list -> declaration .)
-    TYPE_NAME       reduce using rule 198 (declaration_list -> declaration .)
-    CONST           reduce using rule 198 (declaration_list -> declaration .)
-    VOLATILE        reduce using rule 198 (declaration_list -> declaration .)
     ENUM            reduce using rule 198 (declaration_list -> declaration .)
     STRUCT          reduce using rule 198 (declaration_list -> declaration .)
     UNION           reduce using rule 198 (declaration_list -> declaration .)
@@ -2278,6 +2249,8 @@ state 44
     STATIC          reduce using rule 81 (declaration -> declaration_specifiers SEMI .)
     AUTO            reduce using rule 81 (declaration -> declaration_specifiers SEMI .)
     REGISTER        reduce using rule 81 (declaration -> declaration_specifiers SEMI .)
+    CONST           reduce using rule 81 (declaration -> declaration_specifiers SEMI .)
+    VOLATILE        reduce using rule 81 (declaration -> declaration_specifiers SEMI .)
     VOID            reduce using rule 81 (declaration -> declaration_specifiers SEMI .)
     CHAR            reduce using rule 81 (declaration -> declaration_specifiers SEMI .)
     SHORT           reduce using rule 81 (declaration -> declaration_specifiers SEMI .)
@@ -2287,9 +2260,6 @@ state 44
     DOUBLE          reduce using rule 81 (declaration -> declaration_specifiers SEMI .)
     SIGNED          reduce using rule 81 (declaration -> declaration_specifiers SEMI .)
     UNSIGNED        reduce using rule 81 (declaration -> declaration_specifiers SEMI .)
-    TYPE_NAME       reduce using rule 81 (declaration -> declaration_specifiers SEMI .)
-    CONST           reduce using rule 81 (declaration -> declaration_specifiers SEMI .)
-    VOLATILE        reduce using rule 81 (declaration -> declaration_specifiers SEMI .)
     ENUM            reduce using rule 81 (declaration -> declaration_specifiers SEMI .)
     STRUCT          reduce using rule 81 (declaration -> declaration_specifiers SEMI .)
     UNION           reduce using rule 81 (declaration -> declaration_specifiers SEMI .)
@@ -2341,6 +2311,8 @@ state 46
     STATIC          reduce using rule 224 (fheader_type1 -> declaration_specifiers function_declaration .)
     AUTO            reduce using rule 224 (fheader_type1 -> declaration_specifiers function_declaration .)
     REGISTER        reduce using rule 224 (fheader_type1 -> declaration_specifiers function_declaration .)
+    CONST           reduce using rule 224 (fheader_type1 -> declaration_specifiers function_declaration .)
+    VOLATILE        reduce using rule 224 (fheader_type1 -> declaration_specifiers function_declaration .)
     VOID            reduce using rule 224 (fheader_type1 -> declaration_specifiers function_declaration .)
     CHAR            reduce using rule 224 (fheader_type1 -> declaration_specifiers function_declaration .)
     SHORT           reduce using rule 224 (fheader_type1 -> declaration_specifiers function_declaration .)
@@ -2350,9 +2322,6 @@ state 46
     DOUBLE          reduce using rule 224 (fheader_type1 -> declaration_specifiers function_declaration .)
     SIGNED          reduce using rule 224 (fheader_type1 -> declaration_specifiers function_declaration .)
     UNSIGNED        reduce using rule 224 (fheader_type1 -> declaration_specifiers function_declaration .)
-    TYPE_NAME       reduce using rule 224 (fheader_type1 -> declaration_specifiers function_declaration .)
-    CONST           reduce using rule 224 (fheader_type1 -> declaration_specifiers function_declaration .)
-    VOLATILE        reduce using rule 224 (fheader_type1 -> declaration_specifiers function_declaration .)
     ENUM            reduce using rule 224 (fheader_type1 -> declaration_specifiers function_declaration .)
     STRUCT          reduce using rule 224 (fheader_type1 -> declaration_specifiers function_declaration .)
     UNION           reduce using rule 224 (fheader_type1 -> declaration_specifiers function_declaration .)
@@ -2502,8 +2471,8 @@ state 55
     COMMA           reduce using rule 151 (pointer -> STAR .)
     R_PAREN         reduce using rule 151 (pointer -> STAR .)
     STAR            shift and go to state 55
-    CONST           shift and go to state 32
-    VOLATILE        shift and go to state 33
+    CONST           shift and go to state 23
+    VOLATILE        shift and go to state 24
 
     type_qualifier_list            shift and go to state 135
     pointer                        shift and go to state 136
@@ -2606,20 +2575,20 @@ state 62
     (97) storage_class_specifier -> . STATIC
     (98) storage_class_specifier -> . AUTO
     (99) storage_class_specifier -> . REGISTER
-    (100) type_specifier -> . VOID
-    (101) type_specifier -> . CHAR
-    (102) type_specifier -> . SHORT
-    (103) type_specifier -> . INT
-    (104) type_specifier -> . LONG
-    (105) type_specifier -> . FLOAT
-    (106) type_specifier -> . DOUBLE
-    (107) type_specifier -> . SIGNED
-    (108) type_specifier -> . UNSIGNED
-    (109) type_specifier -> . TYPE_NAME
+    (109) type_specifier -> . type
     (110) type_specifier -> . struct_or_union_specifier
     (111) type_specifier -> . enum_specifier
     (136) type_qualifier -> . CONST
     (137) type_qualifier -> . VOLATILE
+    (100) type -> . VOID
+    (101) type -> . CHAR
+    (102) type -> . SHORT
+    (103) type -> . INT
+    (104) type -> . LONG
+    (105) type -> . FLOAT
+    (106) type -> . DOUBLE
+    (107) type -> . SIGNED
+    (108) type -> . UNSIGNED
     (112) struct_or_union_specifier -> . struct_or_union IDENTIFIER L_BRACE struct_declaration_list R_BRACE
     (113) struct_or_union_specifier -> . struct_or_union L_BRACE struct_declaration_list R_BRACE
     (114) struct_or_union_specifier -> . struct_or_union IDENTIFIER
@@ -2636,18 +2605,17 @@ state 62
     STATIC          shift and go to state 17
     AUTO            shift and go to state 18
     REGISTER        shift and go to state 19
-    VOID            shift and go to state 20
-    CHAR            shift and go to state 21
-    SHORT           shift and go to state 22
-    INT             shift and go to state 23
-    LONG            shift and go to state 24
-    FLOAT           shift and go to state 25
-    DOUBLE          shift and go to state 26
-    SIGNED          shift and go to state 27
-    UNSIGNED        shift and go to state 28
-    TYPE_NAME       shift and go to state 29
-    CONST           shift and go to state 32
-    VOLATILE        shift and go to state 33
+    CONST           shift and go to state 23
+    VOLATILE        shift and go to state 24
+    VOID            shift and go to state 25
+    CHAR            shift and go to state 26
+    SHORT           shift and go to state 27
+    INT             shift and go to state 28
+    LONG            shift and go to state 29
+    FLOAT           shift and go to state 30
+    DOUBLE          shift and go to state 31
+    SIGNED          shift and go to state 32
+    UNSIGNED        shift and go to state 33
     ENUM            shift and go to state 35
     STRUCT          shift and go to state 36
     UNION           shift and go to state 37
@@ -2660,8 +2628,9 @@ state 62
     storage_class_specifier        shift and go to state 11
     type_specifier                 shift and go to state 12
     type_qualifier                 shift and go to state 13
-    struct_or_union_specifier      shift and go to state 30
-    enum_specifier                 shift and go to state 31
+    type                           shift and go to state 20
+    struct_or_union_specifier      shift and go to state 21
+    enum_specifier                 shift and go to state 22
     struct_or_union                shift and go to state 34
 
 state 63
@@ -2675,6 +2644,8 @@ state 63
     STATIC          reduce using rule 114 (struct_or_union_specifier -> struct_or_union IDENTIFIER .)
     AUTO            reduce using rule 114 (struct_or_union_specifier -> struct_or_union IDENTIFIER .)
     REGISTER        reduce using rule 114 (struct_or_union_specifier -> struct_or_union IDENTIFIER .)
+    CONST           reduce using rule 114 (struct_or_union_specifier -> struct_or_union IDENTIFIER .)
+    VOLATILE        reduce using rule 114 (struct_or_union_specifier -> struct_or_union IDENTIFIER .)
     VOID            reduce using rule 114 (struct_or_union_specifier -> struct_or_union IDENTIFIER .)
     CHAR            reduce using rule 114 (struct_or_union_specifier -> struct_or_union IDENTIFIER .)
     SHORT           reduce using rule 114 (struct_or_union_specifier -> struct_or_union IDENTIFIER .)
@@ -2684,9 +2655,6 @@ state 63
     DOUBLE          reduce using rule 114 (struct_or_union_specifier -> struct_or_union IDENTIFIER .)
     SIGNED          reduce using rule 114 (struct_or_union_specifier -> struct_or_union IDENTIFIER .)
     UNSIGNED        reduce using rule 114 (struct_or_union_specifier -> struct_or_union IDENTIFIER .)
-    TYPE_NAME       reduce using rule 114 (struct_or_union_specifier -> struct_or_union IDENTIFIER .)
-    CONST           reduce using rule 114 (struct_or_union_specifier -> struct_or_union IDENTIFIER .)
-    VOLATILE        reduce using rule 114 (struct_or_union_specifier -> struct_or_union IDENTIFIER .)
     ENUM            reduce using rule 114 (struct_or_union_specifier -> struct_or_union IDENTIFIER .)
     STRUCT          reduce using rule 114 (struct_or_union_specifier -> struct_or_union IDENTIFIER .)
     UNION           reduce using rule 114 (struct_or_union_specifier -> struct_or_union IDENTIFIER .)
@@ -2710,20 +2678,20 @@ state 64
     (121) specifier_qualifier_list -> . type_specifier
     (122) specifier_qualifier_list -> . type_qualifier specifier_qualifier_list
     (123) specifier_qualifier_list -> . type_qualifier
-    (100) type_specifier -> . VOID
-    (101) type_specifier -> . CHAR
-    (102) type_specifier -> . SHORT
-    (103) type_specifier -> . INT
-    (104) type_specifier -> . LONG
-    (105) type_specifier -> . FLOAT
-    (106) type_specifier -> . DOUBLE
-    (107) type_specifier -> . SIGNED
-    (108) type_specifier -> . UNSIGNED
-    (109) type_specifier -> . TYPE_NAME
+    (109) type_specifier -> . type
     (110) type_specifier -> . struct_or_union_specifier
     (111) type_specifier -> . enum_specifier
     (136) type_qualifier -> . CONST
     (137) type_qualifier -> . VOLATILE
+    (100) type -> . VOID
+    (101) type -> . CHAR
+    (102) type -> . SHORT
+    (103) type -> . INT
+    (104) type -> . LONG
+    (105) type -> . FLOAT
+    (106) type -> . DOUBLE
+    (107) type -> . SIGNED
+    (108) type -> . UNSIGNED
     (112) struct_or_union_specifier -> . struct_or_union IDENTIFIER L_BRACE struct_declaration_list R_BRACE
     (113) struct_or_union_specifier -> . struct_or_union L_BRACE struct_declaration_list R_BRACE
     (114) struct_or_union_specifier -> . struct_or_union IDENTIFIER
@@ -2733,18 +2701,17 @@ state 64
     (115) struct_or_union -> . STRUCT
     (116) struct_or_union -> . UNION
 
-    VOID            shift and go to state 20
-    CHAR            shift and go to state 21
-    SHORT           shift and go to state 22
-    INT             shift and go to state 23
-    LONG            shift and go to state 24
-    FLOAT           shift and go to state 25
-    DOUBLE          shift and go to state 26
-    SIGNED          shift and go to state 27
-    UNSIGNED        shift and go to state 28
-    TYPE_NAME       shift and go to state 29
-    CONST           shift and go to state 32
-    VOLATILE        shift and go to state 33
+    CONST           shift and go to state 23
+    VOLATILE        shift and go to state 24
+    VOID            shift and go to state 25
+    CHAR            shift and go to state 26
+    SHORT           shift and go to state 27
+    INT             shift and go to state 28
+    LONG            shift and go to state 29
+    FLOAT           shift and go to state 30
+    DOUBLE          shift and go to state 31
+    SIGNED          shift and go to state 32
+    UNSIGNED        shift and go to state 33
     ENUM            shift and go to state 35
     STRUCT          shift and go to state 36
     UNION           shift and go to state 37
@@ -2755,8 +2722,9 @@ state 64
     specifier_qualifier_list       shift and go to state 148
     type_specifier                 shift and go to state 149
     type_qualifier                 shift and go to state 150
-    struct_or_union_specifier      shift and go to state 30
-    enum_specifier                 shift and go to state 31
+    type                           shift and go to state 20
+    struct_or_union_specifier      shift and go to state 21
+    enum_specifier                 shift and go to state 22
 
 state 65
 
@@ -2782,6 +2750,8 @@ state 66
     STATIC          reduce using rule 131 (enum_specifier -> ENUM IDENTIFIER .)
     AUTO            reduce using rule 131 (enum_specifier -> ENUM IDENTIFIER .)
     REGISTER        reduce using rule 131 (enum_specifier -> ENUM IDENTIFIER .)
+    CONST           reduce using rule 131 (enum_specifier -> ENUM IDENTIFIER .)
+    VOLATILE        reduce using rule 131 (enum_specifier -> ENUM IDENTIFIER .)
     VOID            reduce using rule 131 (enum_specifier -> ENUM IDENTIFIER .)
     CHAR            reduce using rule 131 (enum_specifier -> ENUM IDENTIFIER .)
     SHORT           reduce using rule 131 (enum_specifier -> ENUM IDENTIFIER .)
@@ -2791,9 +2761,6 @@ state 66
     DOUBLE          reduce using rule 131 (enum_specifier -> ENUM IDENTIFIER .)
     SIGNED          reduce using rule 131 (enum_specifier -> ENUM IDENTIFIER .)
     UNSIGNED        reduce using rule 131 (enum_specifier -> ENUM IDENTIFIER .)
-    TYPE_NAME       reduce using rule 131 (enum_specifier -> ENUM IDENTIFIER .)
-    CONST           reduce using rule 131 (enum_specifier -> ENUM IDENTIFIER .)
-    VOLATILE        reduce using rule 131 (enum_specifier -> ENUM IDENTIFIER .)
     ENUM            reduce using rule 131 (enum_specifier -> ENUM IDENTIFIER .)
     STRUCT          reduce using rule 131 (enum_specifier -> ENUM IDENTIFIER .)
     UNION           reduce using rule 131 (enum_specifier -> ENUM IDENTIFIER .)
@@ -2817,6 +2784,8 @@ state 67
     STATIC          reduce using rule 227 (function_definition -> function_header declaration_list compound_statement .)
     AUTO            reduce using rule 227 (function_definition -> function_header declaration_list compound_statement .)
     REGISTER        reduce using rule 227 (function_definition -> function_header declaration_list compound_statement .)
+    CONST           reduce using rule 227 (function_definition -> function_header declaration_list compound_statement .)
+    VOLATILE        reduce using rule 227 (function_definition -> function_header declaration_list compound_statement .)
     VOID            reduce using rule 227 (function_definition -> function_header declaration_list compound_statement .)
     CHAR            reduce using rule 227 (function_definition -> function_header declaration_list compound_statement .)
     SHORT           reduce using rule 227 (function_definition -> function_header declaration_list compound_statement .)
@@ -2826,9 +2795,6 @@ state 67
     DOUBLE          reduce using rule 227 (function_definition -> function_header declaration_list compound_statement .)
     SIGNED          reduce using rule 227 (function_definition -> function_header declaration_list compound_statement .)
     UNSIGNED        reduce using rule 227 (function_definition -> function_header declaration_list compound_statement .)
-    TYPE_NAME       reduce using rule 227 (function_definition -> function_header declaration_list compound_statement .)
-    CONST           reduce using rule 227 (function_definition -> function_header declaration_list compound_statement .)
-    VOLATILE        reduce using rule 227 (function_definition -> function_header declaration_list compound_statement .)
     ENUM            reduce using rule 227 (function_definition -> function_header declaration_list compound_statement .)
     STRUCT          reduce using rule 227 (function_definition -> function_header declaration_list compound_statement .)
     UNION           reduce using rule 227 (function_definition -> function_header declaration_list compound_statement .)
@@ -2845,6 +2811,8 @@ state 68
     STATIC          reduce using rule 199 (declaration_list -> declaration_list declaration .)
     AUTO            reduce using rule 199 (declaration_list -> declaration_list declaration .)
     REGISTER        reduce using rule 199 (declaration_list -> declaration_list declaration .)
+    CONST           reduce using rule 199 (declaration_list -> declaration_list declaration .)
+    VOLATILE        reduce using rule 199 (declaration_list -> declaration_list declaration .)
     VOID            reduce using rule 199 (declaration_list -> declaration_list declaration .)
     CHAR            reduce using rule 199 (declaration_list -> declaration_list declaration .)
     SHORT           reduce using rule 199 (declaration_list -> declaration_list declaration .)
@@ -2854,9 +2822,6 @@ state 68
     DOUBLE          reduce using rule 199 (declaration_list -> declaration_list declaration .)
     SIGNED          reduce using rule 199 (declaration_list -> declaration_list declaration .)
     UNSIGNED        reduce using rule 199 (declaration_list -> declaration_list declaration .)
-    TYPE_NAME       reduce using rule 199 (declaration_list -> declaration_list declaration .)
-    CONST           reduce using rule 199 (declaration_list -> declaration_list declaration .)
-    VOLATILE        reduce using rule 199 (declaration_list -> declaration_list declaration .)
     ENUM            reduce using rule 199 (declaration_list -> declaration_list declaration .)
     STRUCT          reduce using rule 199 (declaration_list -> declaration_list declaration .)
     UNION           reduce using rule 199 (declaration_list -> declaration_list declaration .)
@@ -2897,6 +2862,8 @@ state 69
     STATIC          reduce using rule 194 (compound_statement -> L_BRACE R_BRACE .)
     AUTO            reduce using rule 194 (compound_statement -> L_BRACE R_BRACE .)
     REGISTER        reduce using rule 194 (compound_statement -> L_BRACE R_BRACE .)
+    CONST           reduce using rule 194 (compound_statement -> L_BRACE R_BRACE .)
+    VOLATILE        reduce using rule 194 (compound_statement -> L_BRACE R_BRACE .)
     VOID            reduce using rule 194 (compound_statement -> L_BRACE R_BRACE .)
     CHAR            reduce using rule 194 (compound_statement -> L_BRACE R_BRACE .)
     SHORT           reduce using rule 194 (compound_statement -> L_BRACE R_BRACE .)
@@ -2906,9 +2873,6 @@ state 69
     DOUBLE          reduce using rule 194 (compound_statement -> L_BRACE R_BRACE .)
     SIGNED          reduce using rule 194 (compound_statement -> L_BRACE R_BRACE .)
     UNSIGNED        reduce using rule 194 (compound_statement -> L_BRACE R_BRACE .)
-    TYPE_NAME       reduce using rule 194 (compound_statement -> L_BRACE R_BRACE .)
-    CONST           reduce using rule 194 (compound_statement -> L_BRACE R_BRACE .)
-    VOLATILE        reduce using rule 194 (compound_statement -> L_BRACE R_BRACE .)
     ENUM            reduce using rule 194 (compound_statement -> L_BRACE R_BRACE .)
     STRUCT          reduce using rule 194 (compound_statement -> L_BRACE R_BRACE .)
     UNION           reduce using rule 194 (compound_statement -> L_BRACE R_BRACE .)
@@ -3143,16 +3107,7 @@ state 71
     (97) storage_class_specifier -> . STATIC
     (98) storage_class_specifier -> . AUTO
     (99) storage_class_specifier -> . REGISTER
-    (100) type_specifier -> . VOID
-    (101) type_specifier -> . CHAR
-    (102) type_specifier -> . SHORT
-    (103) type_specifier -> . INT
-    (104) type_specifier -> . LONG
-    (105) type_specifier -> . FLOAT
-    (106) type_specifier -> . DOUBLE
-    (107) type_specifier -> . SIGNED
-    (108) type_specifier -> . UNSIGNED
-    (109) type_specifier -> . TYPE_NAME
+    (109) type_specifier -> . type
     (110) type_specifier -> . struct_or_union_specifier
     (111) type_specifier -> . enum_specifier
     (136) type_qualifier -> . CONST
@@ -3162,6 +3117,15 @@ state 71
     (208) iteration_header -> . WHILE L_PAREN expression R_PAREN
     (209) iteration_header -> . FOR L_PAREN expression_statement expression_statement R_PAREN
     (210) iteration_header -> . FOR L_PAREN expression_statement expression_statement expression R_PAREN
+    (100) type -> . VOID
+    (101) type -> . CHAR
+    (102) type -> . SHORT
+    (103) type -> . INT
+    (104) type -> . LONG
+    (105) type -> . FLOAT
+    (106) type -> . DOUBLE
+    (107) type -> . SIGNED
+    (108) type -> . UNSIGNED
     (112) struct_or_union_specifier -> . struct_or_union IDENTIFIER L_BRACE struct_declaration_list R_BRACE
     (113) struct_or_union_specifier -> . struct_or_union L_BRACE struct_declaration_list R_BRACE
     (114) struct_or_union_specifier -> . struct_or_union IDENTIFIER
@@ -3252,20 +3216,19 @@ state 71
     STATIC          shift and go to state 17
     AUTO            shift and go to state 18
     REGISTER        shift and go to state 19
-    VOID            shift and go to state 20
-    CHAR            shift and go to state 21
-    SHORT           shift and go to state 22
-    INT             shift and go to state 23
-    LONG            shift and go to state 24
-    FLOAT           shift and go to state 25
-    DOUBLE          shift and go to state 26
-    SIGNED          shift and go to state 27
-    UNSIGNED        shift and go to state 28
-    TYPE_NAME       shift and go to state 29
-    CONST           shift and go to state 32
-    VOLATILE        shift and go to state 33
+    CONST           shift and go to state 23
+    VOLATILE        shift and go to state 24
     WHILE           shift and go to state 93
     FOR             shift and go to state 94
+    VOID            shift and go to state 25
+    CHAR            shift and go to state 26
+    SHORT           shift and go to state 27
+    INT             shift and go to state 28
+    LONG            shift and go to state 29
+    FLOAT           shift and go to state 30
+    DOUBLE          shift and go to state 31
+    SIGNED          shift and go to state 32
+    UNSIGNED        shift and go to state 33
     ENUM            shift and go to state 35
     STRUCT          shift and go to state 36
     UNION           shift and go to state 37
@@ -3297,8 +3260,9 @@ state 71
     type_qualifier                 shift and go to state 13
     expression                     shift and go to state 83
     iteration_header               shift and go to state 87
-    struct_or_union_specifier      shift and go to state 30
-    enum_specifier                 shift and go to state 31
+    type                           shift and go to state 20
+    struct_or_union_specifier      shift and go to state 21
+    enum_specifier                 shift and go to state 22
     assignment_expression          shift and go to state 92
     struct_or_union                shift and go to state 34
     conditional_expression         shift and go to state 95
@@ -3780,16 +3744,7 @@ state 85
     (62) conditional_expression -> . logical_or_expression
     (63) conditional_expression -> . logical_or_expression QUEST expression COLON conditional_expression
     (66) assignment_lhs -> . unary_expression
-    (100) type_specifier -> . VOID
-    (101) type_specifier -> . CHAR
-    (102) type_specifier -> . SHORT
-    (103) type_specifier -> . INT
-    (104) type_specifier -> . LONG
-    (105) type_specifier -> . FLOAT
-    (106) type_specifier -> . DOUBLE
-    (107) type_specifier -> . SIGNED
-    (108) type_specifier -> . UNSIGNED
-    (109) type_specifier -> . TYPE_NAME
+    (109) type_specifier -> . type
     (110) type_specifier -> . struct_or_union_specifier
     (111) type_specifier -> . enum_specifier
     (136) type_qualifier -> . CONST
@@ -3802,6 +3757,15 @@ state 85
     (21) unary_expression -> . unary_op_before_cast_exp
     (22) unary_expression -> . SIZEOF unary_expression
     (23) unary_expression -> . SIZEOF L_PAREN type_name R_PAREN
+    (100) type -> . VOID
+    (101) type -> . CHAR
+    (102) type -> . SHORT
+    (103) type -> . INT
+    (104) type -> . LONG
+    (105) type -> . FLOAT
+    (106) type -> . DOUBLE
+    (107) type -> . SIGNED
+    (108) type -> . UNSIGNED
     (112) struct_or_union_specifier -> . struct_or_union IDENTIFIER L_BRACE struct_declaration_list R_BRACE
     (113) struct_or_union_specifier -> . struct_or_union L_BRACE struct_declaration_list R_BRACE
     (114) struct_or_union_specifier -> . struct_or_union IDENTIFIER
@@ -3862,21 +3826,20 @@ state 85
     (31) cast_expression -> . unary_expression
     (32) cast_expression -> . L_PAREN type_name R_PAREN cast_expression
 
-    VOID            shift and go to state 20
-    CHAR            shift and go to state 21
-    SHORT           shift and go to state 22
-    INT             shift and go to state 23
-    LONG            shift and go to state 24
-    FLOAT           shift and go to state 25
-    DOUBLE          shift and go to state 26
-    SIGNED          shift and go to state 27
-    UNSIGNED        shift and go to state 28
-    TYPE_NAME       shift and go to state 29
-    CONST           shift and go to state 32
-    VOLATILE        shift and go to state 33
+    CONST           shift and go to state 23
+    VOLATILE        shift and go to state 24
     INC_OP          shift and go to state 101
     DEC_OP          shift and go to state 102
     SIZEOF          shift and go to state 104
+    VOID            shift and go to state 25
+    CHAR            shift and go to state 26
+    SHORT           shift and go to state 27
+    INT             shift and go to state 28
+    LONG            shift and go to state 29
+    FLOAT           shift and go to state 30
+    DOUBLE          shift and go to state 31
+    SIGNED          shift and go to state 32
+    UNSIGNED        shift and go to state 33
     ENUM            shift and go to state 35
     STRUCT          shift and go to state 36
     UNION           shift and go to state 37
@@ -3902,8 +3865,9 @@ state 85
     type_qualifier                 shift and go to state 150
     logical_or_expression          shift and go to state 97
     unary_expression               shift and go to state 98
-    struct_or_union_specifier      shift and go to state 30
-    enum_specifier                 shift and go to state 31
+    type                           shift and go to state 20
+    struct_or_union_specifier      shift and go to state 21
+    enum_specifier                 shift and go to state 22
     logical_and_expression         shift and go to state 99
     postfix_expression             shift and go to state 100
     unary_op_before_cast_exp       shift and go to state 103
@@ -5332,6 +5296,8 @@ state 129
     STATIC          reduce using rule 82 (declaration -> declaration_specifiers init_declarator_list SEMI .)
     AUTO            reduce using rule 82 (declaration -> declaration_specifiers init_declarator_list SEMI .)
     REGISTER        reduce using rule 82 (declaration -> declaration_specifiers init_declarator_list SEMI .)
+    CONST           reduce using rule 82 (declaration -> declaration_specifiers init_declarator_list SEMI .)
+    VOLATILE        reduce using rule 82 (declaration -> declaration_specifiers init_declarator_list SEMI .)
     VOID            reduce using rule 82 (declaration -> declaration_specifiers init_declarator_list SEMI .)
     CHAR            reduce using rule 82 (declaration -> declaration_specifiers init_declarator_list SEMI .)
     SHORT           reduce using rule 82 (declaration -> declaration_specifiers init_declarator_list SEMI .)
@@ -5341,9 +5307,6 @@ state 129
     DOUBLE          reduce using rule 82 (declaration -> declaration_specifiers init_declarator_list SEMI .)
     SIGNED          reduce using rule 82 (declaration -> declaration_specifiers init_declarator_list SEMI .)
     UNSIGNED        reduce using rule 82 (declaration -> declaration_specifiers init_declarator_list SEMI .)
-    TYPE_NAME       reduce using rule 82 (declaration -> declaration_specifiers init_declarator_list SEMI .)
-    CONST           reduce using rule 82 (declaration -> declaration_specifiers init_declarator_list SEMI .)
-    VOLATILE        reduce using rule 82 (declaration -> declaration_specifiers init_declarator_list SEMI .)
     ENUM            reduce using rule 82 (declaration -> declaration_specifiers init_declarator_list SEMI .)
     STRUCT          reduce using rule 82 (declaration -> declaration_specifiers init_declarator_list SEMI .)
     UNION           reduce using rule 82 (declaration -> declaration_specifiers init_declarator_list SEMI .)
@@ -5667,8 +5630,8 @@ state 135
     COMMA           reduce using rule 152 (pointer -> STAR type_qualifier_list .)
     R_PAREN         reduce using rule 152 (pointer -> STAR type_qualifier_list .)
     STAR            shift and go to state 55
-    CONST           shift and go to state 32
-    VOLATILE        shift and go to state 33
+    CONST           shift and go to state 23
+    VOLATILE        shift and go to state 24
 
     pointer                        shift and go to state 232
     type_qualifier                 shift and go to state 233
@@ -5723,6 +5686,8 @@ state 140
     STATIC          reduce using rule 150 (function_declaration -> IDENTIFIER L_PAREN R_PAREN .)
     AUTO            reduce using rule 150 (function_declaration -> IDENTIFIER L_PAREN R_PAREN .)
     REGISTER        reduce using rule 150 (function_declaration -> IDENTIFIER L_PAREN R_PAREN .)
+    CONST           reduce using rule 150 (function_declaration -> IDENTIFIER L_PAREN R_PAREN .)
+    VOLATILE        reduce using rule 150 (function_declaration -> IDENTIFIER L_PAREN R_PAREN .)
     VOID            reduce using rule 150 (function_declaration -> IDENTIFIER L_PAREN R_PAREN .)
     CHAR            reduce using rule 150 (function_declaration -> IDENTIFIER L_PAREN R_PAREN .)
     SHORT           reduce using rule 150 (function_declaration -> IDENTIFIER L_PAREN R_PAREN .)
@@ -5732,9 +5697,6 @@ state 140
     DOUBLE          reduce using rule 150 (function_declaration -> IDENTIFIER L_PAREN R_PAREN .)
     SIGNED          reduce using rule 150 (function_declaration -> IDENTIFIER L_PAREN R_PAREN .)
     UNSIGNED        reduce using rule 150 (function_declaration -> IDENTIFIER L_PAREN R_PAREN .)
-    TYPE_NAME       reduce using rule 150 (function_declaration -> IDENTIFIER L_PAREN R_PAREN .)
-    CONST           reduce using rule 150 (function_declaration -> IDENTIFIER L_PAREN R_PAREN .)
-    VOLATILE        reduce using rule 150 (function_declaration -> IDENTIFIER L_PAREN R_PAREN .)
     ENUM            reduce using rule 150 (function_declaration -> IDENTIFIER L_PAREN R_PAREN .)
     STRUCT          reduce using rule 150 (function_declaration -> IDENTIFIER L_PAREN R_PAREN .)
     UNION           reduce using rule 150 (function_declaration -> IDENTIFIER L_PAREN R_PAREN .)
@@ -5834,20 +5796,20 @@ state 145
     (121) specifier_qualifier_list -> . type_specifier
     (122) specifier_qualifier_list -> . type_qualifier specifier_qualifier_list
     (123) specifier_qualifier_list -> . type_qualifier
-    (100) type_specifier -> . VOID
-    (101) type_specifier -> . CHAR
-    (102) type_specifier -> . SHORT
-    (103) type_specifier -> . INT
-    (104) type_specifier -> . LONG
-    (105) type_specifier -> . FLOAT
-    (106) type_specifier -> . DOUBLE
-    (107) type_specifier -> . SIGNED
-    (108) type_specifier -> . UNSIGNED
-    (109) type_specifier -> . TYPE_NAME
+    (109) type_specifier -> . type
     (110) type_specifier -> . struct_or_union_specifier
     (111) type_specifier -> . enum_specifier
     (136) type_qualifier -> . CONST
     (137) type_qualifier -> . VOLATILE
+    (100) type -> . VOID
+    (101) type -> . CHAR
+    (102) type -> . SHORT
+    (103) type -> . INT
+    (104) type -> . LONG
+    (105) type -> . FLOAT
+    (106) type -> . DOUBLE
+    (107) type -> . SIGNED
+    (108) type -> . UNSIGNED
     (112) struct_or_union_specifier -> . struct_or_union IDENTIFIER L_BRACE struct_declaration_list R_BRACE
     (113) struct_or_union_specifier -> . struct_or_union L_BRACE struct_declaration_list R_BRACE
     (114) struct_or_union_specifier -> . struct_or_union IDENTIFIER
@@ -5857,18 +5819,17 @@ state 145
     (115) struct_or_union -> . STRUCT
     (116) struct_or_union -> . UNION
 
-    VOID            shift and go to state 20
-    CHAR            shift and go to state 21
-    SHORT           shift and go to state 22
-    INT             shift and go to state 23
-    LONG            shift and go to state 24
-    FLOAT           shift and go to state 25
-    DOUBLE          shift and go to state 26
-    SIGNED          shift and go to state 27
-    UNSIGNED        shift and go to state 28
-    TYPE_NAME       shift and go to state 29
-    CONST           shift and go to state 32
-    VOLATILE        shift and go to state 33
+    CONST           shift and go to state 23
+    VOLATILE        shift and go to state 24
+    VOID            shift and go to state 25
+    CHAR            shift and go to state 26
+    SHORT           shift and go to state 27
+    INT             shift and go to state 28
+    LONG            shift and go to state 29
+    FLOAT           shift and go to state 30
+    DOUBLE          shift and go to state 31
+    SIGNED          shift and go to state 32
+    UNSIGNED        shift and go to state 33
     ENUM            shift and go to state 35
     STRUCT          shift and go to state 36
     UNION           shift and go to state 37
@@ -5879,8 +5840,9 @@ state 145
     specifier_qualifier_list       shift and go to state 148
     type_specifier                 shift and go to state 149
     type_qualifier                 shift and go to state 150
-    struct_or_union_specifier      shift and go to state 30
-    enum_specifier                 shift and go to state 31
+    type                           shift and go to state 20
+    struct_or_union_specifier      shift and go to state 21
+    enum_specifier                 shift and go to state 22
 
 state 146
 
@@ -5891,20 +5853,20 @@ state 146
     (121) specifier_qualifier_list -> . type_specifier
     (122) specifier_qualifier_list -> . type_qualifier specifier_qualifier_list
     (123) specifier_qualifier_list -> . type_qualifier
-    (100) type_specifier -> . VOID
-    (101) type_specifier -> . CHAR
-    (102) type_specifier -> . SHORT
-    (103) type_specifier -> . INT
-    (104) type_specifier -> . LONG
-    (105) type_specifier -> . FLOAT
-    (106) type_specifier -> . DOUBLE
-    (107) type_specifier -> . SIGNED
-    (108) type_specifier -> . UNSIGNED
-    (109) type_specifier -> . TYPE_NAME
+    (109) type_specifier -> . type
     (110) type_specifier -> . struct_or_union_specifier
     (111) type_specifier -> . enum_specifier
     (136) type_qualifier -> . CONST
     (137) type_qualifier -> . VOLATILE
+    (100) type -> . VOID
+    (101) type -> . CHAR
+    (102) type -> . SHORT
+    (103) type -> . INT
+    (104) type -> . LONG
+    (105) type -> . FLOAT
+    (106) type -> . DOUBLE
+    (107) type -> . SIGNED
+    (108) type -> . UNSIGNED
     (112) struct_or_union_specifier -> . struct_or_union IDENTIFIER L_BRACE struct_declaration_list R_BRACE
     (113) struct_or_union_specifier -> . struct_or_union L_BRACE struct_declaration_list R_BRACE
     (114) struct_or_union_specifier -> . struct_or_union IDENTIFIER
@@ -5915,18 +5877,17 @@ state 146
     (116) struct_or_union -> . UNION
 
     R_BRACE         shift and go to state 245
-    VOID            shift and go to state 20
-    CHAR            shift and go to state 21
-    SHORT           shift and go to state 22
-    INT             shift and go to state 23
-    LONG            shift and go to state 24
-    FLOAT           shift and go to state 25
-    DOUBLE          shift and go to state 26
-    SIGNED          shift and go to state 27
-    UNSIGNED        shift and go to state 28
-    TYPE_NAME       shift and go to state 29
-    CONST           shift and go to state 32
-    VOLATILE        shift and go to state 33
+    CONST           shift and go to state 23
+    VOLATILE        shift and go to state 24
+    VOID            shift and go to state 25
+    CHAR            shift and go to state 26
+    SHORT           shift and go to state 27
+    INT             shift and go to state 28
+    LONG            shift and go to state 29
+    FLOAT           shift and go to state 30
+    DOUBLE          shift and go to state 31
+    SIGNED          shift and go to state 32
+    UNSIGNED        shift and go to state 33
     ENUM            shift and go to state 35
     STRUCT          shift and go to state 36
     UNION           shift and go to state 37
@@ -5936,14 +5897,17 @@ state 146
     specifier_qualifier_list       shift and go to state 148
     type_specifier                 shift and go to state 149
     type_qualifier                 shift and go to state 150
-    struct_or_union_specifier      shift and go to state 30
-    enum_specifier                 shift and go to state 31
+    type                           shift and go to state 20
+    struct_or_union_specifier      shift and go to state 21
+    enum_specifier                 shift and go to state 22
 
 state 147
 
     (117) struct_declaration_list -> struct_declaration .
 
     R_BRACE         reduce using rule 117 (struct_declaration_list -> struct_declaration .)
+    CONST           reduce using rule 117 (struct_declaration_list -> struct_declaration .)
+    VOLATILE        reduce using rule 117 (struct_declaration_list -> struct_declaration .)
     VOID            reduce using rule 117 (struct_declaration_list -> struct_declaration .)
     CHAR            reduce using rule 117 (struct_declaration_list -> struct_declaration .)
     SHORT           reduce using rule 117 (struct_declaration_list -> struct_declaration .)
@@ -5953,9 +5917,6 @@ state 147
     DOUBLE          reduce using rule 117 (struct_declaration_list -> struct_declaration .)
     SIGNED          reduce using rule 117 (struct_declaration_list -> struct_declaration .)
     UNSIGNED        reduce using rule 117 (struct_declaration_list -> struct_declaration .)
-    TYPE_NAME       reduce using rule 117 (struct_declaration_list -> struct_declaration .)
-    CONST           reduce using rule 117 (struct_declaration_list -> struct_declaration .)
-    VOLATILE        reduce using rule 117 (struct_declaration_list -> struct_declaration .)
     ENUM            reduce using rule 117 (struct_declaration_list -> struct_declaration .)
     STRUCT          reduce using rule 117 (struct_declaration_list -> struct_declaration .)
     UNION           reduce using rule 117 (struct_declaration_list -> struct_declaration .)
@@ -6010,20 +5971,20 @@ state 149
     (121) specifier_qualifier_list -> . type_specifier
     (122) specifier_qualifier_list -> . type_qualifier specifier_qualifier_list
     (123) specifier_qualifier_list -> . type_qualifier
-    (100) type_specifier -> . VOID
-    (101) type_specifier -> . CHAR
-    (102) type_specifier -> . SHORT
-    (103) type_specifier -> . INT
-    (104) type_specifier -> . LONG
-    (105) type_specifier -> . FLOAT
-    (106) type_specifier -> . DOUBLE
-    (107) type_specifier -> . SIGNED
-    (108) type_specifier -> . UNSIGNED
-    (109) type_specifier -> . TYPE_NAME
+    (109) type_specifier -> . type
     (110) type_specifier -> . struct_or_union_specifier
     (111) type_specifier -> . enum_specifier
     (136) type_qualifier -> . CONST
     (137) type_qualifier -> . VOLATILE
+    (100) type -> . VOID
+    (101) type -> . CHAR
+    (102) type -> . SHORT
+    (103) type -> . INT
+    (104) type -> . LONG
+    (105) type -> . FLOAT
+    (106) type -> . DOUBLE
+    (107) type -> . SIGNED
+    (108) type -> . UNSIGNED
     (112) struct_or_union_specifier -> . struct_or_union IDENTIFIER L_BRACE struct_declaration_list R_BRACE
     (113) struct_or_union_specifier -> . struct_or_union L_BRACE struct_declaration_list R_BRACE
     (114) struct_or_union_specifier -> . struct_or_union IDENTIFIER
@@ -6039,18 +6000,17 @@ state 149
     L_PAREN         reduce using rule 121 (specifier_qualifier_list -> type_specifier .)
     L_SQUARE        reduce using rule 121 (specifier_qualifier_list -> type_specifier .)
     R_PAREN         reduce using rule 121 (specifier_qualifier_list -> type_specifier .)
-    VOID            shift and go to state 20
-    CHAR            shift and go to state 21
-    SHORT           shift and go to state 22
-    INT             shift and go to state 23
-    LONG            shift and go to state 24
-    FLOAT           shift and go to state 25
-    DOUBLE          shift and go to state 26
-    SIGNED          shift and go to state 27
-    UNSIGNED        shift and go to state 28
-    TYPE_NAME       shift and go to state 29
-    CONST           shift and go to state 32
-    VOLATILE        shift and go to state 33
+    CONST           shift and go to state 23
+    VOLATILE        shift and go to state 24
+    VOID            shift and go to state 25
+    CHAR            shift and go to state 26
+    SHORT           shift and go to state 27
+    INT             shift and go to state 28
+    LONG            shift and go to state 29
+    FLOAT           shift and go to state 30
+    DOUBLE          shift and go to state 31
+    SIGNED          shift and go to state 32
+    UNSIGNED        shift and go to state 33
     ENUM            shift and go to state 35
     STRUCT          shift and go to state 36
     UNION           shift and go to state 37
@@ -6058,8 +6018,9 @@ state 149
     type_specifier                 shift and go to state 149
     specifier_qualifier_list       shift and go to state 251
     type_qualifier                 shift and go to state 150
-    struct_or_union_specifier      shift and go to state 30
-    enum_specifier                 shift and go to state 31
+    type                           shift and go to state 20
+    struct_or_union_specifier      shift and go to state 21
+    enum_specifier                 shift and go to state 22
     struct_or_union                shift and go to state 34
 
 state 150
@@ -6070,20 +6031,20 @@ state 150
     (121) specifier_qualifier_list -> . type_specifier
     (122) specifier_qualifier_list -> . type_qualifier specifier_qualifier_list
     (123) specifier_qualifier_list -> . type_qualifier
-    (100) type_specifier -> . VOID
-    (101) type_specifier -> . CHAR
-    (102) type_specifier -> . SHORT
-    (103) type_specifier -> . INT
-    (104) type_specifier -> . LONG
-    (105) type_specifier -> . FLOAT
-    (106) type_specifier -> . DOUBLE
-    (107) type_specifier -> . SIGNED
-    (108) type_specifier -> . UNSIGNED
-    (109) type_specifier -> . TYPE_NAME
+    (109) type_specifier -> . type
     (110) type_specifier -> . struct_or_union_specifier
     (111) type_specifier -> . enum_specifier
     (136) type_qualifier -> . CONST
     (137) type_qualifier -> . VOLATILE
+    (100) type -> . VOID
+    (101) type -> . CHAR
+    (102) type -> . SHORT
+    (103) type -> . INT
+    (104) type -> . LONG
+    (105) type -> . FLOAT
+    (106) type -> . DOUBLE
+    (107) type -> . SIGNED
+    (108) type -> . UNSIGNED
     (112) struct_or_union_specifier -> . struct_or_union IDENTIFIER L_BRACE struct_declaration_list R_BRACE
     (113) struct_or_union_specifier -> . struct_or_union L_BRACE struct_declaration_list R_BRACE
     (114) struct_or_union_specifier -> . struct_or_union IDENTIFIER
@@ -6099,18 +6060,17 @@ state 150
     L_PAREN         reduce using rule 123 (specifier_qualifier_list -> type_qualifier .)
     L_SQUARE        reduce using rule 123 (specifier_qualifier_list -> type_qualifier .)
     R_PAREN         reduce using rule 123 (specifier_qualifier_list -> type_qualifier .)
-    VOID            shift and go to state 20
-    CHAR            shift and go to state 21
-    SHORT           shift and go to state 22
-    INT             shift and go to state 23
-    LONG            shift and go to state 24
-    FLOAT           shift and go to state 25
-    DOUBLE          shift and go to state 26
-    SIGNED          shift and go to state 27
-    UNSIGNED        shift and go to state 28
-    TYPE_NAME       shift and go to state 29
-    CONST           shift and go to state 32
-    VOLATILE        shift and go to state 33
+    CONST           shift and go to state 23
+    VOLATILE        shift and go to state 24
+    VOID            shift and go to state 25
+    CHAR            shift and go to state 26
+    SHORT           shift and go to state 27
+    INT             shift and go to state 28
+    LONG            shift and go to state 29
+    FLOAT           shift and go to state 30
+    DOUBLE          shift and go to state 31
+    SIGNED          shift and go to state 32
+    UNSIGNED        shift and go to state 33
     ENUM            shift and go to state 35
     STRUCT          shift and go to state 36
     UNION           shift and go to state 37
@@ -6118,8 +6078,9 @@ state 150
     type_qualifier                 shift and go to state 150
     specifier_qualifier_list       shift and go to state 252
     type_specifier                 shift and go to state 149
-    struct_or_union_specifier      shift and go to state 30
-    enum_specifier                 shift and go to state 31
+    type                           shift and go to state 20
+    struct_or_union_specifier      shift and go to state 21
+    enum_specifier                 shift and go to state 22
     struct_or_union                shift and go to state 34
 
 state 151
@@ -6172,6 +6133,8 @@ state 155
     STATIC          reduce using rule 195 (compound_statement -> L_BRACE statement_list R_BRACE .)
     AUTO            reduce using rule 195 (compound_statement -> L_BRACE statement_list R_BRACE .)
     REGISTER        reduce using rule 195 (compound_statement -> L_BRACE statement_list R_BRACE .)
+    CONST           reduce using rule 195 (compound_statement -> L_BRACE statement_list R_BRACE .)
+    VOLATILE        reduce using rule 195 (compound_statement -> L_BRACE statement_list R_BRACE .)
     VOID            reduce using rule 195 (compound_statement -> L_BRACE statement_list R_BRACE .)
     CHAR            reduce using rule 195 (compound_statement -> L_BRACE statement_list R_BRACE .)
     SHORT           reduce using rule 195 (compound_statement -> L_BRACE statement_list R_BRACE .)
@@ -6181,9 +6144,6 @@ state 155
     DOUBLE          reduce using rule 195 (compound_statement -> L_BRACE statement_list R_BRACE .)
     SIGNED          reduce using rule 195 (compound_statement -> L_BRACE statement_list R_BRACE .)
     UNSIGNED        reduce using rule 195 (compound_statement -> L_BRACE statement_list R_BRACE .)
-    TYPE_NAME       reduce using rule 195 (compound_statement -> L_BRACE statement_list R_BRACE .)
-    CONST           reduce using rule 195 (compound_statement -> L_BRACE statement_list R_BRACE .)
-    VOLATILE        reduce using rule 195 (compound_statement -> L_BRACE statement_list R_BRACE .)
     ENUM            reduce using rule 195 (compound_statement -> L_BRACE statement_list R_BRACE .)
     STRUCT          reduce using rule 195 (compound_statement -> L_BRACE statement_list R_BRACE .)
     UNION           reduce using rule 195 (compound_statement -> L_BRACE statement_list R_BRACE .)
@@ -6258,6 +6218,8 @@ state 157
     STATIC          reduce using rule 196 (compound_statement -> L_BRACE declaration_list R_BRACE .)
     AUTO            reduce using rule 196 (compound_statement -> L_BRACE declaration_list R_BRACE .)
     REGISTER        reduce using rule 196 (compound_statement -> L_BRACE declaration_list R_BRACE .)
+    CONST           reduce using rule 196 (compound_statement -> L_BRACE declaration_list R_BRACE .)
+    VOLATILE        reduce using rule 196 (compound_statement -> L_BRACE declaration_list R_BRACE .)
     VOID            reduce using rule 196 (compound_statement -> L_BRACE declaration_list R_BRACE .)
     CHAR            reduce using rule 196 (compound_statement -> L_BRACE declaration_list R_BRACE .)
     SHORT           reduce using rule 196 (compound_statement -> L_BRACE declaration_list R_BRACE .)
@@ -6267,9 +6229,6 @@ state 157
     DOUBLE          reduce using rule 196 (compound_statement -> L_BRACE declaration_list R_BRACE .)
     SIGNED          reduce using rule 196 (compound_statement -> L_BRACE declaration_list R_BRACE .)
     UNSIGNED        reduce using rule 196 (compound_statement -> L_BRACE declaration_list R_BRACE .)
-    TYPE_NAME       reduce using rule 196 (compound_statement -> L_BRACE declaration_list R_BRACE .)
-    CONST           reduce using rule 196 (compound_statement -> L_BRACE declaration_list R_BRACE .)
-    VOLATILE        reduce using rule 196 (compound_statement -> L_BRACE declaration_list R_BRACE .)
     ENUM            reduce using rule 196 (compound_statement -> L_BRACE declaration_list R_BRACE .)
     STRUCT          reduce using rule 196 (compound_statement -> L_BRACE declaration_list R_BRACE .)
     UNION           reduce using rule 196 (compound_statement -> L_BRACE declaration_list R_BRACE .)
@@ -6801,16 +6760,7 @@ state 164
     (123) specifier_qualifier_list -> . type_qualifier
     (64) assignment_expression -> . conditional_expression
     (65) assignment_expression -> . assignment_lhs assignment_operator assignment_expression
-    (100) type_specifier -> . VOID
-    (101) type_specifier -> . CHAR
-    (102) type_specifier -> . SHORT
-    (103) type_specifier -> . INT
-    (104) type_specifier -> . LONG
-    (105) type_specifier -> . FLOAT
-    (106) type_specifier -> . DOUBLE
-    (107) type_specifier -> . SIGNED
-    (108) type_specifier -> . UNSIGNED
-    (109) type_specifier -> . TYPE_NAME
+    (109) type_specifier -> . type
     (110) type_specifier -> . struct_or_union_specifier
     (111) type_specifier -> . enum_specifier
     (136) type_qualifier -> . CONST
@@ -6818,6 +6768,15 @@ state 164
     (62) conditional_expression -> . logical_or_expression
     (63) conditional_expression -> . logical_or_expression QUEST expression COLON conditional_expression
     (66) assignment_lhs -> . unary_expression
+    (100) type -> . VOID
+    (101) type -> . CHAR
+    (102) type -> . SHORT
+    (103) type -> . INT
+    (104) type -> . LONG
+    (105) type -> . FLOAT
+    (106) type -> . DOUBLE
+    (107) type -> . SIGNED
+    (108) type -> . UNSIGNED
     (112) struct_or_union_specifier -> . struct_or_union IDENTIFIER L_BRACE struct_declaration_list R_BRACE
     (113) struct_or_union_specifier -> . struct_or_union L_BRACE struct_declaration_list R_BRACE
     (114) struct_or_union_specifier -> . struct_or_union IDENTIFIER
@@ -6886,18 +6845,17 @@ state 164
     (31) cast_expression -> . unary_expression
     (32) cast_expression -> . L_PAREN type_name R_PAREN cast_expression
 
-    VOID            shift and go to state 20
-    CHAR            shift and go to state 21
-    SHORT           shift and go to state 22
-    INT             shift and go to state 23
-    LONG            shift and go to state 24
-    FLOAT           shift and go to state 25
-    DOUBLE          shift and go to state 26
-    SIGNED          shift and go to state 27
-    UNSIGNED        shift and go to state 28
-    TYPE_NAME       shift and go to state 29
-    CONST           shift and go to state 32
-    VOLATILE        shift and go to state 33
+    CONST           shift and go to state 23
+    VOLATILE        shift and go to state 24
+    VOID            shift and go to state 25
+    CHAR            shift and go to state 26
+    SHORT           shift and go to state 27
+    INT             shift and go to state 28
+    LONG            shift and go to state 29
+    FLOAT           shift and go to state 30
+    DOUBLE          shift and go to state 31
+    SIGNED          shift and go to state 32
+    UNSIGNED        shift and go to state 33
     ENUM            shift and go to state 35
     INC_OP          shift and go to state 101
     DEC_OP          shift and go to state 102
@@ -6924,8 +6882,9 @@ state 164
     type_qualifier                 shift and go to state 150
     conditional_expression         shift and go to state 95
     assignment_lhs                 shift and go to state 96
-    struct_or_union_specifier      shift and go to state 30
-    enum_specifier                 shift and go to state 31
+    type                           shift and go to state 20
+    struct_or_union_specifier      shift and go to state 21
+    enum_specifier                 shift and go to state 22
     logical_or_expression          shift and go to state 97
     unary_expression               shift and go to state 98
     struct_or_union                shift and go to state 34
@@ -9039,16 +8998,7 @@ state 207
     (123) specifier_qualifier_list -> . type_qualifier
     (64) assignment_expression -> . conditional_expression
     (65) assignment_expression -> . assignment_lhs assignment_operator assignment_expression
-    (100) type_specifier -> . VOID
-    (101) type_specifier -> . CHAR
-    (102) type_specifier -> . SHORT
-    (103) type_specifier -> . INT
-    (104) type_specifier -> . LONG
-    (105) type_specifier -> . FLOAT
-    (106) type_specifier -> . DOUBLE
-    (107) type_specifier -> . SIGNED
-    (108) type_specifier -> . UNSIGNED
-    (109) type_specifier -> . TYPE_NAME
+    (109) type_specifier -> . type
     (110) type_specifier -> . struct_or_union_specifier
     (111) type_specifier -> . enum_specifier
     (136) type_qualifier -> . CONST
@@ -9056,6 +9006,15 @@ state 207
     (62) conditional_expression -> . logical_or_expression
     (63) conditional_expression -> . logical_or_expression QUEST expression COLON conditional_expression
     (66) assignment_lhs -> . unary_expression
+    (100) type -> . VOID
+    (101) type -> . CHAR
+    (102) type -> . SHORT
+    (103) type -> . INT
+    (104) type -> . LONG
+    (105) type -> . FLOAT
+    (106) type -> . DOUBLE
+    (107) type -> . SIGNED
+    (108) type -> . UNSIGNED
     (112) struct_or_union_specifier -> . struct_or_union IDENTIFIER L_BRACE struct_declaration_list R_BRACE
     (113) struct_or_union_specifier -> . struct_or_union L_BRACE struct_declaration_list R_BRACE
     (114) struct_or_union_specifier -> . struct_or_union IDENTIFIER
@@ -9124,18 +9083,17 @@ state 207
     (31) cast_expression -> . unary_expression
     (32) cast_expression -> . L_PAREN type_name R_PAREN cast_expression
 
-    VOID            shift and go to state 20
-    CHAR            shift and go to state 21
-    SHORT           shift and go to state 22
-    INT             shift and go to state 23
-    LONG            shift and go to state 24
-    FLOAT           shift and go to state 25
-    DOUBLE          shift and go to state 26
-    SIGNED          shift and go to state 27
-    UNSIGNED        shift and go to state 28
-    TYPE_NAME       shift and go to state 29
-    CONST           shift and go to state 32
-    VOLATILE        shift and go to state 33
+    CONST           shift and go to state 23
+    VOLATILE        shift and go to state 24
+    VOID            shift and go to state 25
+    CHAR            shift and go to state 26
+    SHORT           shift and go to state 27
+    INT             shift and go to state 28
+    LONG            shift and go to state 29
+    FLOAT           shift and go to state 30
+    DOUBLE          shift and go to state 31
+    SIGNED          shift and go to state 32
+    UNSIGNED        shift and go to state 33
     ENUM            shift and go to state 35
     INC_OP          shift and go to state 101
     DEC_OP          shift and go to state 102
@@ -9161,8 +9119,9 @@ state 207
     type_qualifier                 shift and go to state 150
     conditional_expression         shift and go to state 95
     assignment_lhs                 shift and go to state 96
-    struct_or_union_specifier      shift and go to state 30
-    enum_specifier                 shift and go to state 31
+    type                           shift and go to state 20
+    struct_or_union_specifier      shift and go to state 21
+    enum_specifier                 shift and go to state 22
     logical_or_expression          shift and go to state 97
     unary_expression               shift and go to state 98
     struct_or_union                shift and go to state 34
@@ -10561,6 +10520,8 @@ state 234
     STATIC          reduce using rule 148 (function_declaration -> IDENTIFIER L_PAREN parameter_type_list R_PAREN .)
     AUTO            reduce using rule 148 (function_declaration -> IDENTIFIER L_PAREN parameter_type_list R_PAREN .)
     REGISTER        reduce using rule 148 (function_declaration -> IDENTIFIER L_PAREN parameter_type_list R_PAREN .)
+    CONST           reduce using rule 148 (function_declaration -> IDENTIFIER L_PAREN parameter_type_list R_PAREN .)
+    VOLATILE        reduce using rule 148 (function_declaration -> IDENTIFIER L_PAREN parameter_type_list R_PAREN .)
     VOID            reduce using rule 148 (function_declaration -> IDENTIFIER L_PAREN parameter_type_list R_PAREN .)
     CHAR            reduce using rule 148 (function_declaration -> IDENTIFIER L_PAREN parameter_type_list R_PAREN .)
     SHORT           reduce using rule 148 (function_declaration -> IDENTIFIER L_PAREN parameter_type_list R_PAREN .)
@@ -10570,9 +10531,6 @@ state 234
     DOUBLE          reduce using rule 148 (function_declaration -> IDENTIFIER L_PAREN parameter_type_list R_PAREN .)
     SIGNED          reduce using rule 148 (function_declaration -> IDENTIFIER L_PAREN parameter_type_list R_PAREN .)
     UNSIGNED        reduce using rule 148 (function_declaration -> IDENTIFIER L_PAREN parameter_type_list R_PAREN .)
-    TYPE_NAME       reduce using rule 148 (function_declaration -> IDENTIFIER L_PAREN parameter_type_list R_PAREN .)
-    CONST           reduce using rule 148 (function_declaration -> IDENTIFIER L_PAREN parameter_type_list R_PAREN .)
-    VOLATILE        reduce using rule 148 (function_declaration -> IDENTIFIER L_PAREN parameter_type_list R_PAREN .)
     ENUM            reduce using rule 148 (function_declaration -> IDENTIFIER L_PAREN parameter_type_list R_PAREN .)
     STRUCT          reduce using rule 148 (function_declaration -> IDENTIFIER L_PAREN parameter_type_list R_PAREN .)
     UNION           reduce using rule 148 (function_declaration -> IDENTIFIER L_PAREN parameter_type_list R_PAREN .)
@@ -10593,6 +10551,8 @@ state 235
     STATIC          reduce using rule 149 (function_declaration -> IDENTIFIER L_PAREN identifier_list R_PAREN .)
     AUTO            reduce using rule 149 (function_declaration -> IDENTIFIER L_PAREN identifier_list R_PAREN .)
     REGISTER        reduce using rule 149 (function_declaration -> IDENTIFIER L_PAREN identifier_list R_PAREN .)
+    CONST           reduce using rule 149 (function_declaration -> IDENTIFIER L_PAREN identifier_list R_PAREN .)
+    VOLATILE        reduce using rule 149 (function_declaration -> IDENTIFIER L_PAREN identifier_list R_PAREN .)
     VOID            reduce using rule 149 (function_declaration -> IDENTIFIER L_PAREN identifier_list R_PAREN .)
     CHAR            reduce using rule 149 (function_declaration -> IDENTIFIER L_PAREN identifier_list R_PAREN .)
     SHORT           reduce using rule 149 (function_declaration -> IDENTIFIER L_PAREN identifier_list R_PAREN .)
@@ -10602,9 +10562,6 @@ state 235
     DOUBLE          reduce using rule 149 (function_declaration -> IDENTIFIER L_PAREN identifier_list R_PAREN .)
     SIGNED          reduce using rule 149 (function_declaration -> IDENTIFIER L_PAREN identifier_list R_PAREN .)
     UNSIGNED        reduce using rule 149 (function_declaration -> IDENTIFIER L_PAREN identifier_list R_PAREN .)
-    TYPE_NAME       reduce using rule 149 (function_declaration -> IDENTIFIER L_PAREN identifier_list R_PAREN .)
-    CONST           reduce using rule 149 (function_declaration -> IDENTIFIER L_PAREN identifier_list R_PAREN .)
-    VOLATILE        reduce using rule 149 (function_declaration -> IDENTIFIER L_PAREN identifier_list R_PAREN .)
     ENUM            reduce using rule 149 (function_declaration -> IDENTIFIER L_PAREN identifier_list R_PAREN .)
     STRUCT          reduce using rule 149 (function_declaration -> IDENTIFIER L_PAREN identifier_list R_PAREN .)
     UNION           reduce using rule 149 (function_declaration -> IDENTIFIER L_PAREN identifier_list R_PAREN .)
@@ -10640,20 +10597,20 @@ state 237
     (97) storage_class_specifier -> . STATIC
     (98) storage_class_specifier -> . AUTO
     (99) storage_class_specifier -> . REGISTER
-    (100) type_specifier -> . VOID
-    (101) type_specifier -> . CHAR
-    (102) type_specifier -> . SHORT
-    (103) type_specifier -> . INT
-    (104) type_specifier -> . LONG
-    (105) type_specifier -> . FLOAT
-    (106) type_specifier -> . DOUBLE
-    (107) type_specifier -> . SIGNED
-    (108) type_specifier -> . UNSIGNED
-    (109) type_specifier -> . TYPE_NAME
+    (109) type_specifier -> . type
     (110) type_specifier -> . struct_or_union_specifier
     (111) type_specifier -> . enum_specifier
     (136) type_qualifier -> . CONST
     (137) type_qualifier -> . VOLATILE
+    (100) type -> . VOID
+    (101) type -> . CHAR
+    (102) type -> . SHORT
+    (103) type -> . INT
+    (104) type -> . LONG
+    (105) type -> . FLOAT
+    (106) type -> . DOUBLE
+    (107) type -> . SIGNED
+    (108) type -> . UNSIGNED
     (112) struct_or_union_specifier -> . struct_or_union IDENTIFIER L_BRACE struct_declaration_list R_BRACE
     (113) struct_or_union_specifier -> . struct_or_union L_BRACE struct_declaration_list R_BRACE
     (114) struct_or_union_specifier -> . struct_or_union IDENTIFIER
@@ -10669,18 +10626,17 @@ state 237
     STATIC          shift and go to state 17
     AUTO            shift and go to state 18
     REGISTER        shift and go to state 19
-    VOID            shift and go to state 20
-    CHAR            shift and go to state 21
-    SHORT           shift and go to state 22
-    INT             shift and go to state 23
-    LONG            shift and go to state 24
-    FLOAT           shift and go to state 25
-    DOUBLE          shift and go to state 26
-    SIGNED          shift and go to state 27
-    UNSIGNED        shift and go to state 28
-    TYPE_NAME       shift and go to state 29
-    CONST           shift and go to state 32
-    VOLATILE        shift and go to state 33
+    CONST           shift and go to state 23
+    VOLATILE        shift and go to state 24
+    VOID            shift and go to state 25
+    CHAR            shift and go to state 26
+    SHORT           shift and go to state 27
+    INT             shift and go to state 28
+    LONG            shift and go to state 29
+    FLOAT           shift and go to state 30
+    DOUBLE          shift and go to state 31
+    SIGNED          shift and go to state 32
+    UNSIGNED        shift and go to state 33
     ENUM            shift and go to state 35
     STRUCT          shift and go to state 36
     UNION           shift and go to state 37
@@ -10690,8 +10646,9 @@ state 237
     storage_class_specifier        shift and go to state 11
     type_specifier                 shift and go to state 12
     type_qualifier                 shift and go to state 13
-    struct_or_union_specifier      shift and go to state 30
-    enum_specifier                 shift and go to state 31
+    type                           shift and go to state 20
+    struct_or_union_specifier      shift and go to state 21
+    enum_specifier                 shift and go to state 22
     struct_or_union                shift and go to state 34
 
 state 238
@@ -10921,20 +10878,20 @@ state 243
     (97) storage_class_specifier -> . STATIC
     (98) storage_class_specifier -> . AUTO
     (99) storage_class_specifier -> . REGISTER
-    (100) type_specifier -> . VOID
-    (101) type_specifier -> . CHAR
-    (102) type_specifier -> . SHORT
-    (103) type_specifier -> . INT
-    (104) type_specifier -> . LONG
-    (105) type_specifier -> . FLOAT
-    (106) type_specifier -> . DOUBLE
-    (107) type_specifier -> . SIGNED
-    (108) type_specifier -> . UNSIGNED
-    (109) type_specifier -> . TYPE_NAME
+    (109) type_specifier -> . type
     (110) type_specifier -> . struct_or_union_specifier
     (111) type_specifier -> . enum_specifier
     (136) type_qualifier -> . CONST
     (137) type_qualifier -> . VOLATILE
+    (100) type -> . VOID
+    (101) type -> . CHAR
+    (102) type -> . SHORT
+    (103) type -> . INT
+    (104) type -> . LONG
+    (105) type -> . FLOAT
+    (106) type -> . DOUBLE
+    (107) type -> . SIGNED
+    (108) type -> . UNSIGNED
     (112) struct_or_union_specifier -> . struct_or_union IDENTIFIER L_BRACE struct_declaration_list R_BRACE
     (113) struct_or_union_specifier -> . struct_or_union L_BRACE struct_declaration_list R_BRACE
     (114) struct_or_union_specifier -> . struct_or_union IDENTIFIER
@@ -10954,18 +10911,17 @@ state 243
     STATIC          shift and go to state 17
     AUTO            shift and go to state 18
     REGISTER        shift and go to state 19
-    VOID            shift and go to state 20
-    CHAR            shift and go to state 21
-    SHORT           shift and go to state 22
-    INT             shift and go to state 23
-    LONG            shift and go to state 24
-    FLOAT           shift and go to state 25
-    DOUBLE          shift and go to state 26
-    SIGNED          shift and go to state 27
-    UNSIGNED        shift and go to state 28
-    TYPE_NAME       shift and go to state 29
-    CONST           shift and go to state 32
-    VOLATILE        shift and go to state 33
+    CONST           shift and go to state 23
+    VOLATILE        shift and go to state 24
+    VOID            shift and go to state 25
+    CHAR            shift and go to state 26
+    SHORT           shift and go to state 27
+    INT             shift and go to state 28
+    LONG            shift and go to state 29
+    FLOAT           shift and go to state 30
+    DOUBLE          shift and go to state 31
+    SIGNED          shift and go to state 32
+    UNSIGNED        shift and go to state 33
     ENUM            shift and go to state 35
     STRUCT          shift and go to state 36
     UNION           shift and go to state 37
@@ -10986,8 +10942,9 @@ state 243
     storage_class_specifier        shift and go to state 11
     type_specifier                 shift and go to state 12
     type_qualifier                 shift and go to state 13
-    struct_or_union_specifier      shift and go to state 30
-    enum_specifier                 shift and go to state 31
+    type                           shift and go to state 20
+    struct_or_union_specifier      shift and go to state 21
+    enum_specifier                 shift and go to state 22
     struct_or_union                shift and go to state 34
 
 state 244
@@ -10999,20 +10956,20 @@ state 244
     (121) specifier_qualifier_list -> . type_specifier
     (122) specifier_qualifier_list -> . type_qualifier specifier_qualifier_list
     (123) specifier_qualifier_list -> . type_qualifier
-    (100) type_specifier -> . VOID
-    (101) type_specifier -> . CHAR
-    (102) type_specifier -> . SHORT
-    (103) type_specifier -> . INT
-    (104) type_specifier -> . LONG
-    (105) type_specifier -> . FLOAT
-    (106) type_specifier -> . DOUBLE
-    (107) type_specifier -> . SIGNED
-    (108) type_specifier -> . UNSIGNED
-    (109) type_specifier -> . TYPE_NAME
+    (109) type_specifier -> . type
     (110) type_specifier -> . struct_or_union_specifier
     (111) type_specifier -> . enum_specifier
     (136) type_qualifier -> . CONST
     (137) type_qualifier -> . VOLATILE
+    (100) type -> . VOID
+    (101) type -> . CHAR
+    (102) type -> . SHORT
+    (103) type -> . INT
+    (104) type -> . LONG
+    (105) type -> . FLOAT
+    (106) type -> . DOUBLE
+    (107) type -> . SIGNED
+    (108) type -> . UNSIGNED
     (112) struct_or_union_specifier -> . struct_or_union IDENTIFIER L_BRACE struct_declaration_list R_BRACE
     (113) struct_or_union_specifier -> . struct_or_union L_BRACE struct_declaration_list R_BRACE
     (114) struct_or_union_specifier -> . struct_or_union IDENTIFIER
@@ -11023,18 +10980,17 @@ state 244
     (116) struct_or_union -> . UNION
 
     R_BRACE         shift and go to state 315
-    VOID            shift and go to state 20
-    CHAR            shift and go to state 21
-    SHORT           shift and go to state 22
-    INT             shift and go to state 23
-    LONG            shift and go to state 24
-    FLOAT           shift and go to state 25
-    DOUBLE          shift and go to state 26
-    SIGNED          shift and go to state 27
-    UNSIGNED        shift and go to state 28
-    TYPE_NAME       shift and go to state 29
-    CONST           shift and go to state 32
-    VOLATILE        shift and go to state 33
+    CONST           shift and go to state 23
+    VOLATILE        shift and go to state 24
+    VOID            shift and go to state 25
+    CHAR            shift and go to state 26
+    SHORT           shift and go to state 27
+    INT             shift and go to state 28
+    LONG            shift and go to state 29
+    FLOAT           shift and go to state 30
+    DOUBLE          shift and go to state 31
+    SIGNED          shift and go to state 32
+    UNSIGNED        shift and go to state 33
     ENUM            shift and go to state 35
     STRUCT          shift and go to state 36
     UNION           shift and go to state 37
@@ -11044,8 +11000,9 @@ state 244
     specifier_qualifier_list       shift and go to state 148
     type_specifier                 shift and go to state 149
     type_qualifier                 shift and go to state 150
-    struct_or_union_specifier      shift and go to state 30
-    enum_specifier                 shift and go to state 31
+    type                           shift and go to state 20
+    struct_or_union_specifier      shift and go to state 21
+    enum_specifier                 shift and go to state 22
 
 state 245
 
@@ -11056,6 +11013,8 @@ state 245
     STATIC          reduce using rule 113 (struct_or_union_specifier -> struct_or_union L_BRACE struct_declaration_list R_BRACE .)
     AUTO            reduce using rule 113 (struct_or_union_specifier -> struct_or_union L_BRACE struct_declaration_list R_BRACE .)
     REGISTER        reduce using rule 113 (struct_or_union_specifier -> struct_or_union L_BRACE struct_declaration_list R_BRACE .)
+    CONST           reduce using rule 113 (struct_or_union_specifier -> struct_or_union L_BRACE struct_declaration_list R_BRACE .)
+    VOLATILE        reduce using rule 113 (struct_or_union_specifier -> struct_or_union L_BRACE struct_declaration_list R_BRACE .)
     VOID            reduce using rule 113 (struct_or_union_specifier -> struct_or_union L_BRACE struct_declaration_list R_BRACE .)
     CHAR            reduce using rule 113 (struct_or_union_specifier -> struct_or_union L_BRACE struct_declaration_list R_BRACE .)
     SHORT           reduce using rule 113 (struct_or_union_specifier -> struct_or_union L_BRACE struct_declaration_list R_BRACE .)
@@ -11065,9 +11024,6 @@ state 245
     DOUBLE          reduce using rule 113 (struct_or_union_specifier -> struct_or_union L_BRACE struct_declaration_list R_BRACE .)
     SIGNED          reduce using rule 113 (struct_or_union_specifier -> struct_or_union L_BRACE struct_declaration_list R_BRACE .)
     UNSIGNED        reduce using rule 113 (struct_or_union_specifier -> struct_or_union L_BRACE struct_declaration_list R_BRACE .)
-    TYPE_NAME       reduce using rule 113 (struct_or_union_specifier -> struct_or_union L_BRACE struct_declaration_list R_BRACE .)
-    CONST           reduce using rule 113 (struct_or_union_specifier -> struct_or_union L_BRACE struct_declaration_list R_BRACE .)
-    VOLATILE        reduce using rule 113 (struct_or_union_specifier -> struct_or_union L_BRACE struct_declaration_list R_BRACE .)
     ENUM            reduce using rule 113 (struct_or_union_specifier -> struct_or_union L_BRACE struct_declaration_list R_BRACE .)
     STRUCT          reduce using rule 113 (struct_or_union_specifier -> struct_or_union L_BRACE struct_declaration_list R_BRACE .)
     UNION           reduce using rule 113 (struct_or_union_specifier -> struct_or_union L_BRACE struct_declaration_list R_BRACE .)
@@ -11086,6 +11042,8 @@ state 246
     (118) struct_declaration_list -> struct_declaration_list struct_declaration .
 
     R_BRACE         reduce using rule 118 (struct_declaration_list -> struct_declaration_list struct_declaration .)
+    CONST           reduce using rule 118 (struct_declaration_list -> struct_declaration_list struct_declaration .)
+    VOLATILE        reduce using rule 118 (struct_declaration_list -> struct_declaration_list struct_declaration .)
     VOID            reduce using rule 118 (struct_declaration_list -> struct_declaration_list struct_declaration .)
     CHAR            reduce using rule 118 (struct_declaration_list -> struct_declaration_list struct_declaration .)
     SHORT           reduce using rule 118 (struct_declaration_list -> struct_declaration_list struct_declaration .)
@@ -11095,9 +11053,6 @@ state 246
     DOUBLE          reduce using rule 118 (struct_declaration_list -> struct_declaration_list struct_declaration .)
     SIGNED          reduce using rule 118 (struct_declaration_list -> struct_declaration_list struct_declaration .)
     UNSIGNED        reduce using rule 118 (struct_declaration_list -> struct_declaration_list struct_declaration .)
-    TYPE_NAME       reduce using rule 118 (struct_declaration_list -> struct_declaration_list struct_declaration .)
-    CONST           reduce using rule 118 (struct_declaration_list -> struct_declaration_list struct_declaration .)
-    VOLATILE        reduce using rule 118 (struct_declaration_list -> struct_declaration_list struct_declaration .)
     ENUM            reduce using rule 118 (struct_declaration_list -> struct_declaration_list struct_declaration .)
     STRUCT          reduce using rule 118 (struct_declaration_list -> struct_declaration_list struct_declaration .)
     UNION           reduce using rule 118 (struct_declaration_list -> struct_declaration_list struct_declaration .)
@@ -11266,6 +11221,8 @@ state 253
     STATIC          reduce using rule 129 (enum_specifier -> ENUM L_BRACE enumerator_list R_BRACE .)
     AUTO            reduce using rule 129 (enum_specifier -> ENUM L_BRACE enumerator_list R_BRACE .)
     REGISTER        reduce using rule 129 (enum_specifier -> ENUM L_BRACE enumerator_list R_BRACE .)
+    CONST           reduce using rule 129 (enum_specifier -> ENUM L_BRACE enumerator_list R_BRACE .)
+    VOLATILE        reduce using rule 129 (enum_specifier -> ENUM L_BRACE enumerator_list R_BRACE .)
     VOID            reduce using rule 129 (enum_specifier -> ENUM L_BRACE enumerator_list R_BRACE .)
     CHAR            reduce using rule 129 (enum_specifier -> ENUM L_BRACE enumerator_list R_BRACE .)
     SHORT           reduce using rule 129 (enum_specifier -> ENUM L_BRACE enumerator_list R_BRACE .)
@@ -11275,9 +11232,6 @@ state 253
     DOUBLE          reduce using rule 129 (enum_specifier -> ENUM L_BRACE enumerator_list R_BRACE .)
     SIGNED          reduce using rule 129 (enum_specifier -> ENUM L_BRACE enumerator_list R_BRACE .)
     UNSIGNED        reduce using rule 129 (enum_specifier -> ENUM L_BRACE enumerator_list R_BRACE .)
-    TYPE_NAME       reduce using rule 129 (enum_specifier -> ENUM L_BRACE enumerator_list R_BRACE .)
-    CONST           reduce using rule 129 (enum_specifier -> ENUM L_BRACE enumerator_list R_BRACE .)
-    VOLATILE        reduce using rule 129 (enum_specifier -> ENUM L_BRACE enumerator_list R_BRACE .)
     ENUM            reduce using rule 129 (enum_specifier -> ENUM L_BRACE enumerator_list R_BRACE .)
     STRUCT          reduce using rule 129 (enum_specifier -> ENUM L_BRACE enumerator_list R_BRACE .)
     UNION           reduce using rule 129 (enum_specifier -> ENUM L_BRACE enumerator_list R_BRACE .)
@@ -11423,6 +11377,8 @@ state 257
     STATIC          reduce using rule 197 (compound_statement -> L_BRACE declaration_list statement_list R_BRACE .)
     AUTO            reduce using rule 197 (compound_statement -> L_BRACE declaration_list statement_list R_BRACE .)
     REGISTER        reduce using rule 197 (compound_statement -> L_BRACE declaration_list statement_list R_BRACE .)
+    CONST           reduce using rule 197 (compound_statement -> L_BRACE declaration_list statement_list R_BRACE .)
+    VOLATILE        reduce using rule 197 (compound_statement -> L_BRACE declaration_list statement_list R_BRACE .)
     VOID            reduce using rule 197 (compound_statement -> L_BRACE declaration_list statement_list R_BRACE .)
     CHAR            reduce using rule 197 (compound_statement -> L_BRACE declaration_list statement_list R_BRACE .)
     SHORT           reduce using rule 197 (compound_statement -> L_BRACE declaration_list statement_list R_BRACE .)
@@ -11432,9 +11388,6 @@ state 257
     DOUBLE          reduce using rule 197 (compound_statement -> L_BRACE declaration_list statement_list R_BRACE .)
     SIGNED          reduce using rule 197 (compound_statement -> L_BRACE declaration_list statement_list R_BRACE .)
     UNSIGNED        reduce using rule 197 (compound_statement -> L_BRACE declaration_list statement_list R_BRACE .)
-    TYPE_NAME       reduce using rule 197 (compound_statement -> L_BRACE declaration_list statement_list R_BRACE .)
-    CONST           reduce using rule 197 (compound_statement -> L_BRACE declaration_list statement_list R_BRACE .)
-    VOLATILE        reduce using rule 197 (compound_statement -> L_BRACE declaration_list statement_list R_BRACE .)
     ENUM            reduce using rule 197 (compound_statement -> L_BRACE declaration_list statement_list R_BRACE .)
     STRUCT          reduce using rule 197 (compound_statement -> L_BRACE declaration_list statement_list R_BRACE .)
     UNION           reduce using rule 197 (compound_statement -> L_BRACE declaration_list statement_list R_BRACE .)
@@ -11945,20 +11898,20 @@ state 270
     (97) storage_class_specifier -> . STATIC
     (98) storage_class_specifier -> . AUTO
     (99) storage_class_specifier -> . REGISTER
-    (100) type_specifier -> . VOID
-    (101) type_specifier -> . CHAR
-    (102) type_specifier -> . SHORT
-    (103) type_specifier -> . INT
-    (104) type_specifier -> . LONG
-    (105) type_specifier -> . FLOAT
-    (106) type_specifier -> . DOUBLE
-    (107) type_specifier -> . SIGNED
-    (108) type_specifier -> . UNSIGNED
-    (109) type_specifier -> . TYPE_NAME
+    (109) type_specifier -> . type
     (110) type_specifier -> . struct_or_union_specifier
     (111) type_specifier -> . enum_specifier
     (136) type_qualifier -> . CONST
     (137) type_qualifier -> . VOLATILE
+    (100) type -> . VOID
+    (101) type -> . CHAR
+    (102) type -> . SHORT
+    (103) type -> . INT
+    (104) type -> . LONG
+    (105) type -> . FLOAT
+    (106) type -> . DOUBLE
+    (107) type -> . SIGNED
+    (108) type -> . UNSIGNED
     (112) struct_or_union_specifier -> . struct_or_union IDENTIFIER L_BRACE struct_declaration_list R_BRACE
     (113) struct_or_union_specifier -> . struct_or_union L_BRACE struct_declaration_list R_BRACE
     (114) struct_or_union_specifier -> . struct_or_union IDENTIFIER
@@ -11977,18 +11930,17 @@ state 270
     STATIC          shift and go to state 17
     AUTO            shift and go to state 18
     REGISTER        shift and go to state 19
-    VOID            shift and go to state 20
-    CHAR            shift and go to state 21
-    SHORT           shift and go to state 22
-    INT             shift and go to state 23
-    LONG            shift and go to state 24
-    FLOAT           shift and go to state 25
-    DOUBLE          shift and go to state 26
-    SIGNED          shift and go to state 27
-    UNSIGNED        shift and go to state 28
-    TYPE_NAME       shift and go to state 29
-    CONST           shift and go to state 32
-    VOLATILE        shift and go to state 33
+    CONST           shift and go to state 23
+    VOLATILE        shift and go to state 24
+    VOID            shift and go to state 25
+    CHAR            shift and go to state 26
+    SHORT           shift and go to state 27
+    INT             shift and go to state 28
+    LONG            shift and go to state 29
+    FLOAT           shift and go to state 30
+    DOUBLE          shift and go to state 31
+    SIGNED          shift and go to state 32
+    UNSIGNED        shift and go to state 33
     ENUM            shift and go to state 35
     STRUCT          shift and go to state 36
     UNION           shift and go to state 37
@@ -12003,8 +11955,9 @@ state 270
     storage_class_specifier        shift and go to state 11
     type_specifier                 shift and go to state 12
     type_qualifier                 shift and go to state 13
-    struct_or_union_specifier      shift and go to state 30
-    enum_specifier                 shift and go to state 31
+    type                           shift and go to state 20
+    struct_or_union_specifier      shift and go to state 21
+    enum_specifier                 shift and go to state 22
     struct_or_union                shift and go to state 34
 
 state 271
@@ -12904,20 +12857,20 @@ state 307
     (97) storage_class_specifier -> . STATIC
     (98) storage_class_specifier -> . AUTO
     (99) storage_class_specifier -> . REGISTER
-    (100) type_specifier -> . VOID
-    (101) type_specifier -> . CHAR
-    (102) type_specifier -> . SHORT
-    (103) type_specifier -> . INT
-    (104) type_specifier -> . LONG
-    (105) type_specifier -> . FLOAT
-    (106) type_specifier -> . DOUBLE
-    (107) type_specifier -> . SIGNED
-    (108) type_specifier -> . UNSIGNED
-    (109) type_specifier -> . TYPE_NAME
+    (109) type_specifier -> . type
     (110) type_specifier -> . struct_or_union_specifier
     (111) type_specifier -> . enum_specifier
     (136) type_qualifier -> . CONST
     (137) type_qualifier -> . VOLATILE
+    (100) type -> . VOID
+    (101) type -> . CHAR
+    (102) type -> . SHORT
+    (103) type -> . INT
+    (104) type -> . LONG
+    (105) type -> . FLOAT
+    (106) type -> . DOUBLE
+    (107) type -> . SIGNED
+    (108) type -> . UNSIGNED
     (112) struct_or_union_specifier -> . struct_or_union IDENTIFIER L_BRACE struct_declaration_list R_BRACE
     (113) struct_or_union_specifier -> . struct_or_union L_BRACE struct_declaration_list R_BRACE
     (114) struct_or_union_specifier -> . struct_or_union IDENTIFIER
@@ -12933,18 +12886,17 @@ state 307
     STATIC          shift and go to state 17
     AUTO            shift and go to state 18
     REGISTER        shift and go to state 19
-    VOID            shift and go to state 20
-    CHAR            shift and go to state 21
-    SHORT           shift and go to state 22
-    INT             shift and go to state 23
-    LONG            shift and go to state 24
-    FLOAT           shift and go to state 25
-    DOUBLE          shift and go to state 26
-    SIGNED          shift and go to state 27
-    UNSIGNED        shift and go to state 28
-    TYPE_NAME       shift and go to state 29
-    CONST           shift and go to state 32
-    VOLATILE        shift and go to state 33
+    CONST           shift and go to state 23
+    VOLATILE        shift and go to state 24
+    VOID            shift and go to state 25
+    CHAR            shift and go to state 26
+    SHORT           shift and go to state 27
+    INT             shift and go to state 28
+    LONG            shift and go to state 29
+    FLOAT           shift and go to state 30
+    DOUBLE          shift and go to state 31
+    SIGNED          shift and go to state 32
+    UNSIGNED        shift and go to state 33
     ENUM            shift and go to state 35
     STRUCT          shift and go to state 36
     UNION           shift and go to state 37
@@ -12956,8 +12908,9 @@ state 307
     storage_class_specifier        shift and go to state 11
     type_specifier                 shift and go to state 12
     type_qualifier                 shift and go to state 13
-    struct_or_union_specifier      shift and go to state 30
-    enum_specifier                 shift and go to state 31
+    type                           shift and go to state 20
+    struct_or_union_specifier      shift and go to state 21
+    enum_specifier                 shift and go to state 22
     struct_or_union                shift and go to state 34
 
 state 308
@@ -13153,6 +13106,8 @@ state 315
     STATIC          reduce using rule 112 (struct_or_union_specifier -> struct_or_union IDENTIFIER L_BRACE struct_declaration_list R_BRACE .)
     AUTO            reduce using rule 112 (struct_or_union_specifier -> struct_or_union IDENTIFIER L_BRACE struct_declaration_list R_BRACE .)
     REGISTER        reduce using rule 112 (struct_or_union_specifier -> struct_or_union IDENTIFIER L_BRACE struct_declaration_list R_BRACE .)
+    CONST           reduce using rule 112 (struct_or_union_specifier -> struct_or_union IDENTIFIER L_BRACE struct_declaration_list R_BRACE .)
+    VOLATILE        reduce using rule 112 (struct_or_union_specifier -> struct_or_union IDENTIFIER L_BRACE struct_declaration_list R_BRACE .)
     VOID            reduce using rule 112 (struct_or_union_specifier -> struct_or_union IDENTIFIER L_BRACE struct_declaration_list R_BRACE .)
     CHAR            reduce using rule 112 (struct_or_union_specifier -> struct_or_union IDENTIFIER L_BRACE struct_declaration_list R_BRACE .)
     SHORT           reduce using rule 112 (struct_or_union_specifier -> struct_or_union IDENTIFIER L_BRACE struct_declaration_list R_BRACE .)
@@ -13162,9 +13117,6 @@ state 315
     DOUBLE          reduce using rule 112 (struct_or_union_specifier -> struct_or_union IDENTIFIER L_BRACE struct_declaration_list R_BRACE .)
     SIGNED          reduce using rule 112 (struct_or_union_specifier -> struct_or_union IDENTIFIER L_BRACE struct_declaration_list R_BRACE .)
     UNSIGNED        reduce using rule 112 (struct_or_union_specifier -> struct_or_union IDENTIFIER L_BRACE struct_declaration_list R_BRACE .)
-    TYPE_NAME       reduce using rule 112 (struct_or_union_specifier -> struct_or_union IDENTIFIER L_BRACE struct_declaration_list R_BRACE .)
-    CONST           reduce using rule 112 (struct_or_union_specifier -> struct_or_union IDENTIFIER L_BRACE struct_declaration_list R_BRACE .)
-    VOLATILE        reduce using rule 112 (struct_or_union_specifier -> struct_or_union IDENTIFIER L_BRACE struct_declaration_list R_BRACE .)
     ENUM            reduce using rule 112 (struct_or_union_specifier -> struct_or_union IDENTIFIER L_BRACE struct_declaration_list R_BRACE .)
     STRUCT          reduce using rule 112 (struct_or_union_specifier -> struct_or_union IDENTIFIER L_BRACE struct_declaration_list R_BRACE .)
     UNION           reduce using rule 112 (struct_or_union_specifier -> struct_or_union IDENTIFIER L_BRACE struct_declaration_list R_BRACE .)
@@ -13183,6 +13135,8 @@ state 316
     (119) struct_declaration -> specifier_qualifier_list struct_declarator_list SEMI .
 
     R_BRACE         reduce using rule 119 (struct_declaration -> specifier_qualifier_list struct_declarator_list SEMI .)
+    CONST           reduce using rule 119 (struct_declaration -> specifier_qualifier_list struct_declarator_list SEMI .)
+    VOLATILE        reduce using rule 119 (struct_declaration -> specifier_qualifier_list struct_declarator_list SEMI .)
     VOID            reduce using rule 119 (struct_declaration -> specifier_qualifier_list struct_declarator_list SEMI .)
     CHAR            reduce using rule 119 (struct_declaration -> specifier_qualifier_list struct_declarator_list SEMI .)
     SHORT           reduce using rule 119 (struct_declaration -> specifier_qualifier_list struct_declarator_list SEMI .)
@@ -13192,9 +13146,6 @@ state 316
     DOUBLE          reduce using rule 119 (struct_declaration -> specifier_qualifier_list struct_declarator_list SEMI .)
     SIGNED          reduce using rule 119 (struct_declaration -> specifier_qualifier_list struct_declarator_list SEMI .)
     UNSIGNED        reduce using rule 119 (struct_declaration -> specifier_qualifier_list struct_declarator_list SEMI .)
-    TYPE_NAME       reduce using rule 119 (struct_declaration -> specifier_qualifier_list struct_declarator_list SEMI .)
-    CONST           reduce using rule 119 (struct_declaration -> specifier_qualifier_list struct_declarator_list SEMI .)
-    VOLATILE        reduce using rule 119 (struct_declaration -> specifier_qualifier_list struct_declarator_list SEMI .)
     ENUM            reduce using rule 119 (struct_declaration -> specifier_qualifier_list struct_declarator_list SEMI .)
     STRUCT          reduce using rule 119 (struct_declaration -> specifier_qualifier_list struct_declarator_list SEMI .)
     UNION           reduce using rule 119 (struct_declaration -> specifier_qualifier_list struct_declarator_list SEMI .)
@@ -13374,6 +13325,8 @@ state 322
     STATIC          reduce using rule 130 (enum_specifier -> ENUM IDENTIFIER L_BRACE enumerator_list R_BRACE .)
     AUTO            reduce using rule 130 (enum_specifier -> ENUM IDENTIFIER L_BRACE enumerator_list R_BRACE .)
     REGISTER        reduce using rule 130 (enum_specifier -> ENUM IDENTIFIER L_BRACE enumerator_list R_BRACE .)
+    CONST           reduce using rule 130 (enum_specifier -> ENUM IDENTIFIER L_BRACE enumerator_list R_BRACE .)
+    VOLATILE        reduce using rule 130 (enum_specifier -> ENUM IDENTIFIER L_BRACE enumerator_list R_BRACE .)
     VOID            reduce using rule 130 (enum_specifier -> ENUM IDENTIFIER L_BRACE enumerator_list R_BRACE .)
     CHAR            reduce using rule 130 (enum_specifier -> ENUM IDENTIFIER L_BRACE enumerator_list R_BRACE .)
     SHORT           reduce using rule 130 (enum_specifier -> ENUM IDENTIFIER L_BRACE enumerator_list R_BRACE .)
@@ -13383,9 +13336,6 @@ state 322
     DOUBLE          reduce using rule 130 (enum_specifier -> ENUM IDENTIFIER L_BRACE enumerator_list R_BRACE .)
     SIGNED          reduce using rule 130 (enum_specifier -> ENUM IDENTIFIER L_BRACE enumerator_list R_BRACE .)
     UNSIGNED        reduce using rule 130 (enum_specifier -> ENUM IDENTIFIER L_BRACE enumerator_list R_BRACE .)
-    TYPE_NAME       reduce using rule 130 (enum_specifier -> ENUM IDENTIFIER L_BRACE enumerator_list R_BRACE .)
-    CONST           reduce using rule 130 (enum_specifier -> ENUM IDENTIFIER L_BRACE enumerator_list R_BRACE .)
-    VOLATILE        reduce using rule 130 (enum_specifier -> ENUM IDENTIFIER L_BRACE enumerator_list R_BRACE .)
     ENUM            reduce using rule 130 (enum_specifier -> ENUM IDENTIFIER L_BRACE enumerator_list R_BRACE .)
     STRUCT          reduce using rule 130 (enum_specifier -> ENUM IDENTIFIER L_BRACE enumerator_list R_BRACE .)
     UNION           reduce using rule 130 (enum_specifier -> ENUM IDENTIFIER L_BRACE enumerator_list R_BRACE .)

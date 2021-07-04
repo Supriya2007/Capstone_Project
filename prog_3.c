@@ -10,8 +10,6 @@ int f3(int a, int b){
     int b;
     int c;
     c = a + b;
-    rewind(fp);
-    fseek(fp);
 }
 
 int f4(int a){

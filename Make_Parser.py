@@ -4,39 +4,33 @@ import sys
 #Write prog to get initial line numbers, don't hard-code.
 states = {
     'before_parse':['before_parse_main', 6],
-    #'function_prototype' : ['p_function_prototype', 395], 
-    'function_prototype' : ['p_function_declaration', 826],
+    'function_prototype' : ['p_function_declaration', 803],
     #Can not differentiate between function definitions and prototypes as of now
-    #'function_header' : ['p_function_header', 615],
-    'function_header' : ['p_function_declaration', 826],
-    'function_parameters' : ['p_parameter_type_list', 879],
-    'parameter_declaration' : ['p_parameter_declaration', 907],
-    'func_statements' : ['p_statement', 1028],
-    'function_end' : ['p_function_definition', 1283],
-    #'common_prefix' : ['p_common_prefix', 100],
-    #'var_declares' : ['p_variable_declaration', 385],
-    'var_declares' : ['p_variable_declaration1', 793],
-    'declarations' : ['p_other_declarations', 1211], 
+    'function_header' : ['p_function_declaration', 803],
+    'function_parameters' : ['p_parameter_type_list', 856],
+    'parameter_declaration' : ['p_parameter_declaration', 884],
+    'func_statements' : ['p_statement', 1003],
+    'function_end' : ['p_function_definition', 1228],
+    'var_declares' : ['p_variable_declaration1', 770],
+    'declarations' : ['p_other_declarations', 1185], 
     #Maps to declarations outside functions = global variables and function prototypes
-    'declaration_stmt' : ['p_declaration', 470],
+    'declaration_stmt' : ['p_declaration', 450],
     #If many variables are declared in a single statement, declarations is matched once for each variable, while declaration_stmt is matched only once.
-    'function_call' : ['p_function_call', 51],
-    'loop_header':['p_iteration_header', 1145],
-    'loop_body':['p_iteration_body', 1163],
-    'after_parse':['after_parse_main', 1323],
-    'switch_stmt': ['p_selection_statement', 1123],
-    'case_stmt':['p_labeled_statement', 1041],
-    #'variable' : ['p_variable_use' , 41],
-    'equality_cond' : ['p_equality_expression', 258],
-    'equality_cond_lhs' : ['p_equality_exp_lhs', 275],
-    'variable_assignments' : ['p_assignment_expression', 384],
-    'assignment_lhs' : ['p_assignment_lhs', 402],
-    'postfix_expression' : ['p_postfix_expression', 72],
-    'unary_expression' : ['p_unary_expression', 116],
-    'identifier_list':['p_identifier_list', 923],
-    #'function_prototype_or_definition' : 'p_proto_or_defn',
-    'unintialized_declaration':['p_uninitialized_declaration', 540],
-    'expressions':['p_expression_statement', 1104],
+    'function_call' : ['p_function_call', 50],
+    'loop_header':['p_iteration_header', 1119],
+    'loop_body':['p_iteration_body', 1137],
+    'after_parse':['after_parse_main', 1265],
+    'switch_stmt': ['p_selection_statement', 1097],
+    'case_stmt':['p_labeled_statement', 1016],
+    'equality_cond' : ['p_equality_expression', 256],
+    'equality_cond_lhs' : ['p_equality_exp_lhs', 273],
+    'variable_assignments' : ['p_assignment_expression', 381],
+    'assignment_lhs' : ['p_assignment_lhs', 399],
+    'postfix_expression' : ['p_postfix_expression', 71],
+    'unary_expression' : ['p_unary_expression', 115],
+    'identifier_list':['p_identifier_list', 899],
+    'unintialized_declaration':['p_uninitialized_declaration', 520],
+    'expressions':['p_expression_statement', 1078],
     
 }
 # #ADD in C_Parser.py marks place to add code
@@ -84,17 +78,12 @@ def get_cmd_args_dict():
         value = sys.argv[i+1]
         vars_values[var_name] = value
     return vars_values
-        
-    
- 
-#file_handle = open("C_Parser.py", "rt")
-#file_handle = open("trial.py", "rt")
 
 var_values = get_cmd_args_dict()
 print("var_values:", var_values)
 
 #file_handle = open("C_Parser2.py", "rt")
-file_handle = open("C_Parser_Sup.py", "rt")
+file_handle = open("C_Parser.py", "rt")
 file_lines = file_handle.readlines()
 #print(file_lines)
 file_handle.close() 
@@ -103,16 +92,6 @@ at_state="null"
 
 #cur_tab = ""
 while(True):
-    '''
-    try:
-        s = input().lstrip()
-    except EOFError:
-        break
-        
-    s_words = s.split()
-    i=0
-    '''
-    
     words = read_input()
     if(len(words)==0):
         continue
@@ -233,11 +212,7 @@ while(True):
                 list_name = get_next_word()
                 py_cmd = "%sfor %s in %s:\n"%(cur_tab, var_name, list_name)
                 cur_tab+=tab
-        write_file_at(cur_state, py_cmd) 
-        
-            
-    #cur_state=""
-    #cur_tab=""       
+        write_file_at(cur_state, py_cmd)     
    
 file_handle_new = open("C_Parser_new.py", "wt")
 file_handle_new.writelines(file_lines)
