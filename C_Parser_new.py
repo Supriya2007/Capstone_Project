@@ -4,10 +4,6 @@ from C_Lex import tokens
 start = 'translation_unit' #Sets the Start Symbol
 
 #def before_parse_main():
-found_calloc_flag = 0
-found_malloc_flag = 0
-line = 0
-found_sizeof_flag = 0
 #ADD
 
 def p_primary_expression(p):
@@ -70,27 +66,9 @@ def p_function_call(p):
     #FUNC_ARGS = [(type, arg_name)...] - for user to be able to use it in this production
     #p[0]['func_args'] = FUNC_ARGS - for user to be able to use it in parent productions
     #print("Function_call:", p[0])
-    global line
-    global found_calloc_flag
-    global found_malloc_flag
-    if (NAME == "calloc") :
-        found_calloc_flag = 1
-        line = LINE
-    if (NAME == "malloc") :
-        found_malloc_flag = 1
-        line = LINE
-    global found_sizeof_flag
-    if (found_calloc_flag == 1) :
-        if (found_sizeof_flag == 0) :
-            print(line)
-            print(' Use sizeof to determine the size of variable')
-    if (found_malloc_flag == 1) :
-        if (found_sizeof_flag == 0) :
-            print(line)
-            print(' Use sizeof to determine the size of variable')
-    found_calloc_flag = 0
-    found_malloc_flag = 0
-    found_sizeof_flag = 0
+    if (NAME == "rewind") :
+        print(LINE)
+        print(' Use fseek instead of rewind')
     #ADD    
 
 def p_postfix_expression(p):
@@ -164,9 +142,6 @@ def p_unary_expression(p):
         
     NAME = p[1] 
     #Can handle name better, now that we have attribute grammar - check
-    global found_sizeof_flag
-    if (NAME == "sizeof") :
-        found_sizeof_flag = 1
     #ADD
     
 def p_unary_op_before_cast_exp(p):

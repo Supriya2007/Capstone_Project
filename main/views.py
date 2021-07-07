@@ -239,7 +239,7 @@ def get_data(request):
     request.session['v'] = v
     request.session['g'] = g
     request.session['file_contents'] = file_contents
-    return render(request, 'page2.html',{"content":file_contents,"line":lines,"v":v,"g":g,'rules':chosen_guideline_names})
+    return render(request, 'editor.html',{"content":file_contents,"line":lines,"v":v,"g":g,'rules':chosen_guideline_names})
 
 def filter(request):
     rule=request.POST['rules']
@@ -264,7 +264,7 @@ def filter(request):
                 l1[i].append(lines[i][j])
                 v1[i].append(v[i][j])
                 g1[i].append(g[i][j])
-    return render(request, 'page2.html',{"content":file_contents,"line":l1,"v":v1,"g":g1,'rules':chosen_guideline_names})
+    return render(request, 'editor.html',{"content":file_contents,"line":l1,"v":v1,"g":g1,'rules':chosen_guideline_names})
     
 def start_again(request):
     del request.session['code_file_count']
