@@ -276,4 +276,9 @@ def start_again(request):
         del request.session['selected_lib_rules']
     except:
         pass
-    return redirect('home')    
+    return redirect('home') 
+
+def run_again(request):
+    modified_code = request.POST['modified_code']
+    print("Modified code=", modified_code)
+    return redirect('home') 

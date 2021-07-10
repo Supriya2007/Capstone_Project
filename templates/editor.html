@@ -201,6 +201,15 @@ mark:hover{
   transition: all 0.3s ease-in;
 }
 
+.hide
+{
+  display:none;
+}
+.show
+{
+  display:block;
+}
+
 </style>
 </head>
 
@@ -221,10 +230,13 @@ mark:hover{
 
 
 <body onload="contents()" class="full" style="font-size:25px">
-<br><br>
+  <form method="POST" name="run_again" action="run_again" >
+    {% csrf_token %}
+    <input type="text" name="modified_code" id="code" style="display: none;">
+    <button type="submit" onclick="get_modified_code()">Run Again</button>
+  </form>
 <div id="file_names">
 </div>    
-    
 <div class="split left">
   <div id="check_guideline">  
     <pre id="editor" class="program">
@@ -241,11 +253,10 @@ mark:hover{
 </div>
 </div>
 
-
 <form name="start_again" action="start_again" >
     <button type="submit" id="start_again_button" class="topright1"> Start Again </button>
 </form>
-
+</body>
 <script src="{% static 'src-noconflict/ace.js' %}" type="text/javascript" charset="utf-8"></script>
 <script>
 function contents() {
@@ -360,5 +371,12 @@ function get_file_contents(fname){
     //var Tooltip = ace.require("ace/tooltip").Tooltip;
     //tooltip = new Tooltip(editor.container);
     //tooltip.setPosition(2, 4); 
+}
+function get_modified_code()
+{
+    var editor = ace.edit("editor");
+    var code = editor.getValue();
+    console.log(code);
+    document.getElementById("code").value = code;
 }
 </script>
