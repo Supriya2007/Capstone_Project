@@ -12,4 +12,5 @@ urlpatterns = [
     path('get_prog_files', views.get_prog_files, name='get_prog_files'),
     path('get_selected_lib_rules', views.get_selected_lib_rules, name='get_selected_lib_rules'),
     path('start_again', views.start_again, name='start_again'),
+    path('run_again', views.run_again, name='run_again'),
 ]

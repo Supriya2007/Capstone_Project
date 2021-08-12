@@ -1,0 +1,42 @@
+NAME is present in the following states:
+    function_call
+    variable_use
+    unary_expression
+    uninitialized_declaration
+    variable_declaration1
+    function_declaration
+    identifier_list
+    function_header
+    fheader_type1
+    fheader_type2
+    function_definition
+
+TYPE is present in the following states:
+    type_specifier
+    struct_or_union
+    enum_specifier
+
+p[0]['line'] and p[0]['exp'] - Present in all the productions
+
+EXPR is present only in expression_statement state
+
+Some productions have lhs and rhs attribute
+
+Attributes can be added to any grammar symbol
+
+Guidelines working with the attributed grammar:
+    Sizeof
+    Fseek
+    Strcmp
+    Strcpy
+    Global variables
+    Upper case
+    Variable length
+    No a
+    Number of parameters
+    Depth of looping
+
+To be checked:
+    Check is null
+    Function length
+    Switch case

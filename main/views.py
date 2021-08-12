@@ -110,6 +110,30 @@ def get_prog_files(request):
     response = redirect('home_reload')
     return response
         
+'''
+def get_selected_lib_rules(request):
+    guideline_vars = request.session['guideline_vars']
+    input_var_values = request.session['input_var_values']
+    selected_lib_rules_with_vars = request.session['selected_lib_rules_with_vars']
+    print("request.POST:", request.POST)
+    selected_lib_rules = request.GET.getlist('lib_rule', [])
+    print("selected_lib_rules:", selected_lib_rules)
+    chosen_guideline_names = request.session['chosen_guideline_names']
+    chosen_guideline_names.extend(selected_lib_rules)
+    selected_lib_rules_with_vars = get_rule_vars(selected_lib_rules, guideline_vars)
+    print("selected_lib_rules_with_vars:", selected_lib_rules)
+    for selected_rule in selected_lib_rules_with_vars:
+        var_list = selected_lib_rules_with_vars[selected_rule]
+        for v in var_list:
+            input_var_values[v] = request.GET[v]
+    print("input_var_values",  input_var_values )
+    print("selected_lib_rules_with_vars", selected_lib_rules_with_vars)
+    request.session['selected_lib_rules'] = selected_lib_rules
+    request.session['chosen_guideline_names'] = chosen_guideline_names
+    request.session['input_var_values'] = input_var_values
+    request.session['selected_lib_rules_with_vars'] = selected_lib_rules_with_vars
+    response = redirect('home_reload')
+    return response'''
 
 def get_selected_lib_rules(request):
     guideline_vars = request.session['guideline_vars']
@@ -175,9 +199,12 @@ def get_data(request):
     input_var_values = request.session['input_var_values']
     selected_lib_rules_with_vars = request.session['selected_lib_rules_with_vars']
     print("new_fs_rules:", new_fs_rules)
-    selected_lib_rules = request.session['selected_lib_rules']
+    try:
+        selected_lib_rules = request.session['selected_lib_rules']
+    except:
+        pass
     chosen_guideline_names = request.session['chosen_guideline_names']
-    print("selected_lib_rules", selected_lib_rules)
+    #print("selected_lib_rules", selected_lib_rules)
     print("selected_lib_rules_with_vars:", selected_lib_rules_with_vars)
     violations = Run_Formal_Structs.main(selected_lib_rules_with_vars, new_fs_rules, code_files, input_var_values)
     print("Violations in views.py:")
@@ -207,12 +234,12 @@ def get_data(request):
     print("g=",g)
     print("v=",v)
     print("lines=",lines)
-    print(selected_lib_rules)
+    #print(selected_lib_rules)
     request.session['lines'] = lines
     request.session['v'] = v
     request.session['g'] = g
     request.session['file_contents'] = file_contents
-    return render(request, 'page2.html',{"content":file_contents,"line":lines,"v":v,"g":g,'rules':chosen_guideline_names})
+    return render(request, 'editor.html',{"content":file_contents,"line":lines,"v":v,"g":g,'rules':chosen_guideline_names})
 
 def filter(request):
     rule=request.POST['rules']
@@ -237,13 +264,21 @@ def filter(request):
                 l1[i].append(lines[i][j])
                 v1[i].append(v[i][j])
                 g1[i].append(g[i][j])
-    return render(request, 'page2.html',{"content":file_contents,"line":l1,"v":v1,"g":g1,'rules':chosen_guideline_names})
+    return render(request, 'editor.html',{"content":file_contents,"line":l1,"v":v1,"g":g1,'rules':chosen_guideline_names})
     
 def start_again(request):
     del request.session['code_file_count']
     del request.session['file_count']
-    del request.session['selected_lib_rules']
     del request.session['new_fs_rules']
     del request.session['fs_files']
     del request.session['chosen_guideline_names']
-    return redirect('home')    
+    try:
+        del request.session['selected_lib_rules']
+    except:
+        pass
+    return redirect('home') 
+
+def run_again(request):
+    modified_code = request.POST['modified_code']
+    print("Modified code=", modified_code)
+    return redirect('home') 

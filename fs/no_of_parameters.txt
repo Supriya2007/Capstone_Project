@@ -1,6 +1,6 @@
 STATE before_parse
     CREATE count 0
-    CREATE allowed_no 1
+    CREATE allowed_no 3
 END_STATE
 
 STATE function_header
