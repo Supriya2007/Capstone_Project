@@ -3,34 +3,35 @@ import sys
 
 #Write prog to get initial line numbers, don't hard-code.
 states = {
-    'before_parse':['before_parse_main', 6],
-    'function_prototype' : ['p_function_declaration', 803],
+    'before_parse':['before_parse_main', 7],
+    'function_prototype' : ['p_function_declaration', 816],
     #Can not differentiate between function definitions and prototypes as of now
-    'function_header' : ['p_function_declaration', 803],
-    'function_parameters' : ['p_parameter_type_list', 856],
-    'parameter_declaration' : ['p_parameter_declaration', 884],
-    'func_statements' : ['p_statement', 1003],
-    'function_end' : ['p_function_definition', 1228],
-    'var_declares' : ['p_variable_declaration1', 770],
-    'declarations' : ['p_other_declarations', 1185], 
+    'function_header' : ['p_function_declaration', 816],
+    'function_parameters' : ['p_parameter_type_list', 870],
+    'parameter_declaration' : ['p_parameter_declaration', 897],
+    'func_statements' : ['p_statement', 1016],
+    'function_end' : ['p_function_definition', 1241],
+    'var_declares' : ['p_variable_declaration1', 780],
+    'declarations' : ['p_other_declarations', 1198], 
     #Maps to declarations outside functions = global variables and function prototypes
-    'declaration_stmt' : ['p_declaration', 450],
+    'declaration_stmt' : ['p_declaration', 451],
     #If many variables are declared in a single statement, declarations is matched once for each variable, while declaration_stmt is matched only once.
-    'function_call' : ['p_function_call', 50],
-    'loop_header':['p_iteration_header', 1119],
-    'loop_body':['p_iteration_body', 1137],
-    'after_parse':['after_parse_main', 1265],
-    'switch_stmt': ['p_selection_statement', 1097],
-    'case_stmt':['p_labeled_statement', 1016],
-    'equality_cond' : ['p_equality_expression', 256],
-    'equality_cond_lhs' : ['p_equality_exp_lhs', 273],
-    'variable_assignments' : ['p_assignment_expression', 381],
-    'assignment_lhs' : ['p_assignment_lhs', 399],
-    'postfix_expression' : ['p_postfix_expression', 71],
-    'unary_expression' : ['p_unary_expression', 115],
-    'identifier_list':['p_identifier_list', 899],
-    'unintialized_declaration':['p_uninitialized_declaration', 520],
-    'expressions':['p_expression_statement', 1078],
+    'function_call' : ['p_function_call', 51],
+    'loop_header':['p_iteration_header', 1132],
+    'loop_body':['p_iteration_body', 1150],
+    'after_parse':['after_parse_main', 1278],
+    'switch_stmt': ['p_selection_statement', 1110],
+    'case_stmt':['p_labeled_statement', 1029],
+    'equality_cond' : ['p_equality_expression', 257],
+    'equality_cond_lhs' : ['p_equality_exp_lhs', 274],
+    'variable_assignments' : ['p_assignment_expression', 382],
+    'assignment_lhs' : ['p_assignment_lhs', 400],
+    'postfix_expression' : ['p_postfix_expression', 72],
+    'unary_expression' : ['p_unary_expression', 116],
+    'identifier_list':['p_identifier_list', 912],
+    'unintialized_declaration':['p_uninitialized_declaration', 530],
+    'initialized_declaration': ['p_initialized_declaration', 508],
+    'expressions':['p_expression_statement', 1091],
     
 }
 # #ADD in C_Parser.py marks place to add code
@@ -167,7 +168,13 @@ while(True):
                 py_cmd = "%sif (%s < %s) :\n"%(cur_tab, var_name, var2_name)
             elif(cond == "GREATER_THAN"):
                 var2_name = get_next_word()
-                py_cmd = "%sif (%s > %s) :\n"%(cur_tab, var_name, var2_name)    
+                py_cmd = "%sif (%s > %s) :\n"%(cur_tab, var_name, var2_name)  
+            elif(cond == "GREATER_EQUAL"):
+                var2_name = get_next_word()
+                py_cmd = "%sif (%s >= %s) :\n"%(cur_tab, var_name, var2_name)  
+            elif(cond == "LESS_EQUAL"):
+                var2_name = get_next_word()
+                py_cmd = "%sif (%s <= %s) :\n"%(cur_tab, var_name, var2_name)    
             #Add LESS_EQUAL, GREATER_EQUAL later   
                 
             cur_tab+=tab  

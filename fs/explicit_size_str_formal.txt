@@ -1,0 +1,12 @@
+    
+STATE initialized_declaration
+    IF '[' IN LHS
+        CREATE rhs_len len(RHS[0])
+        IF ARR_SIZE NOTEQUALTO 'unspecified'
+            IF ARR_SIZE LESS_EQUAL rhs_len
+                PRINT LINE
+                VIOLATION Insufficient space allocated for string
+            END_IF
+        END_IF
+    END_IF        
+END_STATE    

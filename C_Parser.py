@@ -1,5 +1,6 @@
 import ply.yacc as yacc
 from C_Lex import tokens
+import copy
 
 start = 'translation_unit' #Sets the Start Symbol
 
@@ -508,11 +509,18 @@ def p_initialized_declaration(p):
     '''
     initialized_declaration : declarator EQUAL initializer
     '''
-    p[0] = {}
-    p[0]['line'] = p[1]['line']
+    p[0] = copy.deepcopy(p[1])
+    p[0].update(p[3])
     p[0]['lhs'] = p[1]['exp']
     p[0]['rhs'] = p[3]['exp']
-    p[0]['exp'] = p[1]['exp'] + [ p[2] ] + p[3]['exp']
+    p[0]['exp'] = p[1]['exp'] + [ p[2] ] + p[3]['exp']; 
+    LHS = p[0]['lhs']
+    RHS = p[0]['rhs']
+    EXP = p[0]['exp']
+    ARR_SIZE = ''
+    LINE = p[0]['line']
+    if(p[0].get('arr_size')): #None returned in case LHS is not an array
+        ARR_SIZE = p[0]['arr_size']
     #p[] = dict with 2 keys lhs, rhs
     #print("p_initialized_declaration", p[0])
     #ADD 
@@ -780,10 +788,13 @@ def p_variable_declaration1(p):
     p[0]['line'] = LINE
     if(len(p)==2):
         p[0]['exp'] = [ p[1] ]
-    elif(len(p)==4):
-        p[0]['exp'] = [ p[1] ] + [ p[2] ] + p[3]['exp'] + [ p[4] ]
     elif(len(p)==5):
+        p[0]['exp'] = [ p[1] ] + [ p[2] ] + p[3]['exp'] + [ p[4] ]
+        #print("const_expression:", p[3]['exp'])
+        p[0]['arr_size'] = int(p[3]['exp'][0])
+    elif(len(p)==4):
         p[0]['exp'] = [ p[1] ] + [ p[2] ] + [ p[3] ]
+        p[0]['arr_size'] = 'unspecified'
     else:
         print("ERROR in p_variable_declaration1")
     #print("variable_declaration1:", p[0])
