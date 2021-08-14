@@ -1,0 +1,22 @@
+STATE before_parse
+    CREATE count 0
+    CREATE allowed_no 3
+END_STATE
+
+STATE function_header
+	GLOBAL_SET count count
+    GLOBAL_SET flag 1
+    GLOBAL_SET line LINE
+    IF flag GREATER_THAN 0
+    	IF count EQUALTO 0
+        	PRINT line
+    	    VIOLATION Explicitly specify void when a function accept no arguments!
+            SET flag 0
+    	END_IF
+    END_IF
+    SET count 0
+END_STATE
+
+STATE parameter_declaration
+	GLOBAL_SET count count+1
+END_STATE

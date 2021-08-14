@@ -63,10 +63,11 @@ def p_function_call(p):
         p[0]['exp'] = [p[1]] + [p[2]] + [p[3]]
     elif(len(p) == 5):
         p[0]['exp'] = [p[1]] + [p[2]] + p[3]['exp'] + [p[4]]
+    p[0]['func_args']=p[0]['exp'][2:-1:2]
     #example of adding an attribute can be:
     #FUNC_ARGS = [(type, arg_name)...] - for user to be able to use it in this production
     #p[0]['func_args'] = FUNC_ARGS - for user to be able to use it in parent productions
-    #print("Function_call:", p[0])
+    
     #ADD    
 
 def p_postfix_expression(p):
@@ -106,11 +107,12 @@ def p_argument_expression_list(p):
     '''
     if(len(p) == 2):
         p[0] = p[1]
+        NAME = p[1]
     elif(len(p) == 4):
         p[0] = {}
         p[0]['exp'] = p[1]['exp'] + [p[2]] + p[3]['exp']
         p[0]['line'] = p[1]['line']
-    #print("argument_expression_list:", p[0])
+    
     pass
     
 def p_unary_expression(p):
@@ -1137,13 +1139,23 @@ def p_iteration_header(p):
     p[0] = {}
     p[0]['line'] = LINE
     if(len(p) == 5):
+        CONDITION=p[3]['exp']
+        p[0]['type']='while'
         p[0]['exp'] = [p[1]] + [p[2]] + p[3]['exp'] + [p[4]]
     elif(len(p) == 6):
+        CONDITION=p[4]['exp']
+        p[0]['type']='for'
         p[0]['exp'] = [p[1]] + [p[2]] + p[3]['exp'] + p[4]['exp'] + [p[5]]
     elif(len(p) == 7):
+        CONDITION=p[4]['exp']
+        p[0]['type']='for'
         p[0]['exp'] = [p[1]] + [p[2]] + p[3]['exp'] + p[4]['exp'] + p[5]['exp'] + [p[6]]
     #do while not supported
     #ADD
+    
+
+        
+    
 
 def p_iteration_body(p):
     '''iteration_body : statement '''

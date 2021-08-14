@@ -1,0 +1,6 @@
+STATE loop_header
+	IF "=" IN CONDITION
+		PRINT LINE
+		VIOLATION Assinment in the loop condition
+	END_IF
+END_STATE
