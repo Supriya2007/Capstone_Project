@@ -30,6 +30,7 @@ lib_rules = {
 'Check for loops with depth more than INPUT:allowed_depth' : 'while_formal_structure.txt', 
 'Always check if the return value of malloc() or calloc() is null':'null_formal.txt',
 'Use SIZEOF to determine the size of a type in malloc() or calloc()':'sizeof_formal.txt',
+'Specify void when function accepts no arguments':'void_formal.txt'
 }
 
 #Even code files without errors inserted into violations. Will have an empty list as value

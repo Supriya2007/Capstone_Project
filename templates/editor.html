@@ -289,8 +289,8 @@ function get_file_contents(fname){
     let text_pre=document.getElementById("file_content");
     let g_pre=document.getElementById("guidelines");
     let f_contents = file_contents[fname];
-    f_contents=f_contents.replaceAll('<','&lt');
-    f_contents=f_contents.replaceAll('<','&gt');
+    f_contents=f_contents.replaceAll('&lt','<');
+    f_contents=f_contents.replaceAll('&gt','>');
     f_contents = f_contents.split("\n");
     var a=[],g_1=[],v_1=[],tmp,i,j=0;
     for(i in line)
