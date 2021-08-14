@@ -95,6 +95,11 @@ def p_postfix_expression(p):
         p[0]['rhs'] = p[3]
         p[0]['exp'] = p[0]['lhs'] + [ p[2] ] + p[0]['rhs']
         p[0]['line'] = LINE
+    elif(len(p)==5): #ARRAY
+        LINE = p.lineno(2)
+        p[0] = {}
+        p[0]['exp'] = p[1]['exp'] + [ p[2] ] + p[3]['exp'] + [p[4]]
+        p[0]['line'] = LINE
     else:
         print("ERROR in p_postfix_expression")
     #print("postfix exp:", p[0])
