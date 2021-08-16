@@ -10,7 +10,8 @@ states = {
     'function_parameters' : ['p_parameter_type_list', 874],
     'parameter_declaration' : ['p_parameter_declaration', 902],
     'func_statements' : ['p_statement', 1021],
-    'function_end' : ['p_function_definition', 1246],
+    #'function_end' : ['p_function_definition', 1246],
+    'function_end' : ['p_function_definition', 1256],
     'var_declares' : ['p_variable_declaration1', 785],
     'declarations' : ['p_other_declarations', 1213], 
     #Maps to declarations outside functions = global variables and function prototypes

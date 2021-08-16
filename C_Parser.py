@@ -1235,7 +1235,7 @@ def p_fheader_type1(p):
     fheader_type1 : declaration_specifiers function_declaration
     '''
     p[0] = {}
-    LINE = p.lineno(1)
+    LINE = p[2]['line']
     NAME = p[2]['name']
     p[0]['line'] = LINE
     p[0]['exp'] = p[1]['exp'] + p[2]['exp']
@@ -1261,7 +1261,7 @@ def p_function_definition(p):
     NAME = p[1]['name']
     LINE = p[1]['line']
     p[0] = {}
-    p[0]['line'] = p.lineno(1)
+    p[0]['line'] = LINE
     if(len(p) == 3):
         p[0]['exp'] = p[1]['exp'] + p[2]['exp']
     elif(len(p) == 4):
