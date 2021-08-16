@@ -32,7 +32,6 @@ states = {
     'unintialized_declaration':['p_uninitialized_declaration', 535],
     'initialized_declaration': ['p_initialized_declaration', 515],
     'expressions':['p_expression_statement', 1096],
-    
 }
 # #ADD in C_Parser.py marks place to add code
 
