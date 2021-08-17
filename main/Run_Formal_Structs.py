@@ -28,7 +28,7 @@ lib_rules = {
 'Check for use of rewind() (use fseek instead)' : 'fseek_formal.txt',
 'Check for use of strcmp() (use strncmp() instead)' : 'strcmp_formal.txt',
 'Check for loops with depth more than INPUT:allowed_depth' : 'while_formal_structure.txt', 
-'Always check if the return value of malloc() or calloc() is null':'null_formal.txt',
+#'Always check if the return value of malloc() or calloc() is null':'null_formal.txt',
 'Use SIZEOF to determine the size of a type in malloc() or calloc()':'sizeof_formal.txt',
 'Specify void when function accepts no arguments':'void_formal.txt',
 'Do not perform assignments in looping conditions':'assignment_in_loop.txt',
