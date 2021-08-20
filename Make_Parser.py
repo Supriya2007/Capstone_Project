@@ -4,13 +4,14 @@ import sys
 #Write prog to get initial line numbers, don't hard-code.
 states = {
     'before_parse':['before_parse_main', 7],
-    'function_prototype' : ['p_function_declaration', 821],
+    'function_prototype' : ['p_function_declaration', 822],
     #Can not differentiate between function definitions and prototypes as of now
-    'function_header' : ['p_function_declaration', 821],
+    'function_header' : ['p_function_declaration', 822],
     'function_parameters' : ['p_parameter_type_list', 874],
-    'parameter_declaration' : ['p_parameter_declaration', 902],
+    'parameter_declaration' : ['p_parameter_declaration', 903],
     'func_statements' : ['p_statement', 1021],
-    'function_end' : ['p_function_definition', 1246],
+    #'function_end' : ['p_function_definition', 1246],
+    'function_end' : ['p_function_definition', 1256],
     'var_declares' : ['p_variable_declaration1', 785],
     'declarations' : ['p_other_declarations', 1213], 
     #Maps to declarations outside functions = global variables and function prototypes
@@ -32,7 +33,6 @@ states = {
     'unintialized_declaration':['p_uninitialized_declaration', 535],
     'initialized_declaration': ['p_initialized_declaration', 515],
     'expressions':['p_expression_statement', 1096],
-    
 }
 # #ADD in C_Parser.py marks place to add code
 

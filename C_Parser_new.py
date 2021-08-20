@@ -441,7 +441,6 @@ def p_expression(p):
     if(len(p)==2):
         p[0] = p[1]
     elif(len(p)==4):
-        p[0] = {}
         p[0]['line'] = p[1]['line']
         p[0]['exp'] = p[1]['exp'] + [p[2]] + p[3]['exp']
     #print("In p_expression: ", p[0])
@@ -531,6 +530,12 @@ def p_initialized_declaration(p):
         ARR_SIZE = p[0]['arr_size']
     #p[] = dict with 2 keys lhs, rhs
     #print("p_initialized_declaration", p[0])
+    if ('[' in LHS) :
+        rhs_len = len(RHS[0])
+        if (ARR_SIZE != 'unspecified') :
+            if (ARR_SIZE <= rhs_len) :
+                print(LINE)
+                print(' Insufficient space allocated for string')
     #ADD 
        
 def p_uninitialized_declaration(p):   
@@ -1236,7 +1241,7 @@ def p_fheader_type1(p):
     fheader_type1 : declaration_specifiers function_declaration
     '''
     p[0] = {}
-    LINE = p[2]['line']
+    LINE = p.lineno(1)
     NAME = p[2]['name']
     p[0]['line'] = LINE
     p[0]['exp'] = p[1]['exp'] + p[2]['exp']
@@ -1262,7 +1267,7 @@ def p_function_definition(p):
     NAME = p[1]['name']
     LINE = p[1]['line']
     p[0] = {}
-    p[0]['line'] = LINE
+    p[0]['line'] = p.lineno(1)
     if(len(p) == 3):
         p[0]['exp'] = p[1]['exp'] + p[2]['exp']
     elif(len(p) == 4):
