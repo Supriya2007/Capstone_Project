@@ -1,0 +1,19 @@
+STATE before_parse
+    CREATE var_list []
+END_STATE
+
+STATE variable_declaration
+    USE_GLOBAL var_list
+    IF LINE IN var_list
+        PRINT LINE
+	    VIOLATION More than one variable per declaration found
+    END_IF
+    IF LINE NOTIN var_list
+        APPEND var_list LINE
+    END_IF
+END_STATE
+
+STATE declaration_stmt
+    USE_GLOBAL var_list
+    SET var_list []
+END_STATE

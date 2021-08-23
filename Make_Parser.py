@@ -13,6 +13,7 @@ states = {
     #'function_end' : ['p_function_definition', 1246],
     'function_end' : ['p_function_definition', 1256],
     'var_declares' : ['p_variable_declaration1', 785],
+    'variable_declaration' : ['p_variable_declaration', 778],
     'declarations' : ['p_other_declarations', 1213], 
     #Maps to declarations outside functions = global variables and function prototypes
     'declaration_stmt' : ['p_declaration', 458],

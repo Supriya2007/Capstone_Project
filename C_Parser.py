@@ -781,7 +781,10 @@ def  p_variable_declaration(p):
     | variable_declaration2
     '''    
     p[0] = p[1]
+    NAME = p[0]['name']
+    LINE = p[0]['line']
     #print("variable_declaration:", p[0])
+    #ADD
     
 def p_variable_declaration1(p):
     '''
@@ -1078,7 +1081,7 @@ def p_declaration_list(p):
         p[0]['line'] = p[1]['line']
         p[0]['exp'] = p[1]['exp'] + p[2]['exp']
     #print("p_declaration_list:", p[0])
-    pass
+    #ADD
 
 def p_statement_list(p):
     '''

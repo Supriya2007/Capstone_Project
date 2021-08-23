@@ -32,7 +32,8 @@ lib_rules = {
 'Use SIZEOF to determine the size of a type in malloc() or calloc()':'sizeof_formal.txt',
 'Specify void when function accepts no arguments':'void_formal.txt',
 'Do not perform assignments in looping conditions':'assignment_in_loop.txt',
-'Check if strings have been allocated sufficient space':'explicit_size_str_formal.txt'
+'Check if strings have been allocated sufficient space':'explicit_size_str_formal.txt',
+'Check for more than one variable per declaration':'one_variable_per_declaration_formal.txt'
 }
 
 #Even code files without errors inserted into violations. Will have an empty list as value
