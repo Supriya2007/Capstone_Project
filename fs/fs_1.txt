@@ -1,0 +1,7 @@
+STATE var_declares
+    LENGTH NAME
+    IF NAME_len GREATER_THAN 31
+        PRINT LINE
+        VIOLATION Variable has length greater than 31
+    END_IF
+END_STATE

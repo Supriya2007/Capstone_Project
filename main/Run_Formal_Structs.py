@@ -19,20 +19,17 @@ err_msgs_file = "Violations.txt"
 formal_struct_dir = "fs"
 #NOTE: Space not allowed in 'INPUT:<var_name>'
 lib_rules = { 
-#'Check for functions called before their declaration' : 'func_formal.txt', 
-'Check for global variables' : 'global_formal.txt', 
-#'Variable names must be at least 4 characters long' : 'var_len_formal.txt',
-'Check for variable names less than INPUT:n characters long' : 'input_var_len.txt',
-#'Functions should not have more than 10 lines': 'func_size_formal.txt',
-'Check for functions having more than INPUT:max_size lines': 'input_func_size.txt',
-'Check for use of rewind() (use fseek instead)' : 'fseek_formal.txt',
-'Check for use of strcmp() (use strncmp() instead)' : 'strcmp_formal.txt',
-'Check for loops with depth more than INPUT:allowed_depth' : 'while_formal_structure.txt', 
-#'Always check if the return value of malloc() or calloc() is null':'null_formal.txt',
-'Use SIZEOF to determine the size of a type in malloc() or calloc()':'sizeof_formal.txt',
-'Specify void when function accepts no arguments':'void_formal.txt',
-'Do not perform assignments in looping conditions':'assignment_in_loop.txt',
-'Check if strings have been allocated sufficient space':'explicit_size_str_formal.txt',
+'Check for global variables' : 'global_fs.txt', 
+'Check for variable names less than INPUT:n characters long' : 'input_var_len_fs.txt',
+'Check for functions having more than INPUT:max_size lines': 'input_func_size_fs.txt',
+'Check for use of rewind() (use fseek instead)' : 'fseek_fs.txt',
+'Check for use of strcmp() (use strncmp() instead)' : 'strcmp_fs.txt',
+'Check for loops with depth more than INPUT:allowed_depth' : 'depth_of_looping_fs.txt', 
+'Use SIZEOF to determine the size of a type in malloc() or calloc()':'sizeof_fs.txt',
+'Specify void when function accepts no arguments':'void_fs.txt',
+'Do not perform assignments in looping conditions':'assignment_in_loop_fs.txt',
+'Check if strings have been allocated sufficient space':'explicit_size_str_fs.txt',
+'Check for variables having length greater than 31':'var_len_less_than_31_fs.txt',
 'Do not use implicit typing': 'implicit_type_formal.txt',
 }
 
