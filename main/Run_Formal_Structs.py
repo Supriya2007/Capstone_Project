@@ -30,6 +30,7 @@ lib_rules = {
 'Do not perform assignments in looping conditions':'assignment_in_loop_fs.txt',
 'Check if strings have been allocated sufficient space':'explicit_size_str_fs.txt',
 'Check for variables having length greater than 31':'var_len_less_than_31_fs.txt',
+'Check for more than one variable per declaration':'one_variable_per_declaration_fs.txt',
 'Do not use implicit typing': 'implicit_type_formal.txt',
 }
 
