@@ -1,0 +1,24 @@
+STATE before_parse
+    CREATE all_types {'int','void','char','short','int','long','float','double'}
+END_STATE
+
+STATE functions_without_type_specifiers
+    PRINT LINE
+    VIOLATION Takes implicit type as int
+END_STATE
+
+STATE type_specifiers
+    USE_GLOBAL all_types
+    CREATE type_declared False
+    FOR term IN EXP
+        IF term IN all_types
+            SET type_declared True
+        END_IF
+    END_FOR
+    
+    IF type_declared EQUALTO False
+        PRINT LINE
+        VIOLATION Takes implicit type as int
+    END_IF
+    
+END_STATE

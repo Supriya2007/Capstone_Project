@@ -5,11 +5,11 @@ import os
 
 #When running on Windows
 python="python"
-#file_sep = '\\'
+file_sep = '\\'
 
 #When running on Ubuntu
 #python="python3"
-file_sep = '/'
+#file_sep = '/'
 #cur_dir = os.getcwd()
 #cur_dir = ".."
 #print(cur_dir)
@@ -30,6 +30,7 @@ lib_rules = {
 'Do not perform assignments in looping conditions':'assignment_in_loop_fs.txt',
 'Check if strings have been allocated sufficient space':'explicit_size_str_fs.txt',
 'Check for variables having length greater than 31':'var_len_less_than_31_fs.txt',
+'Do not use implicit typing': 'implicit_type_formal.txt',
 }
 
 #Even code files without errors inserted into violations. Will have an empty list as value

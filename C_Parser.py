@@ -168,9 +168,10 @@ def p_unary_operator(p):
     | EXCLAIM
     '''
     LINE = p.lineno(1)
-    p['line'] = LINE
-    p['exp'] = [ p[1] ]
-    print("p_unary_operator:", p[0])
+    p[0] = {}
+    p[0]['line'] = LINE
+    p[0]['exp'] = [ p[1] ]
+    #print("p_unary_operator:", p[0])
 
 def p_cast_expression(p):
     '''
@@ -485,7 +486,8 @@ def p_declaration_specifiers(p):
         p[0] = {}
         p[0]['line'] = p.lineno(1)
         p[0]['exp'] = p[1]['exp'] + p[2]['exp']
-    print("p_declaration_specifiers:", p[0])
+    LINE = p[0]['line']
+    EXP = p[0]['exp']
     #ADD
 
 def p_init_declarator_list(p):
@@ -1164,10 +1166,6 @@ def p_iteration_header(p):
     print("iteration header", EXP)
     #do while not supported
     #ADD
-    
-
-        
-    
 
 def p_iteration_body(p):
     '''iteration_body : statement '''
