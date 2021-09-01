@@ -1,0 +1,78 @@
+STATE before_parse
+    CREATE sequence_points {'&&','||',','}
+END_STATE
+
+STATE exp
+    FOR i IN range(len(EXP))
+        INDEX EXP i
+        IF EXP_i IN {'++','--'}
+            IF i GREATER_THAN 0
+                SET j i-1
+                INDEX EXP j
+                IF EXP_j.isidentifier() EQUALTO False
+                    SET j i+1
+                END_IF
+            ELSE
+                SET j i+1
+            END_IF
+            INDEX EXP j
+            FOR k IN range(len(EXP))
+                IF k EQUALTO j
+                    CONTINUE
+                END_IF
+                
+                INDEX EXP k                      
+                IF EXP_j EQUALTO EXP_k
+                    IF k GREATER_THAN j
+                        SET in_btw_operands set(EXP[j+1:k])
+                    ELSE
+                        SET in_btw_operands set(EXP[k+1:j])
+                END_IF
+                IF in_btw_operands.intersection(sequence_points) EQUALTO set()
+                    PRINT LINE
+                    VIOLATION Value of expression depends on the order of evaluation of side effects
+                END_IF
+                
+            END_FOR
+        END_IF
+    END_FOR
+END_STATE
+
+STATE function_call
+    SET sequence_points_not_comma sequence_points-{','}
+    FOR i IN range(len(EXP))
+        INDEX EXP i
+        IF EXP_i IN {'++','--'}
+            IF i GREATER_THAN 0
+                SET j i-1
+                INDEX EXP j
+                IF EXP_j.isidentifier() EQUALTO False
+                    SET j i+1
+                END_IF
+            ELSE
+                SET j i+1
+            END_IF
+            INDEX EXP j
+            FOR k IN range(len(EXP))
+                IF k EQUALTO j
+                    CONTINUE
+                END_IF
+                
+                INDEX EXP k                      
+                IF EXP_j EQUALTO EXP_k
+                    IF k GREATER_THAN j
+                        SET in_btw_operands set(EXP[j+1:k])
+                    ELSE
+                        SET in_btw_operands set(EXP[k+1:j])
+                END_IF
+                IF in_btw_operands.intersection(sequence_points_not_comma) EQUALTO set()
+                    PRINT LINE
+                    VIOLATION Value of expression depends on the order of evaluation of side effects
+                END_IF
+                
+            END_FOR
+        END_IF
+    END_FOR
+END_STATE
+
+

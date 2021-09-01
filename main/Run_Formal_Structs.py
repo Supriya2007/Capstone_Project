@@ -32,6 +32,7 @@ lib_rules = {
 'Check for variables having length greater than 31':'var_len_less_than_31_fs.txt',
 'Check for more than one variable per declaration':'one_variable_per_declaration_fs.txt',
 'Do not use implicit typing': 'implicit_type_fs.txt',
+'Check for expressions that depend on side effects on the operands' : 'side_effects_fs.txt',
 }
 
 #Even code files without errors inserted into violations. Will have an empty list as value
