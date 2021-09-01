@@ -21,7 +21,7 @@ states = {
     'function_call' : ['p_function_call', 51],
     'loop_header':['p_iteration_header', 1144],
     'loop_body':['p_iteration_body', 1170],
-    'after_parse':['after_parse_main', 1298],
+    'after_parse':['after_parse_main', 1300],
     'switch_stmt': ['p_selection_statement', 1122],
     'case_stmt':['p_labeled_statement', 1041],
     'equality_cond' : ['p_equality_expression', 265],
@@ -34,8 +34,9 @@ states = {
     'unintialized_declaration':['p_uninitialized_declaration', 538],
     'initialized_declaration': ['p_initialized_declaration', 518],
     'expressions':['p_expression_statement', 1103],
-    'functions_without_type_specifiers':['p_fheader_type2', 1251],
+    'functions_without_type_specifiers':['p_fheader_type2', 1253],
     'type_specifiers':['p_declaration_specifiers', 474],
+    'jump_statement' : ['p_jump_statement',1177]
 }
 # #ADD in C_Parser.py marks place to add code
 

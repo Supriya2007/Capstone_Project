@@ -18,6 +18,7 @@ def p_primary_expression(p):
 def p_const_or_parenthesis(p): 
     '''
     const_or_parenthesis : CONSTANT
+    | CHARACTER
     | STRING_LITERAL
     | L_PAREN expression R_PAREN
     '''  
@@ -1182,14 +1183,16 @@ def p_jump_statement(p):
     | RETURN expression SEMI
     '''
     p[0] = {}
-    p[0]['line'] = p.lineno(1)
+    NAME = p[1]
+    LINE = p.lineno(1)
+    p[0]['line'] = LINE
     if(p[1] == 'return' and p[3] == ';'):
         p[0]['exp'] = [p[1]] + p[2]['exp'] + [p[3]]
     elif(len(p) == 3):
         p[0]['exp'] = [p[1]] + [p[2]]
     elif(len(p) == 4):
         p[0]['exp'] = [p[1]] + [p[2]] + [p[3]]
-    pass
+    #ADD
 
 def p_translation_unit(p):
     '''
