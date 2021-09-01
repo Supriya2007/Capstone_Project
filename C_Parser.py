@@ -64,6 +64,7 @@ def p_function_call(p):
         p[0]['exp'] = [p[1]] + [p[2]] + [p[3]]
     elif(len(p) == 5):
         p[0]['exp'] = [p[1]] + [p[2]] + p[3]['exp'] + [p[4]]
+    EXP = p[0]['exp']
     p[0]['func_args']=p[0]['exp'][2:-1:2]
     #example of adding an attribute can be:
     #FUNC_ARGS = [(type, arg_name)...] - for user to be able to use it in this production
@@ -448,6 +449,7 @@ def p_expression(p):
         p[0]['exp'] = p[1]['exp'] + [p[2]] + p[3]['exp']
     #print("In p_expression: ", p[0])
     EXP = p[0]['exp']
+    LINE = p[0]['line']
     #ADD
 
 def p_constant_expression(p):
@@ -1036,6 +1038,8 @@ def p_statement(p):
     | jump_statement
     '''
     p[0] = p[1]
+    EXP = p[0]['exp']
+    LINE = p[0]['line']
     #print("p_statement:", p[0])
     #ADD
 
