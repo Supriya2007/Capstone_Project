@@ -1,12 +1,24 @@
 STATE before_parse
     CREATE var_list []
+    CREATE found_function_header 0
+END_STATE
+
+STATE parameter_declaration 
+    GLOBAL_SET found_function_header 1
+END_STATE
+
+STATE function_header
+    GLOBAL_SET found_function_header 0
 END_STATE
 
 STATE variable_declaration
     USE_GLOBAL var_list
-    IF LINE IN var_list
-        PRINT LINE
-	    VIOLATION More than one variable per declaration found
+    USE_GLOBAL found_function_header
+    IF found_function_header EQUALTO 0
+        IF LINE IN var_list
+            PRINT LINE
+	        VIOLATION More than one variable per declaration found
+        END_IF
     END_IF
     IF LINE NOTIN var_list
         APPEND var_list LINE

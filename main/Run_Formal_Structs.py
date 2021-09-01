@@ -31,7 +31,7 @@ lib_rules = {
 'Check if strings have been allocated sufficient space':'explicit_size_str_fs.txt',
 'Check for variables having length greater than 31':'var_len_less_than_31_fs.txt',
 'Check for more than one variable per declaration':'one_variable_per_declaration_fs.txt',
-'Do not use implicit typing': 'implicit_type_formal.txt',
+'Do not use implicit typing': 'implicit_type_fs.txt',
 'Check for expressions that depend on side effects on the operands' : 'side_effects_fs.txt',
 }
 
