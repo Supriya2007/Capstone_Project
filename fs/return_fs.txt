@@ -1,0 +1,22 @@
+STATE before_parse
+    CREATE return_count 0
+END_STATE
+
+STATE function_header
+    GLOBAL_SET return_count 0
+END_STATE
+
+STATE jump_statement
+    IF NAME EQUALTO "return"
+        GLOBAL_SET return_count return_count+1
+    END_IF
+END_STATE
+
+STATE function_end
+    INPUT max_count
+    USE_GLOBAL return_count
+    IF return_count GREATER_THAN max_count
+        PRINT LINE
+        VIOLATION Too many return statements in a function
+    END_IF
+END_STATE

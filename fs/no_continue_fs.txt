@@ -1,0 +1,6 @@
+STATE jump_statement
+    IF NAME EQUALTO "continue"
+        PRINT LINE
+        VIOLATION Do not use continue
+    END_IF
+END_STATE
