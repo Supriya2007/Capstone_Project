@@ -35,6 +35,7 @@ lib_rules = {
 'Check for expressions that depend on side effects on the operands' : 'side_effects_fs.txt',
 'Do not use continue': 'no_continue_fs.txt',
 'Check for functions with more than INPUT:max_count return statements' : 'return_fs.txt', 
+'Check for more than one break or goto statements' : 'one_break_or_goto_fs.txt', 
 }
 
 #Even code files without errors inserted into violations. Will have an empty list as value
