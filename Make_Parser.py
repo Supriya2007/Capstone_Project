@@ -37,6 +37,7 @@ states = {
     'functions_without_type_specifiers':['p_fheader_type2', 1255],
     'exp': ['p_expression', 438],
     'type_specifiers':['p_declaration_specifiers', 476],
+    'jump_statement' : ['p_jump_statement',1177],
 }
 # #ADD in C_Parser.py marks place to add code
 
