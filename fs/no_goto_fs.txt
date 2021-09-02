@@ -1,0 +1,6 @@
+STATE translation_unit
+    IF 'goto' IN p[0]['exp']
+        PRINT LINE
+        VIOLATION "goto" used
+    END_IF
+END_STATE

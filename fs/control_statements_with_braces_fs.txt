@@ -1,0 +1,15 @@
+STATE if_stmt
+    FOR bl IN BLOCK
+        CREATE ANS 1
+        IF bl[0] EQUALTO '{'
+            IF bl[-1] EQUALTO '}'
+                SET ANS 0
+            END_IF
+        END_IF 
+        IF ANS EQUALTO 1
+            PRINT LINE
+            VIOLATION Control structures should use curly braces 
+        END_IF
+    END_FOR
+        
+END_STATE

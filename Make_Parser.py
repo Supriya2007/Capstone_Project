@@ -23,6 +23,8 @@ states = {
     'loop_body':['p_iteration_body', 1170],
     'after_parse':['after_parse_main', 1298],
     'switch_stmt': ['p_selection_statement', 1122],
+    'if_stmt': ['p_selection_statement', 1122],
+
     'case_stmt':['p_labeled_statement', 1041],
     'equality_cond' : ['p_equality_expression', 265],
     'equality_cond_lhs' : ['p_equality_exp_lhs', 282],
@@ -36,6 +38,7 @@ states = {
     'expressions':['p_expression_statement', 1103],
     'functions_without_type_specifiers':['p_fheader_type2', 1251],
     'type_specifiers':['p_declaration_specifiers', 474],
+    'translation_unit':['p_translation_unit',1195]
 }
 # #ADD in C_Parser.py marks place to add code
 
