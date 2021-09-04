@@ -1136,6 +1136,7 @@ def p_selection_statement(p):
         BLOCK.append(p[5]['exp'])
         BLOCK.append(p[7]['exp'])
         p[0]['exp'] = [p[1]] + [p[2]] + p[3]['exp'] + [p[4]] + p[5]['exp'] + [p[6]] + p[7]['exp']
+    EXP=p[0]['exp']
     #print("p_selection_statement:", p[0])
     #ADD
 
@@ -1279,6 +1280,7 @@ def p_function_definition(p):
     elif(len(p) == 4):
         FUNC_BODY=p[3]['exp']
         p[0]['exp'] = p[1]['exp'] + p[2]['exp'] + p[3]['exp']
+    EXP=p[0]['exp']
     #print("p_function_definition:",p[0])
     #print("p_function_BODY:",FUNC_BODY)
 

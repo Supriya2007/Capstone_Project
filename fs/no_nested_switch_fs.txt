@@ -1,5 +1,5 @@
 STATE switch_stmt
-    IF  p[0]['exp'].count('switch') GREATER_THAN 1
+    IF  EXP.count('switch') GREATER_THAN 1
         PRINT LINE
         VIOLATION nested switch statements
     END_IF  

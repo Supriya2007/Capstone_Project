@@ -1,5 +1,5 @@
 STATE function_end
-    IF p[0]['exp'].count(NAME) GREATER_THAN 1
+    IF EXP.count(NAME) GREATER_THAN 1
             PRINT LINE
             VIOLATION Recursion used
     END_IF
