@@ -4,21 +4,22 @@ import sys
 #Write prog to get initial line numbers, don't hard-code.
 states = {
     'before_parse':['before_parse_main', 7],
-    'function_prototype' : ['p_function_declaration', 828],
+    'function_prototype' : ['p_function_declaration', 830],
     #Can not differentiate between function definitions and prototypes as of now
-    'function_header' : ['p_function_declaration', 828],
-    'function_parameters' : ['p_parameter_type_list', 881],
-    'parameter_declaration' : ['p_parameter_declaration', 909],
-    'func_statements' : ['p_statement', 1028],
+    'function_header' : ['p_function_declaration', 830],
+    'function_parameters' : ['p_parameter_type_list', 883],
+    'parameter_declaration' : ['p_parameter_declaration', 911],
+    'func_statements' : ['p_statement', 1030],
     #'function_end' : ['p_function_definition', 1246],
-    'function_end' : ['p_function_definition', 1261],
-    'var_declares' : ['p_variable_declaration1', 792],
-    'variable_declaration' : ['p_variable_declaration', 781],
-    'declarations' : ['p_other_declarations', 1218], 
+    'function_end' : ['p_function_definition', 1265],
+    'var_declares' : ['p_variable_declaration1', 794],
+    'variable_declaration' : ['p_variable_declaration', 783],
+    'declarations' : ['p_other_declarations', 1222], 
     #Maps to declarations outside functions = global variables and function prototypes
-    'declaration_stmt' : ['p_declaration', 460],
+    'declaration_stmt' : ['p_declaration', 462],
     #If many variables are declared in a single statement, declarations is matched once for each variable, while declaration_stmt is matched only once.
     'function_call' : ['p_function_call', 51],
+
     'loop_header':['p_iteration_header', 1144],
     'loop_body':['p_iteration_body', 1170],
     'after_parse':['after_parse_main', 1298],
@@ -38,7 +39,11 @@ states = {
     'expressions':['p_expression_statement', 1103],
     'functions_without_type_specifiers':['p_fheader_type2', 1251],
     'type_specifiers':['p_declaration_specifiers', 474],
-    'translation_unit':['p_translation_unit',1195]
+    'translation_unit':['p_translation_unit',1195],
+    'exp': ['p_expression', 438],
+    'type_specifiers':['p_declaration_specifiers', 476],
+    'jump_statement' : ['p_jump_statement',1177],
+
 }
 # #ADD in C_Parser.py marks place to add code
 
@@ -184,6 +189,11 @@ while(True):
             #Add LESS_EQUAL, GREATER_EQUAL later   
                 
             cur_tab+=tab  
+        elif(cmd=="ELSE"):
+            #cur_tab-=tab
+            cur_tab = " "*(len(cur_tab)-len(tab))
+            py_cmd = "%selse :\n"%(cur_tab)
+            cur_tab+=tab
         elif(cmd == "END_IF" or cmd=="END_FOR"):
             cur_tab = " "*(len(cur_tab)-len(tab))
         elif(cmd == "SET"):
@@ -225,6 +235,10 @@ while(True):
                 list_name = get_next_word()
                 py_cmd = "%sfor %s in %s:\n"%(cur_tab, var_name, list_name)
                 cur_tab+=tab
+        elif(cmd == "BREAK"):
+            py_cmd = "%sbreak\n"%(cur_tab)
+        elif(cmd == "CONTINUE"):
+            py_cmd = "%scontinue\n"%(cur_tab)
         write_file_at(cur_state, py_cmd)     
    
 file_handle_new = open("C_Parser_new.py", "wt")

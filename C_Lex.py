@@ -1,7 +1,7 @@
 import ply.lex as lex
 
 tokens = (
-    'IDENTIFIER', 'CONSTANT', 'STRING_LITERAL', 'SIZEOF', 'PTR_OP',   
+    'IDENTIFIER', 'CONSTANT', 'STRING_LITERAL', 'SIZEOF', 'PTR_OP', 'CHARACTER',
     'INC_OP', 'DEC_OP', 'LEFT_OP', 'RIGHT_OP', 'LE_OP',
     'GE_OP', 'EQ_OP', 'NE_OP', 'AND_OP', 'OR_OP',
     'TYPEDEF', 'EXTERN', 'STATIC', 'CHAR', 'SHORT', 'INT', 'LONG',
@@ -73,7 +73,7 @@ const_exp4 = D+r'+'+E+FS+r'?'
 const_exp5 = D+r'*\.'+D+r'+('+E+r')?'+FS+r'?'
 const_exp6 = D+r'+\.'+D+r'*('+E+r')?'+FS+r'?'
 all_const_exp = r'('+const_exp1 + r')|(' + const_exp2 + r')|(' + const_exp3 + r')|('+const_exp4+r')|('+const_exp5+r')|('+const_exp6+')'
-#print("all_const_exp =", all_const_exp)
+
 
 
 #Maintaining in descending order of length - same order in which the regular expressions are matched by PLY
@@ -124,10 +124,13 @@ t_GREATER = r'>'
 t_PIPE = r'\|'
 t_QUEST = r'\?'
 
+def t_CHARACTER(t):
+    ''' \'[^\']\' '''
+    t.value = t.value[1:-1]
+    return t
 
 @lex.TOKEN(identifier)
 def t_IDENTIFIER(t):
-     #r'[a-zA-Z_][a-zA-Z_0-9]*'
      t.type = reserved.get(t.value,'IDENTIFIER')    # Check for reserved words
      #print(t)
      return t
@@ -149,6 +152,7 @@ def t_STRING_LITERAL(t):
 def t_CONSTANT(t):
     #print("t.type = ", t.type)
     #print(t)
+    t.type = 'CONSTANT'
     return t
     
 def t_newline(t):
