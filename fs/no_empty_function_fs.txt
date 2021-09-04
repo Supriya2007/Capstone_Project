@@ -1,0 +1,6 @@
+STATE function_end
+    IF len(FUNC_BODY) LESS_THAN 3
+            PRINT LINE
+            VIOLATION Empty Function
+    END_IF
+END_STATE

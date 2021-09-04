@@ -1,0 +1,6 @@
+STATE switch_stmt
+    IF  EXP.count('switch') GREATER_THAN 1
+        PRINT LINE
+        VIOLATION nested switch statements
+    END_IF  
+END_STATE

@@ -1132,10 +1132,16 @@ def p_selection_statement(p):
     '''
     p[0] = {}
     p[0]['line'] = p.lineno(1)
+    LINE=p[0]['line']
+    BLOCK=[]
     if(len(p) == 6):
+        BLOCK.append(p[5]['exp'])
         p[0]['exp'] = [p[1]] + [p[2]] + p[3]['exp'] + [p[4]] + p[5]['exp']
     elif(len(p) == 8):
+        BLOCK.append(p[5]['exp'])
+        BLOCK.append(p[7]['exp'])
         p[0]['exp'] = [p[1]] + [p[2]] + p[3]['exp'] + [p[4]] + p[5]['exp'] + [p[6]] + p[7]['exp']
+    EXP=p[0]['exp']
     #print("p_selection_statement:", p[0])
     #ADD
 
@@ -1203,6 +1209,7 @@ def p_translation_unit(p):
     translation_unit : external_declaration
     | translation_unit external_declaration
     '''
+    #LINE=p.lineno(1)
     if(len(p) == 2):
         p[0] = p[1]
     elif(len(p) == 3):
@@ -1275,10 +1282,15 @@ def p_function_definition(p):
     p[0] = {}
     p[0]['line'] = LINE
     if(len(p) == 3):
+        FUNC_BODY=p[2]['exp']
         p[0]['exp'] = p[1]['exp'] + p[2]['exp']
     elif(len(p) == 4):
+        FUNC_BODY=p[3]['exp']
         p[0]['exp'] = p[1]['exp'] + p[2]['exp'] + p[3]['exp']
+    EXP=p[0]['exp']
     #print("p_function_definition:",p[0])
+    #print("p_function_BODY:",FUNC_BODY)
+
     #ADD      
     
 def p_error(p):
