@@ -1,0 +1,34 @@
+STATE before_parse
+	CREATE goto_count 0
+    CREATE break_count 0
+    CREATE line_count 0
+END_STATE
+
+STATE loop_header
+	GLOBAL_SET goto_count 0
+    GLOBAL_SET break_count 0
+    GLOBAL_SET line_count LINE
+END_STATE
+
+STATE jump_statement
+    IF NAME EQUALTO "goto"
+        GLOBAL_SET goto_count goto_count+1
+    END_IF
+    IF NAME EQUALTO "break"
+        GLOBAL_SET break_count break_count+1
+    END_IF
+END_STATE
+
+STATE loop_body
+    USE_GLOBAL goto_count
+    USE_GLOBAL break_count
+    USE_GLOBAL line_count
+    IF goto_count GREATER_THAN 1
+        PRINT line_count
+        VIOLATION Goto used more than once
+    END_IF
+    IF break_count GREATER_THAN 1
+        PRINT line_count
+        VIOLATION Break used more than once
+    END_IF
+END_STATE
