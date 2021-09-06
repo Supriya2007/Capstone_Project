@@ -1,0 +1,123 @@
+STATE before_parse
+    CREATE pointers {}
+    CREATE scopes {}
+    CREATE cur_scope 0
+    DICT_APPEND scopes 'heap' 0
+END_STATE
+
+STATE block_start
+    USE_GLOBAL cur_scope
+    SET cur_scope cur_scope+1
+END_STATE
+
+STATE block_end
+    USE_GLOBAL cur_scope
+    FOR key IN scopes.copy()
+        INDEX scopes key
+        IF scopes_key EQUALTO cur_scope
+            DICT_REMOVE scopes key
+        END_IF
+    END_FOR
+    SET cur_scope cur_scope-1
+END_STATE
+
+STATE variable_declaration
+    DICT_APPEND scopes NAME cur_scope
+END_STATE
+
+STATE declarator_name
+    IF '*' IN EXP
+        DICT_APPEND pointers NAME 'X'
+    END_IF
+END_STATE
+
+STATE declaration_stmt
+    CREATE s cur_scope
+    IF 'static' IN EXP
+        SET s 0
+    END_IF
+    FOR var_name IN NAME
+        DICT_APPEND scopes var_name s
+    END_FOR
+END_STATE
+
+STATE initialized_declaration
+    IF NAME IN pointers
+        IF 'malloc' IN RHS
+            DICT_APPEND pointers NAME 'heap'
+        END_IF
+        IF 'calloc' IN RHS
+            DICT_APPEND pointers NAME 'heap'
+        END_IF
+        IF 'realloc' IN RHS
+            DICT_APPEND pointers NAME 'heap'
+        END_IF
+        
+        INDEX pointers NAME
+        IF pointers_NAME NOTEQUALTO 'heap'
+            FOR term IN RHS
+                IF term.isidentifier() EQUALTO True
+                    SET var_name ''
+                    IF term IN pointers
+                        SET var_name pointers[term]
+                    ELSE
+                        SET var_name term
+                    END_IF
+                    IF scopes.get(var_name,[]) EQUALTO []
+                        PRINT LINE
+                        VIOLATION Pointer assigned to variable with lower storage duration
+                    ELSE
+                        IF scopes[var_name] GREATER_THAN scopes[NAME]
+                            PRINT LINE
+                            VIOLATION Pointer assigned to variable with lower storage duration
+                        END_IF
+                    END_IF
+                    DICT_APPEND pointers NAME var_name
+                    BREAK
+                END_IF
+            END_FOR
+        END_IF
+    END_IF   
+END_STATE
+
+STATE variable_assignments
+    IF LHS NOTEQUALTO []
+        IF NAME IN pointers
+            IF 'malloc' IN RHS
+                DICT_APPEND pointers NAME 'heap'
+            END_IF
+            IF 'calloc' IN RHS
+                DICT_APPEND pointers NAME 'heap'
+            END_IF
+            IF 'realloc' IN RHS
+                DICT_APPEND pointers NAME 'heap'
+            END_IF
+            
+            INDEX pointers NAME
+            IF pointers_NAME NOTEQUALTO 'heap'       
+                FOR term IN RHS
+                    IF term.isidentifier() EQUALTO True
+                        SET var_name ''
+                        IF term IN pointers
+                            SET var_name pointers[term]
+                        ELSE
+                            SET var_name term
+                        END_IF
+                        IF scopes.get(var_name,[]) EQUALTO []
+                            PRINT LINE
+                            VIOLATION Pointer assigned to variable with lower storage duration
+                        ELSE
+                            IF scopes[var_name] GREATER_THAN scopes[NAME]
+                                PRINT LINE
+                                VIOLATION Pointer assigned to variable with lower storage duration
+                            END_IF
+                        END_IF
+                        DICT_APPEND pointers NAME var_name
+                        BREAK
+                    END_IF
+                END_FOR
+            END_IF
+        END_IF
+    END_IF
+END_STATE
+

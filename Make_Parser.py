@@ -4,19 +4,19 @@ import sys
 #Write prog to get initial line numbers, don't hard-code.
 states = {
     'before_parse':['before_parse_main', 7],
-    'function_prototype' : ['p_function_declaration', 830],
+    'function_prototype' : ['p_function_declaration', 859],
     #Can not differentiate between function definitions and prototypes as of now
-    'function_header' : ['p_function_declaration', 830],
+    'function_header' : ['p_function_declaration', 859],
     'function_parameters' : ['p_parameter_type_list', 883],
     'parameter_declaration' : ['p_parameter_declaration', 911],
     'func_statements' : ['p_statement', 1030],
     #'function_end' : ['p_function_definition', 1246],
-    'function_end' : ['p_function_definition', 1265],
-    'var_declares' : ['p_variable_declaration1', 794],
-    'variable_declaration' : ['p_variable_declaration', 783],
+    'function_end' : ['p_function_definition', 1313],
+    'var_declares' : ['p_variable_declaration1', 823],
+    'variable_declaration' : ['p_variable_declaration', 811],
     'declarations' : ['p_other_declarations', 1222], 
     #Maps to declarations outside functions = global variables and function prototypes
-    'declaration_stmt' : ['p_declaration', 462],
+    'declaration_stmt' : ['p_declaration', 469],
     #If many variables are declared in a single statement, declarations is matched once for each variable, while declaration_stmt is matched only once.
     'function_call' : ['p_function_call', 51],
     'loop_header':['p_iteration_header', 1148],
@@ -26,18 +26,22 @@ states = {
     'case_stmt':['p_labeled_statement', 1045],
     'equality_cond' : ['p_equality_expression', 266],
     'equality_cond_lhs' : ['p_equality_exp_lhs', 283],
-    'variable_assignments' : ['p_assignment_expression', 391],
+    'variable_assignments' : ['p_assignment_expression', 392],
     'assignment_lhs' : ['p_assignment_lhs', 409],
     'postfix_expression' : ['p_postfix_expression', 74],
     'unary_expression' : ['p_unary_expression', 124],
     'identifier_list':['p_identifier_list', 926],
     'unintialized_declaration':['p_uninitialized_declaration', 540],
-    'initialized_declaration': ['p_initialized_declaration', 520],
+    'initialized_declaration': ['p_initialized_declaration', 543],
     'expressions':['p_expression_statement', 1107],
     'functions_without_type_specifiers':['p_fheader_type2', 1255],
     'exp': ['p_expression', 438],
     'type_specifiers':['p_declaration_specifiers', 476],
     'jump_statement' : ['p_jump_statement',1177],
+    'block_end':['p_compound_statement', 1090],
+    'block_start':['p_compound_statement_begin', 1111],
+    'declarator_name':['p_declarator', 782],
+    
 }
 # #ADD in C_Parser.py marks place to add code
 
