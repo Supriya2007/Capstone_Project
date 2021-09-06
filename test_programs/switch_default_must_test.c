@@ -10,7 +10,7 @@ int main()
                 break;
        case 3: printf("Choice is 3");
                break;
-        default:break;
+        
        
    }
    return 0;
