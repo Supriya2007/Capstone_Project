@@ -10,16 +10,16 @@ int main(){
     static int* s;
     int** t;
     
-    p = &a;
-    q = p+1;
-    r = &c;
+    p = &a; //invalid
+    q = p+1; //invalid
+    r = &c; //invalid
     *p =  a+1;
     
-    p = arr+1;
-    q = arr+3-2;
-    r = p+2;
+    p = arr+1; //invalid
+    q = arr+3-2; //invalid
+    r = p+2; //invalid
     
-    p = e;
+    p = &e;
     l = &a;
     n = malloc(sizeof(int)*4);
     m = n+2;
@@ -33,8 +33,8 @@ int main(){
     {
         int *v;
         int w;
-        t = &v;
-        *t = &w; //should be invalid, but was not caught!
+        t = &v; //invalid
+        *t = &w; 
     }
     
     

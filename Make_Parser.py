@@ -4,7 +4,7 @@ import sys
 #Write prog to get initial line numbers, don't hard-code.
 states = {
     'before_parse':['before_parse_main', 7],
-    'function_prototype' : ['p_function_declaration', 859],
+    'function_prototype' : ['p_function_declaration', 862],
     #Can not differentiate between function definitions and prototypes as of now
     'function_header' : ['p_function_declaration', 859],
     'function_parameters' : ['p_parameter_type_list', 883],
@@ -148,6 +148,10 @@ while(True):
             list_name = get_next_word()
             value = get_next_word()
             py_cmd = "%s%s.remove(%s)\n"%(cur_tab, list_name, value)
+        elif(cmd == "POP"):
+            list_name = get_next_word()
+            index = get_next_word()
+            py_cmd = "%s%s.pop(%s)\n"%(cur_tab, list_name, index)
         elif(cmd=="DICT_APPEND"):
             dict_name = get_next_word()
             key = get_next_word()
