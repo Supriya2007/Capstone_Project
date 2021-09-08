@@ -1,0 +1,8 @@
+STATE switch_stmt
+    IF EXP[0] EQUALTO "switch"
+        IF "default" NOTIN EXP
+            PRINT LINE
+            VIOLATION "switch" statements should end with "default" clauses
+        END_IF  
+    END_IF
+END_STATE

@@ -36,6 +36,11 @@ lib_rules = {
 'Do not use continue': 'no_continue_fs.txt',
 'Check for functions with more than INPUT:max_count return statements' : 'return_fs.txt', 
 'Check for more than one break or goto statements' : 'one_break_or_goto_fs.txt', 
+'Always enclose control statement blocks in curly braces': 'control_statements_with_braces_fs.txt',
+'Check for empty functions':'no_empty_function_fs.txt',
+'Do not nest switch statements':'no_nested_switch_fs.txt',
+'Check for recursive functions':'recursion_fs.txt',
+'All switch statements must have a default clause':'switch_default_must.txt',
 'Do not make a pointer to a variable with lower storage duration':'storage_class_fs.txt',
 }
 
