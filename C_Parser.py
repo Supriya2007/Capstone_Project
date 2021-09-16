@@ -474,6 +474,8 @@ def p_declaration(p):
     '''
     p[0] = copy.deepcopy(p[1])
     NAME=[]
+    print("In p_declaration")
+    print("p[1]=", p[1], "p[2]=", p[2])
     #p[0]['line'] = p.lineno(1)
     if(len(p) == 3):
         p[0]['exp'] = p[1]['exp'] + [ p[2] ]
@@ -486,7 +488,8 @@ def p_declaration(p):
         #        NAMES.append(term)
         NAME = p[0]['name']
     EXP = p[0]['exp']
-    #print("p_declaration:", p[0])
+    TYPE = p[1]['exp']
+    print("p_declaration:", p[0]); print(TYPE)
     #ADD
 
 def p_declaration_specifiers(p):
@@ -506,6 +509,7 @@ def p_declaration_specifiers(p):
         p[0]['exp'] = p[1]['exp'] + p[2]['exp']
     LINE = p[0]['line']
     EXP = p[0]['exp']
+    print("p_declaration_specifiers: ", p[0]['exp'])
     #ADD
 
 def p_init_declarator_list(p):
@@ -534,6 +538,9 @@ def p_init_declarator(p):
     | initialized_declaration
     '''
     p[0] = p[1]
+    LINE = p[0]['line']
+    EXP = p[0]['exp']
+    NAME = p[0]['name']
     #print("p_init_declarator", p[0])
     #ADD
     
@@ -773,6 +780,8 @@ def p_type_qualifier(p):
     p[0] = {}
     p[0]['line'] = p.lineno(1)
     p[0]['exp'] = [p[1]]
+    EXP = p[0]['exp']
+    LINE = p[0]['line']
     #print("p_type_qualifier:",p[0])
     #ADD
 
@@ -888,15 +897,20 @@ def p_pointer(p):
     LINE = p.lineno(1)
     p[0] = {}
     p[0]['line'] = LINE
+    TYPE_QUALIFIERS = []
     if(len(p)==2):
         p[0]['exp'] = [ p[1] ]
     elif(len(p)==3):  #NOT HANDLED  
         p[0]['exp'] = [ p[1] ] + p[2]['exp'] 
+        if('*' not in p[2]['exp']):
+            TYPE_QUALIFIERS = p[2]['exp']
     elif(len(p)==4): #NOT HANDLED 
         p[0]['exp'] = [ p[1] ] + p[2]['exp'] + p[3]['exp']
+        TYPE_QUALIFIERS = p[2]['exp']
     else:
         print("ERROR in p_pointer:")
     #print("p_pointer:", p[0])
+    #ADD
 
 def p_type_qualifier_list(p):
     '''

@@ -1,0 +1,105 @@
+STATE before_parse
+    CREATE variables []
+    CREATE var_types {}
+    CREATE cur_id_list_type []
+    CREATE cur_id_type []
+END_STATE
+
+STATE block_start
+    APPEND variables var_types.copy()
+END_STATE
+
+STATE block_end
+    USE_GLOBAL var_types
+    VIOLATION var_types are
+    PRINT var_types
+    SET var_types variables[-1]
+    POP variables -1
+END_STATE
+
+STATE pointer
+    USE_GLOBAL cur_id_type
+    SET cur_id_type ['*']+TYPE_QUALIFIERS+cur_id_type
+    VIOLATION Type qualifiers are
+    PRINT TYPE_QUALIFIERS
+END_STATE
+
+STATE declaration_stmt
+    USE_GLOBAL cur_id_type
+    VIOLATION Appending in p_declaration_specifiers
+    PRINT TYPE
+    FOR var_name IN NAME
+        INDEX var_types var_name
+        DICT_APPEND var_types var_name TYPE+var_types_var_name
+    END_FOR
+    SET cur_id_type []
+END_STATE
+
+STATE func_statements
+    USE_GLOBAL cur_id_type
+    SET cur_id_type []
+END_STATE
+
+STATE declarator_and_initializer
+    USE_GLOBAL cur_id_type
+    DICT_APPEND var_types NAME cur_id_type
+END_STATE
+
+STATE variable_assignments
+    IF LHS NOTEQUALTO []
+        INDEX var_types NAME
+        PRINT "exp"
+        PRINT EXP
+        IF '*' IN var_types_NAME
+            INDEX RHS 0
+            IF RHS_0 EQUALTO '&'
+                INDEX RHS 1
+                SET rhs_name RHS_1    
+            ELSE
+                SET rhs_name RHS_0
+            END_IF    
+            INDEX var_types rhs_name
+            SET l_temp "".join(var_types_NAME).split('*')
+            SET r_temp "".join(var_types_rhs_name).split('*')
+            SET lhs_is_volatile_list []
+            SET rhs_is_volatile_list []
+            FOR t IN l_temp
+                IF 'volatile' IN t
+                    APPEND lhs_is_volatile_list True
+                ELSE
+                    APPEND lhs_is_volatile_list False
+                END_IF
+            END_FOR
+            FOR t IN r_temp
+                IF 'volatile' IN t
+                    APPEND rhs_is_volatile_list True
+                ELSE
+                    APPEND rhs_is_volatile_list False
+                END_IF
+            END_FOR
+            PRINT "lhs_is_volatile_list"
+            PRINT lhs_is_volatile_list
+            PRINT "rhs_is_volatile_list"
+            PRINT rhs_is_volatile_list
+            IF RHS_0 EQUALTO '&'
+                POP lhs_is_volatile_list -1
+            ELSE
+                POP lhs_is_volatile_list -1
+                POP rhs_is_volatile_list -1
+            END_IF
+            
+            FOR i IN range(len(rhs_is_volatile_list))
+                INDEX rhs_is_volatile_list i
+                IF rhs_is_volatile_list_i EQUALTO True
+                    INDEX lhs_is_volatile_list i
+                    IF lhs_is_volatile_list_i EQUALTO False
+                        PRINT LINE
+                        VIOLATION Dangerous pointer assignment
+                    END_IF
+                END_IF
+            END_FOR
+        END_IF
+    END_IF
+END_STATE
+
+

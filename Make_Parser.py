@@ -17,6 +17,8 @@ states = {
     'declarations' : ['p_other_declarations', 1280], 
     #Maps to declarations outside functions = global variables and function prototypes
     'declaration_stmt' : ['p_declaration', 470],
+    'declaration_specifiers' : ['p_declaration_specifiers', 495],
+    'type_qualifier' : ['p_type_qualifier', 772],
     #If many variables are declared in a single statement, declarations is matched once for each variable, while declaration_stmt is matched only once.
     'function_call' : ['p_function_call', 52],
     'loop_header':['p_iteration_header', 1202],
@@ -43,6 +45,8 @@ states = {
     'block_start':['p_compound_statement_begin', 1114],
     'declarator_name':['p_declarator', 779],
     'translation_unit':['p_translation_unit',1255],
+    'pointer':['p_pointer', 885],
+    'declarator_and_initializer':['p_init_declarator', 535],
     
 }
 # #ADD in C_Parser.py marks place to add code
