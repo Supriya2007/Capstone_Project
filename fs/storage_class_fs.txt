@@ -1,0 +1,181 @@
+STATE before_parse
+    CREATE pointers {}
+    CREATE scopes {}
+    CREATE pointer_level {}
+    CREATE scopes_stack []
+    CREATE pointers_stack []
+    CREATE pointer_levels_stack []
+    CREATE cur_scope 0
+END_STATE
+
+STATE block_start
+    USE_GLOBAL cur_scope
+    SET cur_scope cur_scope+1
+    APPEND scopes_stack scopes.copy()
+    APPEND pointers_stack pointers.copy()
+    APPEND pointer_levels_stack pointer_level.copy()
+END_STATE
+
+STATE block_end
+    USE_GLOBAL cur_scope
+    USE_GLOBAL scopes
+    USE_GLOBAL pointers
+    USE_GLOBAL pointer_level
+    SET cur_scope cur_scope-1
+    SET scopes scopes_stack[-1]
+    POP scopes_stack -1
+    SET pointers pointers_stack[-1]
+    POP pointers_stack -1
+    SET pointer_level pointer_levels_stack[-1]
+    POP pointer_levels_stack -1
+END_STATE
+
+STATE variable_declaration
+    DICT_APPEND scopes NAME cur_scope
+    IF ARRAY_SIZE NOTEQUALTO 0
+        DICT_APPEND pointers NAME NAME
+    END_IF
+END_STATE
+
+STATE declarator_name
+    IF '*' IN EXP
+        DICT_APPEND pointers NAME 'X'
+        DICT_APPEND pointer_level NAME EXP.count('*')
+    END_IF
+END_STATE
+
+STATE declaration_stmt
+    CREATE s cur_scope
+    IF 'static' IN EXP
+        SET s 0
+    END_IF
+    FOR var_name IN NAME
+        DICT_APPEND scopes var_name s
+    END_FOR
+END_STATE
+
+STATE initialized_declaration
+    CREATE mem_allocated False
+    IF NAME IN pointers
+        IF 'malloc' IN RHS
+            DICT_APPEND pointers NAME 'star_'+NAME
+            DICT_APPEND scopes 'star_'+NAME 0
+            INDEX pointer_level NAME
+            IF pointer_level_NAME GREATER_THAN 1
+                DICT_APPEND pointers 'star_'+NAME 'X'
+                DICT_APPEND pointer_level 'star_'+NAME pointer_level_NAME-1
+            END_IF
+            SET mem_allocated True
+        END_IF
+        IF 'calloc' IN RHS
+            DICT_APPEND pointers NAME 'star_'+NAME
+            DICT_APPEND scopes 'star_'+NAME 0
+            IF pointer_level_NAME GREATER_THAN 1
+                DICT_APPEND pointers 'star_'+NAME 'X'
+                DICT_APPEND pointer_level 'star_'+NAME pointer_level_NAME-1
+            END_IF
+            SET mem_allocated True
+        END_IF
+        IF 'realloc' IN RHS
+            DICT_APPEND pointers NAME 'star_'+NAME
+            DICT_APPEND scopes 'star_'+NAME 0
+            IF pointer_level_NAME GREATER_THAN 1
+                DICT_APPEND pointers 'star_'+NAME 'X'
+                DICT_APPEND pointer_level 'star_'+NAME pointer_level_NAME-1
+            END_IF
+            SET mem_allocated True
+        END_IF
+        
+        IF mem_allocated EQUALTO False
+            FOR term IN RHS
+                IF term.isidentifier() EQUALTO True
+                    SET var_name ''
+                    IF '&' IN RHS
+                        SET var_name term
+                    ELSE
+                        SET var_name pointers[term]
+                    END_IF
+                    IF var_name NOTIN scopes
+                        PRINT LINE
+                        VIOLATION Dangerous pointer assignment
+                    ELSE
+                        IF scopes[var_name] GREATER_THAN scopes[NAME]
+                            PRINT LINE
+                            VIOLATION Dangerous pointer assignment
+                        END_IF
+                    END_IF
+                    DICT_APPEND pointers NAME var_name
+                    BREAK
+                END_IF
+            END_FOR
+        END_IF
+    END_IF 
+END_STATE
+
+STATE variable_assignments
+    IF LHS NOTEQUALTO []
+        CREATE lhs_name NAME
+        CREATE mem_allocated False
+        FOR i IN range(LHS.count('*'))
+            INDEX pointers lhs_name
+            SET lhs_name pointers_lhs_name
+        END_FOR
+        IF lhs_name IN pointers
+            IF 'malloc' IN RHS
+                DICT_APPEND pointers lhs_name 'star_'+lhs_name
+                DICT_APPEND scopes 'star_'+lhs_name 0
+                INDEX pointer_level lhs_name
+                IF pointer_level_lhs_name-LHS.count('*') GREATER_EQUAL 1
+                    DICT_APPEND pointers 'star_'+lhs_name 'X'
+                    DICT_APPEND pointer_level 'star_'+lhs_name pointer_level_lhs_name-LHS.count('*')
+                END_IF
+                SET mem_allocated True
+            END_IF
+            IF 'calloc' IN RHS
+                DICT_APPEND pointers lhs_name 'star_'+lhs_name
+                DICT_APPEND scopes 'star_'+lhs_name 0
+                INDEX pointer_level lhs_name
+                IF pointer_level_lhs_name-LHS.count('*') GREATER_EQUAL 1
+                    DICT_APPEND pointers 'star_'+lhs_name 'X'
+                    DICT_APPEND pointer_level 'star_'+lhs_name pointer_level_lhs_name-LHS.count('*')
+                END_IF
+                SET mem_allocated True
+            END_IF
+            IF 'realloc' IN RHS
+                DICT_APPEND pointers lhs_name 'star_'+lhs_name
+                DICT_APPEND scopes 'star_'+lhs_name 0
+                INDEX pointer_level lhs_name
+                IF pointer_level_lhs_name-LHS.count('*') GREATER_EQUAL 1
+                    DICT_APPEND pointers 'star_'+lhs_name 'X'
+                    DICT_APPEND pointer_level 'star_'+lhs_name pointer_level_lhs_name-LHS.count('*')
+                END_IF
+                SET mem_allocated True
+            END_IF
+                        
+            IF mem_allocated EQUALTO False
+                FOR term IN RHS
+                    IF term.isidentifier() EQUALTO True
+                        SET var_name ''
+                        IF '&' IN RHS
+                            SET var_name term
+                        ELSE
+                            SET var_name pointers[term]
+                        END_IF
+                        IF var_name NOTIN scopes
+                            PRINT LINE
+                            VIOLATION Dangerous pointer assignment
+                        ELSE
+                            IF scopes[var_name] GREATER_THAN scopes[lhs_name]
+                                PRINT LINE
+                                VIOLATION Dangerous pointer assignment
+                            END_IF
+                        END_IF
+                        DICT_APPEND pointers lhs_name var_name
+                        BREAK
+                    END_IF
+                END_FOR
+            END_IF
+        END_IF
+    END_IF
+END_STATE
+

@@ -41,6 +41,7 @@ lib_rules = {
 'Do not nest switch statements':'no_nested_switch_fs.txt',
 'Check for recursive functions':'recursion_fs.txt',
 'All switch statements must have a default clause':'switch_default_must.txt',
+'Do not make a pointer to a variable with lower storage duration':'storage_class_fs.txt',
 }
 
 #Even code files without errors inserted into violations. Will have an empty list as value

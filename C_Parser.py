@@ -394,6 +394,8 @@ def p_assignment_expression(p):
     assignment_expression : conditional_expression
     | assignment_lhs assignment_operator assignment_expression
     '''
+    LHS = RHS = EXP = []
+    NAME = ''
     if(len(p)==2):
         p[0] = p[1]
     elif(len(p)==4):
@@ -402,9 +404,14 @@ def p_assignment_expression(p):
         p[0]['lhs'] = p[1]['exp']
         p[0]['rhs'] = p[3]['exp']
         p[0]['exp'] = p[1]['exp']+ p[2]['exp'] + p[3]['exp']
+        LHS = p[0]['lhs']
+        RHS = p[0]['rhs']
+        NAME = LHS[-1] #LHS may have * operator, hence assigning to the last element, which must be the identifier name
     else:
         print("ERROR in p_assignment_expression")    
     #print("assignment_expression:", p[0])
+    EXP = p[0]['exp']
+    LINE = p[0]['line']
     #ADD
     
 def p_assignment_lhs(p):
@@ -465,12 +472,20 @@ def p_declaration(p):
     declaration : declaration_specifiers SEMI
     | declaration_specifiers init_declarator_list SEMI
     '''
-    p[0] = {}
-    p[0]['line'] = p.lineno(1)
+    p[0] = copy.deepcopy(p[1])
+    NAME=[]
+    #p[0]['line'] = p.lineno(1)
     if(len(p) == 3):
         p[0]['exp'] = p[1]['exp'] + [ p[2] ]
     elif(len(p) == 4):
         p[0]['exp'] = p[1]['exp'] + p[2]['exp'] + [ p[3] ]
+        p[0]['name'] = p[2]['name']
+        #print("init_declarator_list:", p[2]) 
+        #for term in p[2]['exp']:
+        #    if(term.isidentifier()):
+        #        NAMES.append(term)
+        NAME = p[0]['name']
+    EXP = p[0]['exp']
     #print("p_declaration:", p[0])
     #ADD
 
@@ -498,12 +513,16 @@ def p_init_declarator_list(p):
     init_declarator_list : init_declarator
     | init_declarator_list COMMA init_declarator
     '''
-    p[0] = {}
-    p[0]['line'] = p[1]['line']
+    #p[0] = {}
+    #p[0]['line'] = p[1]['line']
+    p[0] = copy.deepcopy(p[1])
+    NAMES=[]
     if(len(p)==2):
-        p[0]['exp'] = p[1]['exp']
+        #p[0]['exp'] = p[1]['exp']
+        p[0]['name'] = [p[1]['name']]
     elif(len(p)==4):
         p[0]['exp'] = p[1]['exp'] + [ p[2] ] + p[3]['exp']
+        p[0]['name'] = p[1]['name'] + [p[3]['name']]
     else:
         print("ERROR in p_init_declarator_list")
     #print("p_init_declarator_list", p[0])  
@@ -532,6 +551,7 @@ def p_initialized_declaration(p):
     EXP = p[0]['exp']
     ARR_SIZE = ''
     LINE = p[0]['line']
+    NAME = p[1]['name']
     if(p[0].get('arr_size')): #None returned in case LHS is not an array
         ARR_SIZE = p[0]['arr_size']
     #p[] = dict with 2 keys lhs, rhs
@@ -768,8 +788,12 @@ def p_declarator(p):
         p[0]['line'] = p[1]['line']
         p[0]['exp'] = p[1]['exp']+p[2]['exp']
         p[0]['name'] = p[2]['name']
+        p[0]['pointer'] = True
     else:
         print("ERROR in p_declarator: len of p neither 1 nor 3")
+    NAME = p[0]['name']
+    LINE = p[0]['line']
+    EXP = p[0]['exp']
     #print("p_declarator:", p[0])
     #ADD
     
@@ -789,6 +813,10 @@ def  p_variable_declaration(p):
     p[0] = p[1]
     NAME = p[0]['name']
     LINE = p[0]['line']
+    EXP = p[0]['exp']
+    ARRAY_SIZE = 0
+    if('arr_size' in p[0]):
+        ARRAY_SIZE = p[0]
     #print("variable_declaration:", p[0])
     #ADD
     
@@ -808,7 +836,10 @@ def p_variable_declaration1(p):
     elif(len(p)==5):
         p[0]['exp'] = [ p[1] ] + [ p[2] ] + p[3]['exp'] + [ p[4] ]
         #print("const_expression:", p[3]['exp'])
-        p[0]['arr_size'] = int(p[3]['exp'][0])
+        if(p[3]['exp'][0].isdigit()):
+            p[0]['arr_size'] = int(p[3]['exp'][0])
+        else:
+            p[0]['arr_size'] = p[3]['exp'][0]
     elif(len(p)==4):
         p[0]['exp'] = [ p[1] ] + [ p[2] ] + [ p[3] ]
         p[0]['arr_size'] = 'unspecified'
@@ -1061,21 +1092,33 @@ def p_labeled_statement(p):
 #C 89 allows variable declarations at the beginning of the block only. 
 def p_compound_statement(p):
     '''
-    compound_statement : L_BRACE R_BRACE
-    | L_BRACE statement_list R_BRACE
-    | L_BRACE declaration_list R_BRACE
-    | L_BRACE declaration_list statement_list R_BRACE
+    compound_statement : compound_statement_begin R_BRACE
+    | compound_statement_begin statement_list R_BRACE
+    | compound_statement_begin declaration_list R_BRACE
+    | compound_statement_begin declaration_list statement_list R_BRACE
     '''
     p[0] = {}
-    p[0]['line'] = p.lineno(1)
+    p[0]['line'] = p[1]['line']
     if(len(p) == 3):
-        p[0]['exp'] = [p[1]] + [p[2]]
+        p[0]['exp'] = p[1]['exp'] + [p[2]]
     elif(len(p) == 4):
-        p[0]['exp'] = [p[1]] + p[2]['exp'] + [p[3]]
+        p[0]['exp'] = p[1]['exp'] + p[2]['exp'] + [p[3]]
     elif(len(p) == 5):
-        p[0]['exp'] = [p[1]] + p[2]['exp'] + p[3]['exp'] + [p[4]]
+        p[0]['exp'] = p[1]['exp'] + p[2]['exp'] + p[3]['exp'] + [p[4]]
     #print("p_compound_statement:", p[0])
-    pass
+    LINE = p[0]['line']
+    EXP = p[0]['exp']
+    #ADD
+    
+    
+def p_compound_statement_begin(p):
+    '''
+    compound_statement_begin : L_BRACE
+    '''
+    p[0] = {}
+    p[0]['exp'] = ['{']
+    p[0]['line'] = p.lineno(1)
+    #ADD
 
 def p_declaration_list(p):
     '''
@@ -1085,10 +1128,14 @@ def p_declaration_list(p):
     if(len(p) == 2):
         p[0] = p[1]
     elif(len(p) == 3):
-        p[0] = {}
-        p[0]['line'] = p[1]['line']
+        #p[0] = {}
+        #p[0]['line'] = p[1]['line']
+        p[0] = p[1]
         p[0]['exp'] = p[1]['exp'] + p[2]['exp']
     #print("p_declaration_list:", p[0])
+    NAME = p[0]['name']
+    LINE = p[0]['line']
+    EXP = p[0]['exp']
     #ADD
 
 def p_statement_list(p):
@@ -1196,7 +1243,8 @@ def p_jump_statement(p):
     NAME = p[1]
     LINE = p.lineno(1)
     p[0]['line'] = LINE
-    if(p[1] == 'return' and p[3] == ';'):
+    #if(p[1] == 'return' and p[3] == ';'):
+    if(p[1]=='return' and len(p)==4):
         p[0]['exp'] = [p[1]] + p[2]['exp'] + [p[3]]
     elif(len(p) == 3):
         p[0]['exp'] = [p[1]] + [p[2]]
@@ -1246,6 +1294,7 @@ def p_function_header(p):
     NAME = p[1]['name']
     LINE = p[1]['line']
     p[0] = p[1]
+    EXP = p[0]['exp']
     #print("Function header:",p[0])
     #ADD
     
