@@ -14,6 +14,7 @@ STATE loop_header
     USE_GLOBAL cur_nesting_depth
     USE_GLOBAL max_nesting_depth
     USE_GLOBAL loop_assignments
+    USE_GLOBAL count_ifs_in_loop
     
     SET no_of_loops no_of_loops+1
     SET cur_nesting_depth cur_nesting_depth+1
@@ -87,11 +88,7 @@ STATE function_end
     USE_GLOBAL no_of_loops
     USE_GLOBAL found_if_at_depth_2
     USE_GLOBAL swap_done_in_outer_loop
-    IF NAME EQUALTO 'selection_sort'
-        PRINT no_of_loops
-        PRINT max_nesting_depth
-    END_IF
-    
+        
     IF NAME EQUALTO 'selection_sort'
         IF no_of_loops NOTEQUALTO 2
             VIOLATION Selection sort algorithm not used: no_of_loops not equal to 2

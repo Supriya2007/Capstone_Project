@@ -90,7 +90,16 @@ void selection_sort(int a[], int n){
 }
 
 void selection_sort(int a[], int n){
-    for(i=0; i<n-1; i++){
+    for(j =0; j<n-1; j++){
+        for(i=0; i<n-1; i++){
+            {
+                
+                if(1){
+                
+                }
+                
+             }
+        }
         {
             int *p1, *q1;
             int temp;
@@ -104,7 +113,7 @@ void selection_sort(int a[], int n){
             *p1 = *q1;
             b = c;
             *q1 = temp;
-         }
+        }
     }
 }
 
