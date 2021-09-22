@@ -1,5 +1,5 @@
 int selection_sort(int a[], int n){
-    int i, min, j;
+    int i, min, j, temp;
     i=0;
     while(i<n-1){
         min = i;
@@ -10,14 +10,16 @@ int selection_sort(int a[], int n){
             }
             j++;
         }
-        swap(&a[i], &a[min]);
+        temp = a[i];
+        a[i] = a[min];
+        a[min] = temp;
         i++;
     }
 }
 
 
 void selection_sort(int a[], int n){
-    int i, min, j;
+    int i, min, j, temp;
     for(i=0; i<n-1; i++){
         min = i;
         j=i+1;
@@ -27,14 +29,17 @@ void selection_sort(int a[], int n){
             }
             j++;
         }
-        swap(&a[i], &a[min]);
+        temp = a[i];
+        a[i] = a[min];
+        a[min] = temp;
+        i++;
     }
 }
 
 
 
 void selection_sort(int a[], int n){
-    int i, min, j;
+    int i, min, j, temp;
     i=0;
     while(i<n-1){
         min = i;
@@ -43,7 +48,9 @@ void selection_sort(int a[], int n){
                 min = j;
             }
         }
-        swap(&a[i], &a[min]);
+        temp = a[i];
+        a[i] = a[min];
+        a[min] = temp;
         i++;
     }
 }
