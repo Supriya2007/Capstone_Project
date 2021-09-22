@@ -46,9 +46,6 @@ STATE loop_body
                         INDEX var2 0
                         IF [var1_1,var2_0] IN loop_assignments[i+1:j]
                             SET swap_done_in_outer_loop True
-                            VIOLATION Swap found at
-                            PRINT var1_1
-                            PRINT var2_0
                             BREAK
                         END_IF
                     END_IF
@@ -91,16 +88,20 @@ STATE function_end
         
     IF NAME EQUALTO 'selection_sort'
         IF no_of_loops NOTEQUALTO 2
-            VIOLATION Selection sort algorithm not used: no_of_loops not equal to 2
+            PRINT LINE
+            VIOLATION Selection sort algorithm not used
         ELSE 
             IF max_nesting_depth NOTEQUALTO 2
-                VIOLATION Selection sort algorithm not used: max_nesting_depth not equal to 2
+                PRINT LINE
+                VIOLATION Selection sort algorithm not used
             ELSE
                 IF found_if_at_depth_2 NOTEQUALTO True
-                    VIOLATION Selection sort algorithm not used: if not found at depth 2   
+                    PRINT LINE
+                    VIOLATION Selection sort algorithm not used
                     ELSE
                         IF swap_done_in_outer_loop NOTEQUALTO True
-                            VIOLATION Selection sort algorithm not used: swap_done_in_outer_loop not True
+                            PRINT LINE
+                            VIOLATION Selection sort algorithm not used
                         END_IF
                 END_IF
             END_IF

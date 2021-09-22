@@ -4,12 +4,12 @@
 import os
 
 #When running on Windows
-python="python"
-file_sep = '\\'
+#python="python"
+#file_sep = '\\'
 
 #When running on Ubuntu
-#python="python3"
-#file_sep = '/'
+python="python3"
+file_sep = '/'
 #cur_dir = os.getcwd()
 #cur_dir = ".."
 #print(cur_dir)
@@ -42,6 +42,7 @@ lib_rules = {
 'Check for recursive functions':'recursion_fs.txt',
 'All switch statements must have a default clause':'switch_default_must.txt',
 'Do not make a pointer to a variable with lower storage duration':'storage_class_fs.txt',
+'Check if selection sort is used' : 'selection_sort_fs.txt',
 }
 
 #Even code files without errors inserted into violations. Will have an empty list as value
