@@ -88,7 +88,7 @@ def p_postfix_expression(p):
         LINE = p.lineno(2)
         p[0] = {}
         p[0]['line'] = LINE
-        #p[0]['name'] = p[1]['exp']
+        p[0]['name'] = p[1]['exp']
         p[0]['exp'] = p[1]['exp'] + [p[2]]
     elif(len(p)==4): #DOT and PTR (->)
         LINE = p.lineno(2)
@@ -102,6 +102,7 @@ def p_postfix_expression(p):
         p[0] = {}
         p[0]['exp'] = p[1]['exp'] + [ p[2] ] + p[3]['exp'] + [p[4]]
         p[0]['line'] = LINE
+        p[0]['name'] = p[1]['name']
     else:
         print("ERROR in p_postfix_expression")
     #print("postfix exp:", p[0])
@@ -114,7 +115,7 @@ def p_argument_expression_list(p):
     '''
     if(len(p) == 2):
         p[0] = p[1]
-        NAME = p[1]
+        #NAME = p[1]['name']
     elif(len(p) == 4):
         p[0] = {}
         p[0]['exp'] = p[1]['exp'] + [p[2]] + p[3]['exp']
@@ -155,9 +156,10 @@ def p_unary_op_before_cast_exp(p):
     '''
     unary_op_before_cast_exp : unary_operator cast_expression
     '''   
-    p[0] = {}
+    p[0] = p[1]
     p[0]['line'] = p[1]['line']
     p[0]['exp'] = p[1]['exp'] + p[2]['exp']
+    p[0]['name'] = p[2]['name']
     #print("p_unary_op_before_cast_exp:", p[0])
 
 def p_unary_operator(p):
@@ -186,6 +188,7 @@ def p_cast_expression(p):
         p[0] = {}
         p[0]['line'] = p.lineno(1)
         p[0]['exp'] = [p[1]] + p[2]['exp'] + [p[3]] + p[4]['exp']
+        p[0]['name'] = p[4]['name']
     else:
         print("ERROR in p_cast_expression")
     #print("p_cast_expression:", p[0])
@@ -396,6 +399,7 @@ def p_assignment_expression(p):
     '''
     LHS = RHS = EXP = []
     NAME = ''
+    RHS_NAME = ''
     if(len(p)==2):
         p[0] = p[1]
     elif(len(p)==4):
@@ -407,11 +411,14 @@ def p_assignment_expression(p):
         LHS = p[0]['lhs']
         RHS = p[0]['rhs']
         NAME = LHS[-1] #LHS may have * operator, hence assigning to the last element, which must be the identifier name
+        if('name' in p[3]):
+            RHS_NAME = p[3]['name']
     else:
         print("ERROR in p_assignment_expression")    
     #print("assignment_expression:", p[0])
     EXP = p[0]['exp']
     LINE = p[0]['line']
+    #print("RHS_NAME", RHS_NAME)
     #ADD
     
 def p_assignment_lhs(p):

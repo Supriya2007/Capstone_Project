@@ -1,0 +1,113 @@
+STATE before_parse
+    CREATE max_nesting_depth 0
+    CREATE no_of_loops 0
+    CREATE cur_nesting_depth 0
+    CREATE count_ifs_in_loop 0
+    CREATE found_if_at_depth_2 False
+    CREATE loop_assignments []
+    CREATE all_assignments []
+    CREATE swap_done_in_outer_loop False
+END_STATE
+
+STATE loop_header
+    USE_GLOBAL no_of_loops
+    USE_GLOBAL cur_nesting_depth
+    USE_GLOBAL max_nesting_depth
+    USE_GLOBAL loop_assignments
+    USE_GLOBAL count_ifs_in_loop
+    
+    SET no_of_loops no_of_loops+1
+    SET cur_nesting_depth cur_nesting_depth+1
+    SET count_ifs_in_loop 0
+    APPEND all_assignments loop_assignments.copy()
+    SET loop_assignments []
+    
+    IF cur_nesting_depth GREATER_THAN max_nesting_depth
+        SET max_nesting_depth cur_nesting_depth
+    END_IF
+END_STATE
+
+STATE loop_body
+    USE_GLOBAL cur_nesting_depth
+    USE_GLOBAL swap_done_in_outer_loop 
+    USE_GLOBAL loop_assignments
+    IF swap_done_in_outer_loop EQUALTO False
+        IF cur_nesting_depth EQUALTO 1            
+            FOR i IN range(len(loop_assignments)-1)
+                INDEX loop_assignments i
+                SET var1 loop_assignments_i
+                INDEX var1 0                
+                FOR j IN range(i+1,len(loop_assignments))
+                    INDEX loop_assignments j
+                    SET var2 loop_assignments_j
+                    INDEX var2 1                  
+                    IF var1_0 EQUALTO var2_1
+                        INDEX var1 1
+                        INDEX var2 0
+                        IF [var1_1,var2_0] IN loop_assignments[i+1:j]
+                            SET swap_done_in_outer_loop True
+                            BREAK
+                        END_IF
+                    END_IF
+                END_FOR
+            END_FOR
+        END_IF
+    END_IF
+    SET cur_nesting_depth cur_nesting_depth-1
+    SET last_ind -1
+    INDEX all_assignments last_ind
+    SET loop_assignments all_assignments_last_ind
+    POP all_assignments -1
+END_STATE
+
+STATE if_stmt
+    USE_GLOBAL found_if_at_depth_2
+    USE_GLOBAL count_ifs_in_loop
+    IF 'if' IN EXP
+        SET count_ifs_in_loop count_ifs_in_loop+1
+        IF cur_nesting_depth EQUALTO 2
+            IF count_ifs_in_loop EQUALTO 1
+                SET found_if_at_depth_2 True
+            END_IF
+        END_IF
+    END_IF
+END_STATE
+
+STATE variable_assignments
+    IF '=' IN EXP
+        SET equal_oper_ind EXP.index('=')
+        APPEND loop_assignments ["".join(EXP[:equal_oper_ind]),"".join(EXP[equal_oper_ind+1:])]
+    END_IF
+END_STATE
+
+STATE function_end
+    USE_GLOBAL max_nesting_depth
+    USE_GLOBAL no_of_loops
+    USE_GLOBAL found_if_at_depth_2
+    USE_GLOBAL swap_done_in_outer_loop
+        
+    IF no_of_loops NOTEQUALTO 2
+        PRINT LINE
+        VIOLATION Selection sort algorithm not used
+    ELSE 
+        IF max_nesting_depth NOTEQUALTO 2
+            PRINT LINE
+            VIOLATION Selection sort algorithm not used
+        ELSE
+            IF found_if_at_depth_2 NOTEQUALTO True
+                PRINT LINE
+                VIOLATION Selection sort algorithm not used
+                ELSE
+                    IF swap_done_in_outer_loop NOTEQUALTO True
+                        PRINT LINE
+                        VIOLATION Selection sort algorithm not used
+                    END_IF
+            END_IF
+        END_IF
+    END_IF
+    
+    SET max_nesting_depth 0
+    SET no_of_loops 0
+    SET found_if_at_depth_2 False
+    SET swap_done_in_outer_loop False
+END_STATE
