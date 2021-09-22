@@ -1,17 +1,17 @@
-#include <stdlib.h>
-#define ll long long
+//#include <stdlib.h>
+//#define ll long long
 
 
-void merge(ll arr[], ll l, ll m, ll r, ll *number_of_comparisions)
+void merge(long long arr[], long long l, long long m, long long r, long long *number_of_comparisions)
 {
-    ll i, j, k;
-    ll n1 = m - l + 1;
-    ll n2 = r - m;
+    long long i, j, k;
+    long long n1 = m - l + 1;
+    long long n2 = r - m;
 
-    // ll L[n1], R[n2];
+    // long long L[n1], R[n2];
 
-    ll *L = malloc((n1) * sizeof (long long));
-    ll *R = malloc((n2) * sizeof (long long));
+    long long *L = malloc((n1) * sizeof (long long));
+    long long *R = malloc((n2) * sizeof (long long));
 
     for (i = 0; i < n1; i++)
         L[i] = arr[l + i];
@@ -46,16 +46,17 @@ void merge(ll arr[], ll l, ll m, ll r, ll *number_of_comparisions)
     free(R);
 }
 
-void mergeSort(ll arr[], ll l, ll r, ll *number_of_comparisions)
+void mergeSort(long long arr[], long long l, long long r, long long *number_of_comparisions)
 {
     if (l < r) {
-        ll m = l + (r - l) / 2;
+        long long m = l + (r - l) / 2;
 
         mergeSort(arr, l, m, number_of_comparisions);
-        mergeSort(arr, m + 1, r, number_of_comparisions);       
+        mergeSort(arr, m + 1, r, number_of_comparisions);    
+        merge(arr, l, m, r, number_of_comparisions);   
     }
 
-        merge(arr, l, m, r, number_of_comparisions);
+        //merge(arr, l, m, r, number_of_comparisions);
     
 }
 

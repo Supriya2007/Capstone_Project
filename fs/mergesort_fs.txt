@@ -1,34 +1,73 @@
 STATE before_parse
-    CREATE func_meets_criteria
+    CREATE merge_found False
+    CREATE cur_nesting_depth 0
+    CREATE assign_in_if_in_loop False
+    CREATE loop_count_after_compares 0
 END_STATE
 
 STATE if_stmt
-    IF 'if' and else in EXP
-        if '=' in block[0] and block[1]
-            SET found_if
+    USE_GLOBAL assign_in_if
+    IF 'if' IN EXP
+        IF 'else' IN EXP
+            IF '=' IN BLOCK[0] 
+                IF '=' IN BLOCK[1]
+                    SET assign_in_if True
+                END_IF
+            END_IF
+        END_IF
+    END_IF
 END_STATE
 
 STATE loop_header
-    found_if_assignment = false
+    USE_GLOBAL cur_nesting_depth
+    USE_GLOBAL assign_in_if
+    USE_GLOBAL merge_found
+    USE_GLOBAL loop_count_after_compares
+    SET cur_nesting_depth cur_nesting_depth+1
+    SET assign_in_if False
+    
+    IF assign_in_if_in_loop EQUALTO True
+        SET loop_count_after_compares loop_count_after_compares+1
+        IF loop_count_after_compares EQUALTO 2
+            SET merge_found True
+        END_IF
+    END_IF
 END_STATE
     
 STATE loop_body
-
-    if found_loop_if_assignment
-        if depth=1
-            increment loop_after_loop_if_assignment
-            if(loop_after_loop_if_assignment == 2)
-                set got_answer
-
-    check found_if_assignment
-    if found_if_assignment and depth=1, set found_loop_if_assignment
-    set found_if_assignment = false  
-    
+    USE_GLOBAL cur_nesting_depth
+    USE_GLOBAL assign_in_if
+    USE_GLOBAL loop_count_after_compares
+    USE_GLOBAL assign_in_if_in_loop
+    IF assign_in_if_in_loop EQUALTO False
+        IF assign_in_if EQUALTO True
+            IF cur_nesting_depth EQUALTO 1
+                SET assign_in_if_in_loop True
+            END_IF
+        END_IF
+    END_IF 
+    SET cur_nesting_depth cur_nesting_depth-1
 END_STATE    
 
-
-STATE assignment_lhs or assignment_operator
-    SET assignment_flag TRUE
+STATE function_end
+    USE_GLOBAL merge_found
+    IF NAME NOTEQUALTO 'main'
+        IF merge_found EQUALTO False
+            PRINT LINE
+            VIOLATION Merge sort is not used
+            IF assign_in_if NOTEQUALTO True
+                VIOLATION assign_in_if is False
+            END_IF
+            IF assign_in_if_in_loop NOTEQUALTO True
+                VIOLATION assign_in_if_in_loop is False
+            END_IF
+            IF loop_count_after_compares NOTEQUALTO 2
+                VIOLATION loop_count_after_compare is not 2
+            END_IF
+        ELSE
+            SET merge_found False
+        END_IF
+    END_IF
 END_STATE
 
 

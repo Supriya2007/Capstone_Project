@@ -1,8 +1,8 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include "mergeSort.h"
+//#include <stdio.h>
+//#include <stdlib.h>
+//#include "mergeSort.h"
 
-#define SIZE 100
+//#define SIZE 100
 
 void mergeSortedHalfs(int *a, int start, int mid, int end){ //love you, mergesort
 	int i, j, k, size=end-start+1;
