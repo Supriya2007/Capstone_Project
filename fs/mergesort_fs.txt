@@ -8,9 +8,11 @@ END_STATE
 STATE if_stmt
     USE_GLOBAL assign_in_if
     IF 'if' IN EXP
-        IF 'else' IN EXP
-            IF '=' IN BLOCK[0] 
-                IF '=' IN BLOCK[1]
+        IF HAS_ELSE_CLAUSE EQUALTO True
+            INDEX BLOCK 0
+            INDEX BLOCK 1
+            IF '=' IN BLOCK_0
+                IF '=' IN BLOCK_1
                     SET assign_in_if True
                 END_IF
             END_IF
@@ -49,23 +51,23 @@ STATE loop_body
     SET cur_nesting_depth cur_nesting_depth-1
 END_STATE    
 
-STATE function_end
+STATE function_header
+    USE_GLOBAL loop_count_after_compares
+    SET loop_count_after_compares 0
+END_STATE
+
+STATE translation_unit
     USE_GLOBAL merge_found
-    IF NAME NOTEQUALTO 'main'
+    IF AT_PROG_END EQUALTO True
         IF merge_found EQUALTO False
             PRINT LINE
-            VIOLATION Merge sort is not used
-            IF assign_in_if NOTEQUALTO True
-                VIOLATION assign_in_if is False
+            IF assign_in_if_in_loop EQUALTO False
+                VIOLATION Expected a loop containing an if-else statement with assignments in both clauses
+            ELSE
+                IF loop_count_after_compares NOTEQUALTO 2
+                    VIOLATION Expected two loops after the merging loop
+                END_IF
             END_IF
-            IF assign_in_if_in_loop NOTEQUALTO True
-                VIOLATION assign_in_if_in_loop is False
-            END_IF
-            IF loop_count_after_compares NOTEQUALTO 2
-                VIOLATION loop_count_after_compare is not 2
-            END_IF
-        ELSE
-            SET merge_found False
         END_IF
     END_IF
 END_STATE

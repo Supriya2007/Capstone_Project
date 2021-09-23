@@ -1188,6 +1188,7 @@ def p_selection_statement(p):
     p[0]['line'] = p.lineno(1)
     LINE=p[0]['line']
     BLOCK=[]
+    HAS_ELSE_CLAUSE = False
     if(len(p) == 6):
         BLOCK.append(p[5]['exp'])
         p[0]['exp'] = [p[1]] + [p[2]] + p[3]['exp'] + [p[4]] + p[5]['exp']
@@ -1195,6 +1196,7 @@ def p_selection_statement(p):
         BLOCK.append(p[5]['exp'])
         BLOCK.append(p[7]['exp'])
         p[0]['exp'] = [p[1]] + [p[2]] + p[3]['exp'] + [p[4]] + p[5]['exp'] + [p[6]] + p[7]['exp']
+        HAS_ELSE_CLAUSE = True
     EXP=p[0]['exp']
     #print("p_selection_statement:", p[0])
     #ADD
@@ -1262,16 +1264,18 @@ def p_jump_statement(p):
 def p_translation_unit(p):
     '''
     translation_unit : external_declaration
-    | translation_unit external_declaration
+    |  external_declaration translation_unit
     '''
-    #LINE=p.lineno(1)
+    AT_PROG_END = False #works because above production is right-recursive
     if(len(p) == 2):
         p[0] = p[1]
+        AT_PROG_END = True
     elif(len(p) == 3):
         p[0] = {}
         p[0]['line'] = p.lineno(1)
         #print(p[1], p[2])
         p[0]['exp'] = p[1]['exp'] + p[2]['exp']
+    LINE = p[0]['line']
     #print("Translation Unit:",p[0])
     #ADD
 
