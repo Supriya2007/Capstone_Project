@@ -1,0 +1,61 @@
+STATE before_parse
+    CREATE found_while False
+    CREATE assign_inside_while 0
+    CREATE no_of_if_else 0
+    CREATE function_line_number 1
+END_STATE
+
+STATE if_stmt
+    USE_GLOBAL no_of_if_else
+    IF 'if' IN EXP
+        SET no_of_if_else no_of_if_else+1
+    END_IF
+    IF 'else' IN EXP
+        SET no_of_if_else no_of_if_else+1
+    END_IF
+END_STATE
+
+STATE loop_header
+    USE_GLOBAL found_while
+    IF 'while' IN EXP
+        SET found_while True
+    END_IF
+END_STATE
+
+STATE loop_body
+    USE_GLOBAL found_while
+    USE_GLOBAL assign_inside_while
+    USE_GLOBAL no_of_if_else
+    USE_GLOBAL function_line_number
+    IF found_while EQUALTO True
+        SET equal_index EXP.index('if')
+        IF '=' IN EXP[0:equal_index]
+            SET assign_inside_while 1
+        END_IF
+    END_IF
+    IF assign_inside_while EQUALTO 0
+        PRINT function_line_number
+        VIOLATION Mid value not found 
+    END_IF
+    IF no_of_if_else NOTEQUALTO 3
+        PRINT function_line_number
+        VIOLATION Binary search conditions not checked
+    END_IF
+END_STATE
+
+STATE function_end
+    USE_GLOBAL function_line_number
+    USE_GLOBAL found_while
+    USE_GLOBAL no_of_if_else
+    USE_GLOBAL assign_inside_while
+    SET function_line_number LINE
+    IF no_of_if_else GREATER_THAN 3
+        IF found_while EQUALTO False
+	        PRINT function_line_number
+            VIOLATION Iterative binary search not used
+        END_IF
+    END_IF
+    SET found_while False
+    SET assign_inside_while 0
+    SET no_of_if_else 0
+END_STATE
