@@ -1,0 +1,86 @@
+STATE before_parse
+    CREATE self_referential_struct_name ""
+    CREATE list_structure_name ""
+    CREATE head_ptr_name ""
+    CREATE node_ptrs []
+    CREATE link_name ""
+    CREATE list_names []
+    CREAT assignments []
+    CREATE loop_var ""
+END_STATE
+
+
+STATE structure
+    USE_GLOBAL self_referential_struct_name
+    USE_GLOBAL link_name
+    IF self_referential_struct_name EQUALTO ""
+        FOR memb IN STRUCT_MEMBERS
+            IF [NAME,'*'] IN memb.TYPE
+                SET self_referential_struct_name NAME
+                SET link_name memb.NAME
+            END_IF
+        END_FOR
+    ELSE
+        FOR memb IN STRUCT_MEMBERS
+            IF self_referential_struct_name IN memb
+                SET list_structure_name NAME
+                SET head_ptr_name memb.NAME
+            END_IF
+        END_FOR   
+    END_IF
+END_STATE
+
+STATE var_declares
+    USE_GLOBAL node_ptrs
+    IF [self_referential_struct_name,'*'] IN EXP
+        APPEND node_ptrs NAME
+    ELSE
+        IF list_structure_name IN EXP
+            APPEND list_names NAME
+        END_IF
+    END_IF
+END_STATE
+
+STATE initialized_declaration
+    APPEND assignments EXP
+END_STATE
+
+STATE function_header
+    USE_GLOBAL node_ptrs
+    SET node_ptrs []
+    SET insert_func False
+    SET assignment_rhs ""
+    SET assignments []
+END_STATE
+
+STATE assignment_statement
+    IF  assignment_rhs EQUALTO ""
+        IF ["->",link_name] IN LHS
+            INDEX RHS 0
+            SET assignment_rhs_name RHS_0
+        END_IF
+    ELSE
+        IF [assignment_rhs_name,"->",link_name] IN LHS
+            SET insert_func True
+        END_IF
+    END_IF
+    APPEND assignments EXP
+END_STATE
+
+STATE loop_header
+    FOR id IN CONDITION
+        IF id.isidentifier() EQUALTO True
+            SET loop_var id
+        END_IF
+    END_FOR
+END_STATE
+
+STATE function_body
+    IF insert_func EQUALTO True
+        IF loop_var IN assignments
+            
+        END_IF
+    END_IF
+END_STATE
+
+
