@@ -1,0 +1,75 @@
+STATE before_parse
+    CREATE merge_found False
+    CREATE cur_nesting_depth 0
+    CREATE assign_in_if_in_loop False
+    CREATE loop_count_after_compares 0
+END_STATE
+
+STATE if_stmt
+    USE_GLOBAL assign_in_if
+    IF 'if' IN EXP
+        IF HAS_ELSE_CLAUSE EQUALTO True
+            INDEX BLOCK 0
+            INDEX BLOCK 1
+            IF '=' IN BLOCK_0
+                IF '=' IN BLOCK_1
+                    SET assign_in_if True
+                END_IF
+            END_IF
+        END_IF
+    END_IF
+END_STATE
+
+STATE loop_header
+    USE_GLOBAL cur_nesting_depth
+    USE_GLOBAL assign_in_if
+    USE_GLOBAL merge_found
+    USE_GLOBAL loop_count_after_compares
+    SET cur_nesting_depth cur_nesting_depth+1
+    SET assign_in_if False
+    
+    IF assign_in_if_in_loop EQUALTO True
+        SET loop_count_after_compares loop_count_after_compares+1
+        IF loop_count_after_compares EQUALTO 2
+            SET merge_found True
+        END_IF
+    END_IF
+END_STATE
+    
+STATE loop_body
+    USE_GLOBAL cur_nesting_depth
+    USE_GLOBAL assign_in_if
+    USE_GLOBAL loop_count_after_compares
+    USE_GLOBAL assign_in_if_in_loop
+    IF assign_in_if_in_loop EQUALTO False
+        IF assign_in_if EQUALTO True
+            IF cur_nesting_depth EQUALTO 1
+                SET assign_in_if_in_loop True
+            END_IF
+        END_IF
+    END_IF 
+    SET cur_nesting_depth cur_nesting_depth-1
+END_STATE    
+
+STATE function_header
+    USE_GLOBAL loop_count_after_compares
+    SET loop_count_after_compares 0
+END_STATE
+
+STATE translation_unit
+    USE_GLOBAL merge_found
+    IF AT_PROG_END EQUALTO True
+        IF merge_found EQUALTO False
+            PRINT LINE
+            IF assign_in_if_in_loop EQUALTO False
+                VIOLATION Expected a loop containing an if-else statement with assignments in both clauses
+            ELSE
+                IF loop_count_after_compares NOTEQUALTO 2
+                    VIOLATION Expected two loops after the merging loop
+                END_IF
+            END_IF
+        END_IF
+    END_IF
+END_STATE
+
+
