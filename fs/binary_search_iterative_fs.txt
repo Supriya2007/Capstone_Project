@@ -3,12 +3,16 @@ STATE before_parse
     CREATE assign_inside_while 0
     CREATE no_of_if_else 0
     CREATE function_line_number 1
+    CREATE if_else []
     CREATE if_else_block []
     CREATE for_while_block []
+    CREATE mid_variable ""
+    CREATE count_mid 0
 END_STATE
 
 STATE if_stmt
     USE_GLOBAL no_of_if_else
+    USE_GLOBAL if_else
     USE_GLOBAL if_else_block
     IF 'if' IN EXP
         SET no_of_if_else no_of_if_else+1
@@ -17,6 +21,9 @@ STATE if_stmt
         SET no_of_if_else no_of_if_else+1
     END_IF
     FOR stat IN EXP
+        APPEND if_else stat
+    END_FOR
+    FOR stat IN BLOCK
         APPEND if_else_block stat
     END_FOR
 END_STATE
@@ -37,10 +44,13 @@ STATE loop_body
     USE_GLOBAL no_of_if_else
     USE_GLOBAL function_line_number
     USE_GLOBAL for_while_block
+    USE_GLOBAL mid_variable
     IF found_while_for EQUALTO True
-        SET equal_index EXP.index('if')
-        IF '=' IN EXP[0:equal_index]
+        SET if_index EXP.index('if')
+        IF '=' IN EXP[0:if_index]
             SET assign_inside_while 1
+            SET equal_index EXP.index('=')
+            SET mid_variable EXP[equal_index-1]
         END_IF
     END_IF
     IF no_of_if_else NOTEQUALTO 3
@@ -54,23 +64,35 @@ END_STATE
 
 STATE loop_statement
     USE_GLOBAL for_while_block
-    USE_GLOBAL if_else_block
+    USE_GLOBAL if_else
     USE_GLOBAL assign_inside_while
+    USE_GLOBAL mid_variable
+    USE_GLOBAL count_mid
+    USE_GLOBAL if_else_block
+    SET for_while_block_copy for_while_block
     IF assign_inside_while EQUALTO 0
         SET for_while_block "".join(for_while_block)
-        SET if_else_block "".join(if_else_block)
-        IF if_else_block IN for_while_block
+        SET if_else "".join(if_else)
+        IF if_else IN for_while_block
             SET st ""
-            SET for_while_block for_while_block.replace(if_else_block,st)
+            SET for_while_block for_while_block.replace(if_else,st)
         END_IF
         IF '=' IN for_while_block
             SET assign_inside_while 1
+            SET equal_index for_while_block_copy[::-1].index('=')
+            SET mid_variable for_while_block[::-1][equal_index+1]
         END_IF
     END_IF
     IF assign_inside_while EQUALTO 0
         PRINT function_line_number
         VIOLATION Mid value not found 
     END_IF
+    SET count_mid 0
+    FOR stat IN if_else_block
+        IF mid_variable IN stat
+            SET count_mid count_mid+1
+        END_IF
+    END_FOR
 END_STATE
 
 STATE function_end
@@ -78,6 +100,7 @@ STATE function_end
     USE_GLOBAL found_while_for
     USE_GLOBAL no_of_if_else
     USE_GLOBAL assign_inside_while
+    USE_GLOBAL count_mid
     SET function_line_number LINE
     IF no_of_if_else GREATER_THAN 3
         IF found_while_for EQUALTO False
@@ -85,7 +108,15 @@ STATE function_end
             VIOLATION Iterative binary search not used
         END_IF
     END_IF
+    IF found_while_for EQUALTO True
+        IF count_mid LESS_THAN 3
+            PRINT function_line_number
+            VIOLATION Value of left or right not assigned properly
+        END_IF
+    END_IF
     SET found_while_for False
     SET assign_inside_while 0
     SET no_of_if_else 0
+    SET if_else []
+    SET for_while_block []
 END_STATE
