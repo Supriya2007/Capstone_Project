@@ -44,6 +44,7 @@ lib_rules = {
 'Do not make a pointer to a variable with lower storage duration':'storage_class_fs.txt',
 'Check if selection sort is used' : 'selection_sort_fs.txt',
 'Check if merge sort is used' : 'mergesort_fs.txt',
+'Check if iterative binary search is used' : 'binary_search_iterative_fs.txt',
 }
 
 #Even code files without errors inserted into violations. Will have an empty list as value
