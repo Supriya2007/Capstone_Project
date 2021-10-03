@@ -1239,6 +1239,7 @@ def p_iteration_body(p):
     LINE = p.lineno(1)
     p[0] = p[1]
     EXP = p[0]['exp']
+    BLOCK = p[1]['exp']
     #ADD
 
 def p_jump_statement(p):
