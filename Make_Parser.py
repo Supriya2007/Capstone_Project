@@ -44,6 +44,7 @@ states = {
     'block_start':['p_compound_statement_begin', 1114],
     'declarator_name':['p_declarator', 779],
     'translation_unit':['p_translation_unit',1255],
+    'structures_and_unions':['p_struct_or_union_specifier',619],
     
 }
 # #ADD in C_Parser.py marks place to add code

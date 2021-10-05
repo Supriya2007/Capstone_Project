@@ -1,44 +1,44 @@
-//list with header node
+//#include <stdio.h>
+//#include <stdlib.h>
+//list structure with header node
 
 struct node
 {
 	int key_;
 	struct node* link_;
 };
-typedef struct node node_t;
+//typedef struct node struct node;
 
 struct list
 {
-	node_t* head_;
+	struct node* head_;
 };
-typedef struct list list_t;
+//typedef struct list struct list;
 
 //#define ALLOC(x) (x*)malloc(sizeof(x))
 
-/*
-node_t *make_node_(int key)
+
+//struct node *make_node_(int key) //fix issue: not allowing funcs with pointer return type
+struct node make_node_(int key)
+
 {
-	node_t* temp = (node_t *) malloc(sizeof(node_t));
+	struct node* temp = (struct node *) malloc(sizeof(struct node));
 	temp->key_ = key;
-	
 	return temp;
 }
-*/
 
-
-
-void init(list_t *ptr_list)
+void init(struct list *ptr_list)
 {
-	ptr_list->head_ = (node_t *) malloc(sizeof(node_t));
+	ptr_list->head_ = (struct node *) malloc(sizeof(struct node));
 	ptr_list->head_->link_ = NULL;
 	
 	
 }
 
-void deinit(list_t *ptr_list)
+void deinit(struct list *ptr_list)
 {
-	node_t* prev = NULL;
-	node_t* pres = ptr_list->head_;
+	struct node* prev = NULL;
+	struct node* pres = ptr_list->head_;
 	while(pres)
 	{
 		prev = pres;
@@ -47,11 +47,11 @@ void deinit(list_t *ptr_list)
 	}
 }
 
-void insert(list_t *ptr_list, int key)
+void insert(struct list *ptr_list, int key)
 {
-	node_t *temp = make_node_(key);
-	node_t* prev = ptr_list->head_;
-	node_t* pres = prev->link_;
+	struct node *temp = make_node_(key);
+	struct node* prev = ptr_list->head_;
+	struct node* pres = prev->link_;
 	while(pres && pres->key_ < key)
 	{
 		prev = pres;
@@ -62,9 +62,9 @@ void insert(list_t *ptr_list, int key)
 
 }
 
-void disp(list_t *ptr_list)
+void disp(struct list *ptr_list)
 {
-	node_t* temp = ptr_list->head_->link_;
+	struct node* temp = ptr_list->head_->link_;
 	while(temp)
 	{
 		printf("%d ", temp->key_);
@@ -75,11 +75,12 @@ void disp(list_t *ptr_list)
 
 int main()
 {
-	list_t l;
-	init(&l);
+	struct list l;
 	int a[] = { 20, 10, 40, 30, 25};
 	int n = 5;
-	for(int i = 0; i < n; ++i)
+	int i;
+	init(&l);
+	for(i = 0; i < n; ++i)
 	{
 		insert(&l, a[i]);
 		disp(&l);

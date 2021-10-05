@@ -1,8 +1,13 @@
 STATE before_parse
     CREATE self_referential_struct_name ""
     CREATE self_referential_ptrs []
+    CREATE new_node_name ""
+    CREATE new_node_link_set False
+    CREATE link_set_to_new_node False
+    CREATE cur_func_name ""
+    CREATE list_ptr_is_malloced {}
+    CREATE insert_function_name ""
 END_STATE
-
 
 STATE structures_and_unions
     USE_GLOBAL self_referential_struct_name
@@ -30,11 +35,141 @@ STATE structures_and_unions
     END_IF
 END_STATE
 
-STATE after_parse
-    VIOLATION In the end:
-    PRINT self_referential_struct_name
-    PRINT self_referential_ptrs
+STATE function_header
+    USE_GLOBAL new_node_name
+    USE_GLOBAL new_node_link_set
+    USE_GLOBAL link_set_to_new_node
+    USE_GLOBAL cur_func_name
+    SET new_node_name ""
+    SET new_node_link_set False
+    SET link_set_to_new_node False  
+    SET cur_func_name NAME  
 END_STATE
 
+STATE variable_assignments
+    USE_GLOBAL new_node_name
+    USE_GLOBAL new_node_link_set
+    USE_GLOBAL link_set_to_new_node    
+    IF cur_func_name NOTEQUALTO 'main'    
+        IF new_node_name EQUALTO ""
+            IF 'malloc' IN RHS
+                SET new_node_name NAME    
+                VIOLATION new node name set
+            ELSE
+                IF 'calloc' IN RHS
+                    SET new_node_name NAME
+                END_IF
+            END_IF  
+        ELSE 
+            IF new_node_name IN LHS
+                IF '->' IN LHS
+                    FOR term IN self_referential_ptrs
+                        IF term IN LHS
+                            SET new_node_link_set True
+                            BREAK
+                        END_IF
+                    END_FOR
+                END_IF
+            END_IF
+            IF new_node_name IN RHS
+                IF '->' IN LHS
+                    FOR term IN self_referential_ptrs
+                        IF term IN LHS
+                            SET link_set_to_new_node True
+                            BREAK
+                        END_IF
+                    END_FOR
+                END_IF
+            END_IF
+        END_IF  
+    ELSE
+        IF NAME IN list_ptr_is_malloced
+            IF 'malloc' IN RHS
+                SET list_ptr_is_malloced[NAME] True
+            ELSE
+                IF 'calloc' IN RHS
+                    SET list_ptr_is_malloced[NAME] True
+                END_IF
+            END_IF
+        END_IF
+    END_IF
+    
+    
+    
+END_STATE
 
+STATE initialized_declaration
+    USE_GLOBAL new_node_name
+    IF new_node_name EQUALTO ""
+        IF 'malloc' IN RHS
+            SET new_node_name NAME    
+            VIOLATION new node name set
+        ELSE
+            IF 'calloc' IN RHS
+                SET new_node_name NAME
+            END_IF
+        END_IF  
+    END_IF
+END_STATE
+
+STATE function_end
+    USE_GLOBAL insert_function_name
+    IF new_node_name NOTEQUALTO ""
+        IF new_node_link_set EQUALTO True
+            IF link_set_to_new_node EQUALTO True
+                PRINT LINE
+                VIOLATION Insert function found
+                SET insert_function_name NAME
+            END_IF
+        END_IF
+    END_IF
+END_STATE
+
+STATE declaration_stmt
+    USE_GLOBAL list_ptr_is_malloced
+    IF cur_func_name EQUALTO 'main'
+        IF self_referential_struct_name IN EXP
+            FOR var IN NAME 
+                VIOLATION In declaration_stmnt, intial values are:
+                PRINT INITIAL_VALUES
+                IF var NOTIN INITIAL_VALUES
+                   DICT_APPEND list_ptr_is_malloced var False
+                ELSE
+                    INDEX INITIAL_VALUES var
+                    IF 'malloc' IN INITIAL_VALUES_var
+                        DICT_APPEND list_ptr_is_malloced var True
+                    ELSE
+                        IF 'calloc' IN INITIAL_VALUES_var
+                            DICT_APPEND list_ptr_is_malloced var True   
+                        ELSE
+                            DICT_APPEND list_ptr_is_malloced var False   
+                        END_IF                      
+                    END_IF
+                END_IF
+            END_FOR
+        END_IF
+    END_IF
+END_STATE
+
+STATE function_call
+    IF NAME EQUALTO insert_function_name
+        VIOLATION When insert() is called
+        PRINT list_ptr_is_malloced
+        PRINT FUNC_ARGS
+        FOR arg IN FUNC_ARGS
+            IF arg IN list_ptr_is_malloced
+                INDEX list_ptr_is_malloced arg
+                IF list_ptr_is_malloced_arg EQUALTO False
+                    PRINT LINE
+                    VIOLATION Header node concept not used.
+                    BREAK
+                END_IF
+            END_IF
+        END_FOR
+    END_IF
+END_STATE
+
+STATE after_parse
+    
+END_STATE
 
