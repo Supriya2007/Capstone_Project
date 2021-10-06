@@ -8,8 +8,7 @@ start = 'translation_unit' #Sets the Start Symbol
 sel_ref_struct = None
 struct = None
 ptr = None
-list_used = 0
-newnode = None
+sel_ref_struct_used = 0
 #ADD
 
 def p_primary_expression(p):
@@ -424,18 +423,6 @@ def p_assignment_expression(p):
     EXP = p[0]['exp']
     LINE = p[0]['line']
     #print("RHS_NAME", RHS_NAME)
-    global list_used;list_used = list_used
-    if ('malloc' in RHS_NAME) :
-        global newnode;newnode = LHS
-    if (newnode in LHS) :
-        if ('->' in LHS) :
-            if (ptr in LHS) :
-                list_used = list_used+1
-    if (newnode in RHS) :
-        list_used = list_used+1
-    else :
-        if (newnode == RHS) :
-            list_used = list_used+1
     #ADD
     
 def p_assignment_lhs(p):
@@ -688,6 +675,7 @@ def p_struct_declaration_list(p):
         if (p[0]['exp'][ind+1] == '*') :
             global ptr;ptr = p[0]['exp'][ind+2]
             global sel_ref_struct;sel_ref_struct = struct
+            global sel_ref_struct_used;sel_ref_struct_used = 1
     #ADD
 
 def p_struct_declaration(p):
@@ -1401,8 +1389,8 @@ while(True):
 input_prog_str = "\n".join(input_prog) 
 result = parser.parse(input_prog_str)
 #def after_parse_main():
-if (list_used > 1) :
-    print(' Linked list used')
+if (sel_ref_struct_used == 1) :
+    print(' self referential structure used')
 else :
-    print(' Linked list not used')
+    print(' Linked self referential structure not used')
 #ADD
