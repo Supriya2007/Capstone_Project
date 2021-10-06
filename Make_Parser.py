@@ -245,6 +245,8 @@ while(True):
             py_cmd = "%sbreak\n"%(cur_tab)
         elif(cmd == "CONTINUE"):
             py_cmd = "%scontinue\n"%(cur_tab)
+        elif(cmd == "COMMENT"):
+            py_cmd = ""
         write_file_at(cur_state, py_cmd)     
    
 file_handle_new = open("C_Parser_new.py", "wt")

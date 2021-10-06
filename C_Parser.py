@@ -65,8 +65,7 @@ def p_function_call(p):
         p[0]['exp'] = [p[1]] + [p[2]] + [p[3]]
     elif(len(p) == 5):
         p[0]['exp'] = [p[1]] + [p[2]] + p[3]['exp'] + [p[4]]
-        print("argument expr list:", p[3])
-        FUNC_ARGS = p[3]['exp']
+        FUNC_ARGS = p[3]['name']
     EXP = p[0]['exp']
     #p[0]['func_args']=p[0]['exp'][2:-1:2]
     #FUNC_ARGS = p[0]['func_args']
@@ -117,15 +116,21 @@ def p_argument_expression_list(p):
     argument_expression_list : assignment_expression
     | argument_expression_list COMMA assignment_expression
     '''
+    p[0] = {}
+    p[0]['name'] = []
     if(len(p) == 2):
-        p[0] = p[1]
+        p[0]['line'] = p[1]['line']
+        p[0]['exp'] = p[1]['exp']
+        if('name' in p[1]):
+            p[0]['name'] = [p[1]['name']]
         #NAME = p[1]['name']
     elif(len(p) == 4):
         p[0] = {}
         p[0]['exp'] = p[1]['exp'] + [p[2]] + p[3]['exp']
         p[0]['line'] = p[1]['line']
-    
-    pass
+        p[0]['name'] = p[1]['name'] 
+        if('name' in p[3]):
+            p[0]['name'].append(p[3]['name'])
     
 def p_unary_expression(p):
     '''
@@ -163,7 +168,7 @@ def p_unary_op_before_cast_exp(p):
     p[0] = p[1]
     p[0]['line'] = p[1]['line']
     p[0]['exp'] = p[1]['exp'] + p[2]['exp']
-    #p[0]['name'] = p[2]['name']
+    p[0]['name'] = p[2]['name']
     #print("p_unary_op_before_cast_exp:", p[0])
 
 def p_unary_operator(p):
@@ -496,16 +501,11 @@ def p_declaration(p):
         #for term in p[2]['exp']:
         #    if(term.isidentifier()):
         #        NAMES.append(term)
-        print("initial values in declaration statement:", p[2])
         if('initial_value' in p[2]):
             INITIAL_VALUES = p[2]['initial_value']
         NAME = p[0]['name']
     EXP = p[0]['exp']
     TYPE = p[1]['exp'] #not part of p[0]
-    
-    
-    print("p_declaration:", p[0])
-    print("NAME =", NAME)
     #ADD
 
 def p_declaration_specifiers(p):
@@ -557,7 +557,7 @@ def p_init_declarator(p):
     | initialized_declaration
     '''
     p[0] = p[1]
-    print("p_init_declarator", p[0])
+    #print("p_init_declarator", p[0])
     #ADD
     
 def p_initialized_declaration(p):
@@ -580,7 +580,7 @@ def p_initialized_declaration(p):
     if(p[0].get('arr_size')): #None returned in case LHS is not an array
         ARR_SIZE = p[0]['arr_size']
     #p[] = dict with 2 keys lhs, rhs
-    print("p_initialized_declaration", p[0])
+    #print("p_initialized_declaration", p[0])
     #ADD 
        
 def p_uninitialized_declaration(p):   
@@ -640,7 +640,6 @@ def p_struct_or_union_specifier(p):
     | struct_or_union L_BRACE struct_declaration_list R_BRACE
     | struct_or_union IDENTIFIER
     '''
-    
     if(len(p) == 6):
         p[0] ={}
         p[0]['line'] = p[1]['line']
@@ -665,7 +664,7 @@ def p_struct_or_union_specifier(p):
     STRUCT_MEMBERS = []    
     if('struct_members' in p[0]):
         STRUCT_MEMBERS = p[0]['struct_members']
-    print("p_struct_or_union_specifier:", p[0])
+    #print("p_struct_or_union_specifier:", p[0])
     #ADD
 
 def p_struct_or_union(p):
@@ -678,7 +677,7 @@ def p_struct_or_union(p):
     p[0]['exp'] = [ p[1] ]
     p[0]['type'] = p[1]
     TYPE = p[1]
-    print("p_struct_or_union:", p[0])
+    #print("p_struct_or_union:", p[0])
     #ADD
 
 def p_struct_declaration_list(p):
@@ -704,9 +703,7 @@ def p_struct_declaration(p):
     p[0] = {}
     p[0]['line'] = p[1]['line']
     p[0]['exp'] = p[1]['exp'] + p[2]['exp'] + [p[3]]
-    print("p_struct_declaration:", p[0])
-    print("p[1]:", p[1])
-    print("p[2]:", p[2])
+    #print("p_struct_declaration:", p[0])
     p[0]['type'] = p[1]['exp']
     p[0]['declarators'] = p[2]['exp'] #variable name and '*' if its a pointer
     #ADD
@@ -896,7 +893,8 @@ def p_variable_declaration2(p):
    variable_declaration2 : L_PAREN declarator R_PAREN
    '''
    p[0] = {}
-   p[0]['name'] = p[1]['name']
+   p[0]['line'] = p.lineno(1)
+   p[0]['name'] = p[2]['name']
    p[0]['exp'] = [ p[1] ] + p[2]['exp'] + [ p[3] ]
    #print("p_variable_declaration2: ", p[0])
    #ADD
@@ -913,11 +911,18 @@ def p_function_declaration(p):
     p[0] = {}
     p[0]['name'] = NAME
     p[0]['line'] = LINE
+    FUNC_PARAMS = {}
+    ORDERED_NAMES = []
     if(len(p) == 4):
         p[0]['exp'] = [p[1]] + [p[2]] + [p[3]]
     elif(len(p) == 5):
         p[0]['exp'] = [p[1]] + [p[2]] + p[3]['exp'] + [p[4]]
-    #print("function declaration: ", p[0])
+        if('parameters' in p[3]):
+            FUNC_PARAMS = p[3]['parameters']
+            p[0]['parameters'] = FUNC_PARAMS
+        if('ordered_names' in p[3]):
+            ORDERED_NAMES = p[3]['ordered_names']
+            p[0]['ordered_names'] = ORDERED_NAMES
     #ADD   
 
 def p_pointer(p):
@@ -965,7 +970,8 @@ def p_parameter_type_list(p):
         p[0] = {}
         p[0]['line'] = p[1]['line']
         p[0]['exp'] = p[1]['exp'] + [p[2]] + [p[3]]
-    print("p_parameter_type_list:", p[0])
+        p[0]['parameters'] = p[1]['parameters']
+        p[0]['ordered_names'] = p[1]['ordered_names']
     #ADD
 
 def p_parameter_list(p):
@@ -975,11 +981,19 @@ def p_parameter_list(p):
     '''
     if(len(p) == 2):
         p[0] = p[1]
+        p[0]['parameters'] = {tuple(p[0]['name']):p[0]['type']} #type casting list to tuple as lists can not be used as dict key
+        p[0]['ordered_names'] = [p[1]['name']]
     elif(len(p) == 4):
         p[0] = {}
         p[0]['line'] = p[1]['line']
         p[0]['exp'] = p[1]['exp'] + [p[2]] + p[3]['exp']
+        p[0]['parameters'] = p[1]['parameters']
+        p[0]['parameters'][tuple(p[3]['name'])] = p[3]['type']
+        p[0]['ordered_names'] = p[1]['ordered_names']+[p[3]['name']]
     #print("p_parameter_list:", p[0])
+    FUNC_PARAMS = p[0]['parameters']
+    ORDERED_NAMES = p[0]['ordered_names']
+    #print("parameters:", p[0]['parameters'])
     #ADD
 
 def p_parameter_declaration(p):
@@ -988,12 +1002,20 @@ def p_parameter_declaration(p):
     | declaration_specifiers abstract_declarator
     | declaration_specifiers
     '''
+    NAME = []
     if(len(p) == 2):
         p[0] = p[1]
+        p[0]['type'] = p[1]['exp']
     elif(len(p) == 3):
         p[0] = {}
         p[0]['line'] = p.lineno(1)
         p[0]['exp'] = p[1]['exp'] + p[2]['exp']
+        p[0]['type'] = p[1]['exp']
+        p[0]['name'] = p[2]['exp']
+        NAME = p[2]['exp']
+    EXP = p[0]['exp']
+    LINE = p[0]['line']
+    TYPE = p[0]['type']
     #print("p_parameter_declaration:", p[0])
     #ADD
 
