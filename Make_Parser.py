@@ -22,7 +22,7 @@ states = {
     'loop_header':['p_iteration_header', 1202],
     'loop_body':['p_iteration_body', 1228],
     'loop_statement':['p_iteration_statement',1204],
-    'after_parse':['after_parse_main', 1366],
+    'after_parse':['after_parse_main', 1394],
     'switch_stmt': ['p_selection_statement', 1174],
     'if_stmt': ['p_selection_statement', 1174],
     'case_stmt':['p_labeled_statement', 1077],

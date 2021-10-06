@@ -5,6 +5,11 @@ import copy
 start = 'translation_unit' #Sets the Start Symbol
 
 #def before_parse_main():
+sel_ref_struct = None
+struct = None
+ptr = None
+list_used = 0
+newnode = None
 #ADD
 
 def p_primary_expression(p):
@@ -419,6 +424,18 @@ def p_assignment_expression(p):
     EXP = p[0]['exp']
     LINE = p[0]['line']
     #print("RHS_NAME", RHS_NAME)
+    global list_used;list_used = list_used
+    if ('malloc' in RHS_NAME) :
+        global newnode;newnode = LHS
+    if (newnode in LHS) :
+        if ('->' in LHS) :
+            if (ptr in LHS) :
+                list_used = list_used+1
+    if (newnode in RHS) :
+        list_used = list_used+1
+    else :
+        if (newnode == RHS) :
+            list_used = list_used+1
     #ADD
     
 def p_assignment_lhs(p):
@@ -614,6 +631,8 @@ def p_type_specifier(p):
     '''
     p[0] = p[1]
     #print("p_type_specifier:", p[0])
+    if (p[0]['exp'][0] == "struct") :
+        global struct;struct = p[0]['name']
     #ADD
 
 def p_struct_or_union_specifier(p):
@@ -664,6 +683,11 @@ def p_struct_declaration_list(p):
         p[0]['line'] = p[1]['line']
         p[0]['exp'] = p[1]['exp'] + p[2]['exp']
     #print("p_struct_declaration_list:", p[0])
+    if (struct in p[0]['exp']) :
+        ind = p[0]['exp'].index(struct)
+        if (p[0]['exp'][ind+1] == '*') :
+            global ptr;ptr = p[0]['exp'][ind+2]
+            global sel_ref_struct;sel_ref_struct = struct
     #ADD
 
 def p_struct_declaration(p):
@@ -1377,4 +1401,8 @@ while(True):
 input_prog_str = "\n".join(input_prog) 
 result = parser.parse(input_prog_str)
 #def after_parse_main():
+if (list_used > 1) :
+    print(' Linked list used')
+else :
+    print(' Linked list not used')
 #ADD

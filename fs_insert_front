@@ -1,0 +1,19 @@
+STATE before_parse
+    CREATE sel_ref_struct None
+    CREATE struct None
+END_STATE
+
+STATE type_specifier
+    IF p[0]['exp'][0] EQUALTO "struct"
+        GLOBAL_SET struct p[0]['name']
+    END_IF
+END_STATE
+
+STATE struct_declaration_list
+    IF struct IN p[0]['exp']
+        GLOBAL_SET sel_ref_struct struct
+        PRINT struct
+    END_IF
+END_STATE
+
+
