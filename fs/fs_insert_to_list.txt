@@ -7,17 +7,17 @@ STATE before_parse
 END_STATE
 
 STATE type_specifier
-    IF p[0]['exp'][0] EQUALTO "struct"
-         GLOBAL_SET struct p[0]['name']
+    IF EXP[0] EQUALTO "struct"
+         GLOBAL_SET struct NAME
         END_IF
     END_IF
 END_STATE
 
 STATE struct_declaration_list
-    IF struct IN p[0]['exp']
-        CREATE ind p[0]['exp'].index(struct)
-        IF p[0]['exp'][ind+1] EQUALTO '*'
-            GLOBAL_SET ptr p[0]['exp'][ind+2]
+    IF struct IN EXP
+        CREATE ind EXP.index(struct)
+        IF EXP[ind+1] EQUALTO '*'
+            GLOBAL_SET ptr EXP[ind+2]
             GLOBAL_SET sel_ref_struct struct
     END_IF
 END_STATE

@@ -8,7 +8,8 @@ start = 'translation_unit' #Sets the Start Symbol
 sel_ref_struct = None
 struct = None
 ptr = None
-sel_ref_struct_used = 0
+list_used = 0
+newnode = None
 #ADD
 
 def p_primary_expression(p):
@@ -423,6 +424,18 @@ def p_assignment_expression(p):
     EXP = p[0]['exp']
     LINE = p[0]['line']
     #print("RHS_NAME", RHS_NAME)
+    global list_used;list_used = list_used
+    if ('malloc' in RHS_NAME) :
+        global newnode;newnode = LHS
+    if (newnode in LHS) :
+        if ('->' in LHS) :
+            if (ptr in LHS) :
+                list_used = list_used+1
+    if (newnode in RHS) :
+        list_used = list_used+1
+    else :
+        if (newnode == RHS) :
+            list_used = list_used+1
     #ADD
     
 def p_assignment_lhs(p):
@@ -617,9 +630,12 @@ def p_type_specifier(p):
     | enum_specifier
     '''
     p[0] = p[1]
+    EXP=p[0]['exp']
+    if('name' in p[0]):
+        NAME=p[0]['name']
     #print("p_type_specifier:", p[0])
-    if (p[0]['exp'][0] == "struct") :
-        global struct;struct = p[0]['name']
+    if (EXP[0] == "struct") :
+        global struct;struct = NAME
     #ADD
 
 def p_struct_or_union_specifier(p):
@@ -669,13 +685,13 @@ def p_struct_declaration_list(p):
         p[0] = {}
         p[0]['line'] = p[1]['line']
         p[0]['exp'] = p[1]['exp'] + p[2]['exp']
+    EXP=p[0]['exp']
     #print("p_struct_declaration_list:", p[0])
-    if (struct in p[0]['exp']) :
-        ind = p[0]['exp'].index(struct)
-        if (p[0]['exp'][ind+1] == '*') :
-            global ptr;ptr = p[0]['exp'][ind+2]
+    if (struct in EXP) :
+        ind = EXP.index(struct)
+        if (EXP[ind+1] == '*') :
+            global ptr;ptr = EXP[ind+2]
             global sel_ref_struct;sel_ref_struct = struct
-            global sel_ref_struct_used;sel_ref_struct_used = 1
     #ADD
 
 def p_struct_declaration(p):
@@ -1389,8 +1405,8 @@ while(True):
 input_prog_str = "\n".join(input_prog) 
 result = parser.parse(input_prog_str)
 #def after_parse_main():
-if (sel_ref_struct_used == 1) :
-    print(' self referential structure used')
+if (list_used > 1) :
+    print(' Linked list used')
 else :
-    print(' Linked self referential structure not used')
+    print(' Linked list not used')
 #ADD

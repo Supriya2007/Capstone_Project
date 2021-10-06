@@ -613,6 +613,9 @@ def p_type_specifier(p):
     | enum_specifier
     '''
     p[0] = p[1]
+    EXP=p[0]['exp']
+    if('name' in p[0]):
+        NAME=p[0]['name']
     #print("p_type_specifier:", p[0])
     #ADD
 
@@ -663,6 +666,7 @@ def p_struct_declaration_list(p):
         p[0] = {}
         p[0]['line'] = p[1]['line']
         p[0]['exp'] = p[1]['exp'] + p[2]['exp']
+    EXP=p[0]['exp']
     #print("p_struct_declaration_list:", p[0])
     #ADD
 
