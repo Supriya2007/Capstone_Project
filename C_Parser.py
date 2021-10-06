@@ -159,7 +159,7 @@ def p_unary_op_before_cast_exp(p):
     p[0] = p[1]
     p[0]['line'] = p[1]['line']
     p[0]['exp'] = p[1]['exp'] + p[2]['exp']
-    p[0]['name'] = p[2]['name']
+    #p[0]['name'] = p[2]['name']
     #print("p_unary_op_before_cast_exp:", p[0])
 
 def p_unary_operator(p):
@@ -1238,6 +1238,8 @@ def p_iteration_body(p):
     '''iteration_body : statement '''
     LINE = p.lineno(1)
     p[0] = p[1]
+    EXP = p[0]['exp']
+    BLOCK = p[1]['exp']
     #ADD
 
 def p_jump_statement(p):
