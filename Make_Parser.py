@@ -45,6 +45,9 @@ states = {
     'declarator_name':['p_declarator', 818],
     'translation_unit':['p_translation_unit',1323],
     'structures_and_unions':['p_struct_or_union_specifier',637],
+  'struct_declaration_list':['struct_declaration_list',655],
+  'type_specifier':['p_type_specifier',609],
+
     
 }
 # #ADD in C_Parser.py marks place to add code
