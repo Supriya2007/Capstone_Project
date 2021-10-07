@@ -1,38 +1,20 @@
-//#include <stdio.h>
-//#include <stdlib.h>
-//list structure with header node
+//ordered list with header node and a separate list structure having pointer to list head
 
 struct node
 {
 	int key_;
 	struct node* link_;
 };
-//typedef struct node struct node;
 
 struct list
 {
 	struct node* head_;
 };
-//typedef struct list struct list;
-
-//#define ALLOC(x) (x*)malloc(sizeof(x))
-
-
-//struct node *make_node_(int key) //fix issue: not allowing funcs with pointer return type
-struct node make_node_(int key)
-
-{
-	struct node* temp = (struct node *) malloc(sizeof(struct node));
-	temp->key_ = key;
-	return temp;
-}
 
 void init(struct list *ptr_list)
 {
 	ptr_list->head_ = (struct node *) malloc(sizeof(struct node));
-	ptr_list->head_->link_ = NULL;
-	
-	
+	ptr_list->head_->link_ = NULL;	
 }
 
 void deinit(struct list *ptr_list)
@@ -49,9 +31,11 @@ void deinit(struct list *ptr_list)
 
 void insert(struct list *ptr_list, int key)
 {
-	struct node *temp = make_node_(key);
+	struct node *temp = (struct node*) malloc(sizeof(struct node));
 	struct node* prev = ptr_list->head_;
 	struct node* pres = prev->link_;
+	temp->key_ = key;
+	temp->link_ = NULL;
 	while(pres && pres->key_ < key)
 	{
 		prev = pres;

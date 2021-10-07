@@ -1,52 +1,37 @@
-//#include <stdio.h>
-//#include <stdlib.h>
-//insert at end with header node
-
+//ordered list with header node and a separate list structure having pointer to list head
+//initialization done in main() itself, no init() function
 struct node
 {
 	int key_;
 	struct node* link_;
 };
-//typedef struct node struct node;
 
-//struct list
-//{
-//	struct node* head_;
-//};
-//typedef struct list struct list;
-
-//#define ALLOC(x) (x*)malloc(sizeof(x))
-
-
-//struct node *make_node_(int key) //fix issue: not allowing funcs with pointer return type
-
-void init(struct node** ptr_list)
+struct list
 {
-	*ptr_list = malloc(sizeof(struct node));	
-}
+	struct node* head_;
+};
 
-void deinit(struct node **ptr_list)
+
+void deinit(struct list *ptr_list)
 {
 	struct node* prev = NULL;
-	struct node* pres = *ptr_list;
+	struct node* pres = ptr_list->head_;
 	while(pres)
 	{
 		prev = pres;
 		pres = pres->link_;
 		free(prev);
 	}
-	*ptr_list = NULL;
 }
 
-//insert at end
-void insert(struct node** ptr_list, int key)
+void insert(struct list *ptr_list, int key)
 {
 	struct node *temp = (struct node*) malloc(sizeof(struct node));
-	struct node* prev = *ptr_list;
+	struct node* prev = ptr_list->head_;
 	struct node* pres = prev->link_;
 	temp->key_ = key;
 	temp->link_ = NULL;
-	while(pres)
+	while(pres && pres->key_ < key)
 	{
 		prev = pres;
 		pres = pres->link_;
@@ -56,9 +41,9 @@ void insert(struct node** ptr_list, int key)
 
 }
 
-void disp(struct node *ptr_list)
+void disp(struct list *ptr_list)
 {
-	struct node* temp = ptr_list->link_;
+	struct node* temp = ptr_list->head_->link_;
 	while(temp)
 	{
 		printf("%d ", temp->key_);
@@ -69,18 +54,17 @@ void disp(struct node *ptr_list)
 
 int main()
 {
-	//struct list l;
-	struct node* head = NULL;
-	//struct node* head = (struct node *) malloc(sizeof(struct node));
+	struct list l;
 	int a[] = { 20, 10, 40, 30, 25};
 	int n = 5;
 	int i;
-	init(&head);
-	//head = (struct node *) malloc(sizeof(struct node));
+	l.head_ = (struct node *) malloc(sizeof(struct node));
+	l.head_->link_ = NULL;
+	
 	for(i = 0; i < n; ++i)
 	{
-		insert(&head, a[i]);
-		disp(head);
+		insert(&l, a[i]);
+		disp(&l);
 	}
-	deinit(&head);
+	deinit(&l);
 }

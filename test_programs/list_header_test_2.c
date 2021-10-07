@@ -1,71 +1,72 @@
-//#include <stdio.h>
-//#include <stdlib.h>
-//ordered list with header node
+//ordered list without header node and a separate list structure having pointer to list head
 
 struct node
 {
 	int key_;
 	struct node* link_;
 };
-//typedef struct node struct node;
 
-//struct list
-//{
-//	struct node* head_;
-//};
-//typedef struct list struct list;
-
-//#define ALLOC(x) (x*)malloc(sizeof(x))
-
-
-//struct node *make_node_(int key) //fix issue: not allowing funcs with pointer return type
-
-void init(struct node** ptr_list)
+struct list
 {
-	*ptr_list = malloc(sizeof(struct node));	
+	struct node* head_;
+};
 
-	//struct node* other;
-	//*ptr_list = NULL;
-	//other =  malloc(sizeof(struct node));	
-	
-
-	//*ptr_list = malloc(sizeof(struct not_exists));	//assumed valid. Only cehcking for malloc(), not for type allocated.
-	
+void init(struct list *ptr_list)
+{
+    ptr_list->head_ = NULL;
+	//ptr_list->head_ = (struct node *) malloc(sizeof(struct node));
+	//ptr_list->head_->link_ = NULL;	
 }
 
-void deinit(struct node **ptr_list)
+void deinit(struct list *ptr_list)
 {
 	struct node* prev = NULL;
-	struct node* pres = *ptr_list;
+	struct node* pres = ptr_list->head_;
 	while(pres)
 	{
 		prev = pres;
 		pres = pres->link_;
 		free(prev);
 	}
-	*ptr_list = NULL;
 }
 
-void insert(struct node** ptr_list, int key)
+void insert(struct list *ptr_list, int key)
 {
 	struct node *temp = (struct node*) malloc(sizeof(struct node));
-	struct node* prev = *ptr_list;
-	struct node* pres = prev->link_;
 	temp->key_ = key;
 	temp->link_ = NULL;
-	while(pres && pres->key_ < key)
+	
+	// empty list
+	if(ptr_list->head_ == NULL)
 	{
-		prev = pres;
-		pres = pres->link_;
+		ptr_list->head_ = temp;
+		temp->link_ = NULL;
 	}
-	prev->link_ = temp;
-	temp->link_ = pres;
+	else
+	{
+		struct node* prev = NULL;
+		struct node* pres = ptr_list->head_;
+		while(pres && pres->key_ < key)
+		{
+			prev = pres;
+			pres = pres->link_;
+		}
+		if(prev == NULL) // begin
+		{
+			ptr_list->head_ = temp;
+		}
+		else // middle or end
+		{
+			prev->link_ = temp;
+		}
+		temp->link_ = pres;
+	}
 
 }
 
-void disp(struct node *ptr_list)
+void disp(struct list *ptr_list)
 {
-	struct node* temp = ptr_list->link_;
+	struct node* temp = ptr_list->head_;
 	while(temp)
 	{
 		printf("%d ", temp->key_);
@@ -76,16 +77,15 @@ void disp(struct node *ptr_list)
 
 int main()
 {
-	//struct list l;
-	struct node* head = NULL;
+	struct list l;
 	int a[] = { 20, 10, 40, 30, 25};
 	int n = 5;
 	int i;
-	init(&head);
+	init(&l);
 	for(i = 0; i < n; ++i)
 	{
-		insert(&head, a[i]);
-		disp(head);
+		insert(&l, a[i]);
+		disp(&l);
 	}
-	deinit(&head);
+	deinit(&l);
 }
