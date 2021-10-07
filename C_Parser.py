@@ -172,7 +172,7 @@ def p_unary_op_before_cast_exp(p):
     p[0] = p[1]
     p[0]['line'] = p[1]['line']
     p[0]['exp'] = p[1]['exp'] + p[2]['exp']
-    p[0]['name'] = p[2]['name']
+    #p[0]['name'] = p[2]['name']
     #print("p_unary_op_before_cast_exp:", p[0])
 
 def p_unary_operator(p):
@@ -1254,11 +1254,14 @@ def p_selection_statement(p):
     p[0]['line'] = p.lineno(1)
     LINE=p[0]['line']
     BLOCK=[]
+    CONDITION = []
     HAS_ELSE_CLAUSE = False
     if(len(p) == 6):
+        CONDITION = p[3]['exp']
         BLOCK.append(p[5]['exp'])
         p[0]['exp'] = [p[1]] + [p[2]] + p[3]['exp'] + [p[4]] + p[5]['exp']
     elif(len(p) == 8):
+        CONDITION = p[3]['exp']
         BLOCK.append(p[5]['exp'])
         BLOCK.append(p[7]['exp'])
         p[0]['exp'] = [p[1]] + [p[2]] + p[3]['exp'] + [p[4]] + p[5]['exp'] + [p[6]] + p[7]['exp']

@@ -45,6 +45,7 @@ lib_rules = {
 'Check if selection sort is used' : 'selection_sort_fs.txt',
 'Check if merge sort is used' : 'mergesort_fs.txt',
 'Check if iterative binary search is used' : 'binary_search_iterative_fs.txt',
+'Check if recursive binary search is used' : 'binary_search_recursive_fs.txt',
 }
 
 #Even code files without errors inserted into violations. Will have an empty list as value
