@@ -1,0 +1,70 @@
+STATE before_parse
+    CREATE no_of_if_else 0
+    CREATE recursion_used 0
+    CREATE function_line_number 1
+    CREATE function_name ""
+    CREATE equal_to_flag 0
+    CREATE less_greater_flag 0
+END_STATE
+
+STATE function_header
+    USE_GLOBAL function_name
+    SET function_name NAME
+END_STATE
+
+STATE if_stmt
+    USE_GLOBAL no_of_if_else
+    USE_GLOBAL equal_to_flag
+    USE_GLOBAL less_greater_flag
+    IF 'if' IN EXP
+        SET no_of_if_else no_of_if_else+1
+    END_IF
+    IF 'else' IN EXP
+        SET no_of_if_else no_of_if_else+1
+    END_IF
+    IF '==' IN CONDITION 
+        SET equal_to_flag 1
+    END_IF
+    IF '>' IN CONDITION 
+        SET less_greater_flag 1
+    END_IF
+    IF '<' IN CONDITION 
+        SET less_greater_flag 1
+    END_IF
+END_STATE
+
+STATE function_end
+    USE_GLOBAL function_line_number
+    USE_GLOBAL recursion_used
+    USE_GLOBAL no_of_if_else
+    USE_GLOBAL function_name
+    USE_GLOBAL equal_to_flag
+    USE_GLOBAL less_greater_flag
+    SET function_line_number LINE
+    IF EXP.count(NAME) GREATER_THAN 0
+        IF NAME EQUALTO function_name
+            SET recursion_used 1
+        END_IF
+    END_IF
+    IF recursion_used EQUALTO 0
+        PRINT function_line_number
+        VIOLATION Recursive binary search not used
+    END_IF
+    IF equal_to_flag EQUALTO 0
+        PRINT function_line_number
+        VIOLATION Binary search conditions not checked
+    END_IF
+    IF less_greater_flag EQUALTO 0
+        PRINT function_line_number
+        VIOLATION Binary search conditions not checked
+    END_IF
+    IF no_of_if_else LESS_THAN 2
+        PRINT function_line_number
+        VIOLATION Binary search conditions not checked
+    END_IF
+    SET recursion_used 0
+    SET no_of_if_else 0
+    SET function_name ""
+    SET equal_to_flag 0
+    SET less_greater_flag 0
+END_STATE
