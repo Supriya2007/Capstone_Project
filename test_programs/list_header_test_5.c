@@ -1,5 +1,3 @@
-//#include <stdio.h>
-//#include <stdlib.h>
 //insert at end without header node
 
 struct node
@@ -7,18 +5,7 @@ struct node
 	int key_;
 	struct node* link_;
 };
-//typedef struct node struct node;
 
-//struct list
-//{
-//	struct node* head_;
-//};
-//typedef struct list struct list;
-
-//#define ALLOC(x) (x*)malloc(sizeof(x))
-
-
-//struct node *make_node_(int key) //fix issue: not allowing funcs with pointer return type
 
 void init(struct node** ptr_list)
 {
