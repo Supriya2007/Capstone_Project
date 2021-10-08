@@ -97,17 +97,13 @@ def p_postfix_expression(p):
         LINE = p.lineno(2)
         p[0] = {}
         p[0]['lhs'] = p[1]['exp']
-
-        p[0]['rhs'] = p[3]
-        p[0]['exp'] = [p[0]['lhs']] + [ p[2] ] + [p[0]['rhs']]
-
-      
-
+        p[0]['rhs'] = [p[3]]
+        p[0]['exp'] = p[0]['lhs'] + [ p[2] ] + p[0]['rhs']
         p[0]['line'] = LINE
     elif(len(p)==5): #ARRAY
         LINE = p.lineno(2)
         p[0] = {}
-        p[0]['exp'] = [p[1]['exp']] + [ p[2] ] +[p[3]['exp']] + [p[4]]
+        p[0]['exp'] = p[1]['exp'] + [ p[2] ] + p[3]['exp'] + [p[4]]
         p[0]['line'] = LINE
         p[0]['name'] = p[1]['name']
     else:
@@ -172,7 +168,7 @@ def p_unary_op_before_cast_exp(p):
     p[0] = p[1]
     p[0]['line'] = p[1]['line']
     p[0]['exp'] = p[1]['exp'] + p[2]['exp']
-    #p[0]['name'] = p[2]['name']
+    p[0]['name'] = p[2]['name']
     #print("p_unary_op_before_cast_exp:", p[0])
 
 def p_unary_operator(p):
@@ -1388,7 +1384,7 @@ def p_fheader_type1(p):
     LINE = p[2]['line']
     NAME = p[2]['name']
     p[0]['line'] = LINE
-    p[0]['exp'] = p[1]['exp'] + [p[2]]
+    p[0]['exp'] = p[1]['exp'] + p[2]['exp']
     p[0]['name'] = NAME
     #print("p_fheader_type1:",p[0])
     #ADD
