@@ -1,0 +1,52 @@
+STATE before_parse
+    CREATE sel_ref_struct None
+    CREATE struct None
+    CREATE ptr None
+    CREATE list_used 0
+    CREATE newnode None
+END_STATE
+
+STATE type_specifier
+    IF EXP[0] EQUALTO "struct"
+         GLOBAL_SET struct NAME
+        END_IF
+    END_IF
+END_STATE
+
+STATE struct_declaration_list
+    IF struct IN EXP
+        CREATE ind EXP.index(struct)
+        IF EXP[ind+1] EQUALTO '*'
+            GLOBAL_SET ptr EXP[ind+2]
+            GLOBAL_SET sel_ref_struct struct
+    END_IF
+END_STATE
+
+STATE variable_assignments
+    GLOBAL_SET list_used list_used
+    IF 'malloc' IN RHS_NAME
+        GLOBAL_SET newnode LHS
+    END_IF
+    IF newnode IN LHS
+        IF '->' IN LHS
+            IF ptr IN LHS
+                SET list_used list_used+1
+            END_IF
+        END_IF
+    END_IF
+    IF newnode IN RHS
+        SET list_used list_used+1
+    ELSE 
+        IF newnode EQUALTO RHS
+            SET list_used list_used+1
+        END_IF
+    END_IF
+END_STATE
+
+STATE after_parse
+    IF list_used GREATER_THAN 1
+        VIOLATION Linked list used
+    ELSE 
+        VIOLATION Linked list not used
+    END_IF
+END_STATE

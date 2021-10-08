@@ -97,13 +97,17 @@ def p_postfix_expression(p):
         LINE = p.lineno(2)
         p[0] = {}
         p[0]['lhs'] = p[1]['exp']
-        p[0]['rhs'] = [p[3]]
-        p[0]['exp'] = p[0]['lhs'] + [ p[2] ] + p[0]['rhs']
+
+        p[0]['rhs'] = p[3]
+        p[0]['exp'] = [p[0]['lhs']] + [ p[2] ] + [p[0]['rhs']]
+
+      
+
         p[0]['line'] = LINE
     elif(len(p)==5): #ARRAY
         LINE = p.lineno(2)
         p[0] = {}
-        p[0]['exp'] = p[1]['exp'] + [ p[2] ] + p[3]['exp'] + [p[4]]
+        p[0]['exp'] = [p[1]['exp']] + [ p[2] ] +[p[3]['exp']] + [p[4]]
         p[0]['line'] = LINE
         p[0]['name'] = p[1]['name']
     else:
@@ -168,7 +172,7 @@ def p_unary_op_before_cast_exp(p):
     p[0] = p[1]
     p[0]['line'] = p[1]['line']
     p[0]['exp'] = p[1]['exp'] + p[2]['exp']
-    p[0]['name'] = p[2]['name']
+    #p[0]['name'] = p[2]['name']
     #print("p_unary_op_before_cast_exp:", p[0])
 
 def p_unary_operator(p):
@@ -631,6 +635,9 @@ def p_type_specifier(p):
     | enum_specifier
     '''
     p[0] = p[1]
+    EXP=p[0]['exp']
+    if('name' in p[0]):
+        NAME=p[0]['name']
     #print("p_type_specifier:", p[0])
     #ADD
 
@@ -693,6 +700,8 @@ def p_struct_declaration_list(p):
         p[0]['line'] = p[1]['line']
         p[0]['exp'] = p[1]['exp'] + p[2]['exp']
         p[0]['struct_members'] = p[1]['struct_members']+[{'type':p[2]['type'], 'declarators':p[2]['declarators']}]
+    EXP=p[0]['exp']
+
     #print("p_struct_declaration_list:", p[0])
     #ADD
 
@@ -1245,11 +1254,14 @@ def p_selection_statement(p):
     p[0]['line'] = p.lineno(1)
     LINE=p[0]['line']
     BLOCK=[]
+    CONDITION = []
     HAS_ELSE_CLAUSE = False
     if(len(p) == 6):
+        CONDITION = p[3]['exp']
         BLOCK.append(p[5]['exp'])
         p[0]['exp'] = [p[1]] + [p[2]] + p[3]['exp'] + [p[4]] + p[5]['exp']
     elif(len(p) == 8):
+        CONDITION = p[3]['exp']
         BLOCK.append(p[5]['exp'])
         BLOCK.append(p[7]['exp'])
         p[0]['exp'] = [p[1]] + [p[2]] + p[3]['exp'] + [p[4]] + p[5]['exp'] + [p[6]] + p[7]['exp']
@@ -1376,7 +1388,7 @@ def p_fheader_type1(p):
     LINE = p[2]['line']
     NAME = p[2]['name']
     p[0]['line'] = LINE
-    p[0]['exp'] = p[1]['exp'] + p[2]['exp']
+    p[0]['exp'] = p[1]['exp'] + [p[2]]
     p[0]['name'] = NAME
     #print("p_fheader_type1:",p[0])
     #ADD
