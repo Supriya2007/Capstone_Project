@@ -53,7 +53,7 @@ filename = "C_Parser.py"
 for state in states:
     with open(filename) as myFile:
         for num, line in enumerate(myFile, 1):
-            s = "def " + states[state][0]
+            s = "def " + states[state][0]+"(p)"
             if s in line:
                 states[state][1] = num
 print(states)
