@@ -46,6 +46,9 @@ lib_rules = {
 'Check if merge sort is used' : 'mergesort_fs.txt',
 'Check if iterative binary search is used' : 'binary_search_iterative_fs.txt',
 'Check if recursive binary search is used' : 'binary_search_recursive_fs.txt',
+'Check if linked list used': 'fs_struct.txt',
+'Check for insertion into a linked list':'fs_insert_to_list.txt',
+'Check for deletion linked list':'fs_delete.txt',
 'Check if linked list with header node concept is used' : 'list_header_fs.txt',
 }
 

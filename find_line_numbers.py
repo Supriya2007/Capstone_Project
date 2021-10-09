@@ -1,5 +1,7 @@
 #Stores mapping between user keywords and the states in the grammar with the line at which a newline can be added to the grammar
 
+import re
+
 states = {
     'before_parse':['before_parse_main', 7],
     'function_prototype' : ['p_function_declaration', 911],
@@ -53,7 +55,10 @@ filename = "C_Parser.py"
 for state in states:
     with open(filename) as myFile:
         for num, line in enumerate(myFile, 1):
-            s = "def " + states[state][0]
-            if s in line:
-                states[state][1] = num
+            s = states[state][0]
+            m = re.search(r'def(.*)\(p\):', line)
+            if m:
+                prodn_name = (m.groups()[0]).strip()
+                if s == prodn_name:
+                    states[state][1] = num
 print(states)

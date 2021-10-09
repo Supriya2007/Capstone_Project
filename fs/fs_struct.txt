@@ -27,8 +27,10 @@ END_STATE
 
 STATE after_parse
     IF sel_ref_struct_used EQUALTO 1
+        PRINT 1
         VIOLATION self referential structure used
     ELSE 
+        PRINT 1
         VIOLATION Linked self referential structure not used
     END_IF
 END_STATE

@@ -45,8 +45,10 @@ END_STATE
 
 STATE after_parse
     IF list_used GREATER_THAN 1
+        PRINT 1
         VIOLATION Linked list used
     ELSE 
+        PRINT 1
         VIOLATION Linked list not used
     END_IF
 END_STATE
