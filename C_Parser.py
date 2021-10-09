@@ -168,7 +168,8 @@ def p_unary_op_before_cast_exp(p):
     p[0] = p[1]
     p[0]['line'] = p[1]['line']
     p[0]['exp'] = p[1]['exp'] + p[2]['exp']
-    p[0]['name'] = p[2]['name']
+    if('name' in p[2]):
+        p[0]['name'] = p[2]['name']
     #print("p_unary_op_before_cast_exp:", p[0])
 
 def p_unary_operator(p):
@@ -986,15 +987,22 @@ def p_parameter_list(p):
     '''
     if(len(p) == 2):
         p[0] = p[1]
-        p[0]['parameters'] = {tuple(p[0]['name']):p[0]['type']} #type casting list to tuple as lists can not be used as dict key
-        p[0]['ordered_names'] = [p[1]['name']]
+        if('name' in p[1]):
+            p[0]['parameters'] = {tuple(p[0]['name']):p[0]['type']} #type casting list to tuple as lists can not be used as dict key
+            p[0]['ordered_names'] = [p[1]['name']]
+        else:
+            p[0]['parameters'] = {}
+            p[0]['ordered_names'] = []
     elif(len(p) == 4):
         p[0] = {}
         p[0]['line'] = p[1]['line']
         p[0]['exp'] = p[1]['exp'] + [p[2]] + p[3]['exp']
         p[0]['parameters'] = p[1]['parameters']
-        p[0]['parameters'][tuple(p[3]['name'])] = p[3]['type']
-        p[0]['ordered_names'] = p[1]['ordered_names']+[p[3]['name']]
+        p[0]['ordered_names'] = p[1]['ordered_names']
+        if('name' in p[3]):
+            p[0]['parameters'][tuple(p[3]['name'])] = p[3]['type']
+            p[0]['ordered_names'] = p[1]['ordered_names']+[p[3]['name']]
+            
     #print("p_parameter_list:", p[0])
     FUNC_PARAMS = p[0]['parameters']
     ORDERED_NAMES = p[0]['ordered_names']
