@@ -1,0 +1,62 @@
+STATE before_parse
+    CREATE vars []
+    CREATE assign []
+    CREATE Flag 0
+    CREATE var1 None
+    CREATE var2 None
+END_STATE
+
+STATE variable_assignments
+    GLOBAL_SET var1 var1
+    GLOBAL_SET var2 var2
+    APPEND assign [LHS,RHS]
+    IF var1 EQUALTO None
+        IF LHS NOTEQUALTO []
+            SET var1 LHS
+            SET var2 RHS
+        END_IF
+    ENF_IF
+END_STATE
+
+STATE function_end
+    GLOBAL_SET Flag Flag
+    FOR var IN assign
+        IF var[0] EQUALTO var1
+            IF var[1] EQUALTO var2
+                SET Flag Flag+1
+            END_IF
+        END_IF
+        IF var[0] EQUALTO var2
+            SET val var[1]
+            IF '->' IN val
+                IF var2 IN val
+                    SET Flag Flag+1
+                END_IF
+            END_IF
+        END_IF
+    END_FOR 
+END_STATE
+
+STATE function_call
+    GLOBAL_SET Flag Flag
+    IF NAME EQUALTO 'free'
+        IF FUNC_ARGS EQUALTO var1
+            SET Flag Flag+1
+        END_IF
+    END_IF
+END_STATE
+
+STATE after_parse
+    PRINT 1
+    IF Flag GREATER_THAN 2
+        VIOLATION DELETION correct
+    ELSE
+        VIOLATION DELETION Wrong
+    END_IF    
+END_STATE
+
+
+
+
+
+
