@@ -41,26 +41,36 @@ STATE function_end
     USE_GLOBAL equal_to_flag
     USE_GLOBAL less_greater_flag
     SET function_line_number LINE
-    IF EXP.count(NAME) GREATER_THAN 0
+    IF EXP.count(NAME) GREATER_THAN 1
         IF NAME EQUALTO function_name
             SET recursion_used 1
         END_IF
     END_IF
     IF recursion_used EQUALTO 0
-        PRINT function_line_number
-        VIOLATION Recursive binary search not used
+        IF no_of_if_else GREATER_THAN 2
+            PRINT function_line_number
+            VIOLATION Recursive binary search not used
+        END_IF
+        IF equal_to_flag EQUALTO 1
+            IF less_greater_flag EQUALTO 1
+                PRINT function_line_number
+                VIOLATION Recursive binary search not used
+            END_IF
+        END_IF
     END_IF
-    IF equal_to_flag EQUALTO 0
-        PRINT function_line_number
-        VIOLATION Binary search conditions not checked
-    END_IF
-    IF less_greater_flag EQUALTO 0
-        PRINT function_line_number
-        VIOLATION Binary search conditions not checked
-    END_IF
-    IF no_of_if_else LESS_THAN 2
-        PRINT function_line_number
-        VIOLATION Binary search conditions not checked
+    IF recursion_used EQUALTO 1
+        IF equal_to_flag EQUALTO 0
+            PRINT function_line_number
+            VIOLATION Binary search conditions not checked
+        END_IF
+        IF less_greater_flag EQUALTO 0
+            PRINT function_line_number
+            VIOLATION Binary search conditions not checked
+        END_IF
+        IF no_of_if_else LESS_THAN 2
+            PRINT function_line_number
+            VIOLATION Binary search conditions not checked
+        END_IF  
     END_IF
     SET recursion_used 0
     SET no_of_if_else 0
