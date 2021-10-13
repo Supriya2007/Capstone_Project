@@ -50,6 +50,7 @@ lib_rules = {
 'Check for insertion into a linked list':'fs_insert_to_list.txt',
 'Check for deletion linked list':'fs_delete.txt',
 'Check if linked list with header node concept is used' : 'list_header_fs.txt',
+'Check if linked list with tailer node concept is used' : 'list_tailer_fs.txt',
 }
 
 #Even code files without errors inserted into violations. Will have an empty list as value
