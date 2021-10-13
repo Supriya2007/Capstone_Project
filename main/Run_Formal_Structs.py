@@ -2,14 +2,17 @@
 #filename:[(lineno, guideline_name, violation_msg)..]
 
 import os
+import platform
 
-#When running on Windows
-python="python"
-file_sep = '\\'
+os_name = platform.system()
+if 'Windows' in os_name:
+    python="python"
+    file_sep = '\\'
 
-#When running on Ubuntu
-#python="python3"
-#file_sep = '/'
+if 'Linux' in os_name:
+    python="python3"
+    file_sep = '/'
+
 #cur_dir = os.getcwd()
 #cur_dir = ".."
 #print(cur_dir)
