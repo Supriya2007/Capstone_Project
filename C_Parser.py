@@ -1376,6 +1376,7 @@ def p_function_header(p):
     '''
     function_header : fheader_type1
     | fheader_type2
+    | fheader_type3
     '''
     NAME = p[1]['name']
     LINE = p[1]['line']
@@ -1406,6 +1407,17 @@ def p_fheader_type2(p):
     p[0] = p[1]
     #print("p_fheader_type2:",p[0])
     #ADD    
+    
+def p_fheader_type3(p):
+    '''
+    fheader_type3 : declaration_specifiers pointer function_declaration
+    '''
+    NAME = p[3]['name']
+    LINE = p[3]['line']
+    p[0] = {}
+    p[0]['line'] = LINE
+    p[0]['name'] = NAME
+    p[0]['exp'] = p[1]['exp'] + p[2]['exp'] + p[3]['exp']
        
 def p_function_definition(p):
     '''

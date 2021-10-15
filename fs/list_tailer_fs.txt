@@ -1,0 +1,143 @@
+STATE before_parse
+    CREATE self_ref_struct ""
+    CREATE self_ref_ptrs []
+    CREATE key_name ""
+    CREATE in_loop False
+    CREATE search_criteria_met False
+    CREATE key_assigned False
+    CREATE search_func_found False
+END_STATE
+
+STATE structures_and_unions
+    USE_GLOBAL self_ref_struct
+    USE_GLOBAL self_ref_ptrs
+    USE_GLOBAL key_name
+    IF 'struct' IN EXP
+        COMMENT Checking only struct declarations, not unions.
+        IF self_ref_struct EQUALTO ""
+            FOR memb IN STRUCT_MEMBERS
+                SET t "type"
+                SET d "declarators"
+                COMMENT 'INDEX memb "type"' is invalid as memb_"type" is not a valid identifier
+                INDEX memb t
+                INDEX memb d
+                IF NAME IN memb_t
+                    SET self_ref_struct NAME
+                    FOR i IN range(len(memb_d))
+                        INDEX memb_d i
+                        IF memb_d_i.isidentifier() EQUALTO True
+                            APPEND self_ref_ptrs memb_d_i
+                            BREAK
+                        END_IF
+                    END_FOR
+                ELSE
+                    COMMENT Assuming just a single member other than the self-referential pointers
+                    FOR i IN range(len(memb_d))
+                        INDEX memb_d i
+                        IF memb_d_i.isidentifier() EQUALTO True
+                            SET key_name memb_d_i
+                            BREAK
+                        END_IF
+                    END_FOR
+                END_IF
+            END_FOR
+        END_IF
+    END_IF
+END_STATE
+
+STATE loop_header
+    USE_GLOBAL in_loop
+    USE_GLOBAL search_func_found
+    USE_GLOBAL search_criteria_met
+    SET checks_equality False
+    COMMENT SET search_func_found False
+    SET in_loop True
+    IF search_func_found NOTEQUALTO True
+        IF '==' IN CONDITION
+           SET checks_equality True
+        ELSE
+            IF '!=' IN CONDITION
+                SET checks_equality True
+            END_IF
+        END_IF
+        IF checks_equality EQUALTO True
+             IF '->' IN CONDITION
+                IF key_name IN CONDITION
+                    SET search_func_found True
+                    SET search_criteria_met True
+                END_IF
+            END_IF
+        END_IF 
+    END_IF  
+END_STATE
+
+STATE loop_body
+    USE_GLOBAL in_loop
+    SET in_loop False
+END_STATE
+
+STATE if_stmt
+    USE_GLOBAL in_loop
+    USE_GLOBAL search_func_found
+    USE_GLOBAL search_criteria_met
+    SET checks_equality False
+    IF search_func_found EQUALTO False
+        IF in_loop EQUALTO True
+            IF '==' IN CONDITION
+               SET checks_equality True
+            ELSE
+                IF '!=' IN CONDITION
+                    SET checks_equality True
+                END_IF
+            END_IF
+            IF checks_equality EQUALTO True
+                 IF '->' IN CONDITION
+                    IF key_name IN CONDITION
+                        SET search_func_found True
+                        SET search_criteria_met True
+                    END_IF
+                END_IF
+            END_IF   
+        END_IF
+    END_IF
+END_STATE
+
+
+STATE function_header
+    USE_GLOBAL search_criteria_met
+    USE_GLOBAL key_assigned
+    SET search_criteria_met False
+    SET key_assigned False
+END_STATE
+
+STATE function_end
+    USE_GLOBAL search_criteria_met
+    USE_GLOBAL key_assigned
+    IF search_criteria_met EQUALTO True
+        IF key_assigned NOTEQUALTO True
+            PRINT LINE
+            VIOLATION Tailer node not used: The key searched has not been copied to the tailer node 
+        END_IF
+    END_IF
+    COMMENT END_IF
+    COMMENT If there is no search() function, prints violation that tailer node has not been used
+END_STATE
+
+STATE variable_assignments
+    USE_GLOBAL key_assigned
+    IF '=' IN EXP
+        IF '->' LHS
+            IF key_name IN LHS
+                SET key_assigned True
+            END_IF
+        END_IF
+    END_IF
+END_STATE
+
+STATE after_parse
+    IF search_func_found EQUALTO False    
+         PRINT 1
+         COMMENT Highlight first line if there is no search function
+         VIOLATION Tailer node not used: search not implemented
+    END_IF
+END_STATE
