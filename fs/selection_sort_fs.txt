@@ -86,22 +86,24 @@ STATE function_end
     USE_GLOBAL found_if_at_depth_2
     USE_GLOBAL swap_done_in_outer_loop
         
-    IF no_of_loops NOTEQUALTO 2
-        PRINT LINE
-        VIOLATION Selection sort algorithm not used
-    ELSE 
-        IF max_nesting_depth NOTEQUALTO 2
+    IF NAME EQUALTO 'selection_sort'    
+        IF no_of_loops NOTEQUALTO 2
             PRINT LINE
-            VIOLATION Selection sort algorithm not used
-        ELSE
-            IF found_if_at_depth_2 NOTEQUALTO True
+            VIOLATION Selection sort algorithm not used: number of loops is not 2
+        ELSE 
+            IF max_nesting_depth NOTEQUALTO 2
                 PRINT LINE
-                VIOLATION Selection sort algorithm not used
-                ELSE
-                    IF swap_done_in_outer_loop NOTEQUALTO True
-                        PRINT LINE
-                        VIOLATION Selection sort algorithm not used
-                    END_IF
+                VIOLATION Selection sort algorithm not used: depth of looping should be 2
+            ELSE
+                IF found_if_at_depth_2 NOTEQUALTO True
+                    PRINT LINE
+                    VIOLATION Selection sort algorithm not used: expected if statement in inner nested loop
+                    ELSE
+                        IF swap_done_in_outer_loop NOTEQUALTO True
+                            PRINT LINE
+                            VIOLATION Selection sort algorithm not used: swap not done
+                        END_IF
+                END_IF
             END_IF
         END_IF
     END_IF

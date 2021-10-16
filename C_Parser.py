@@ -536,15 +536,16 @@ def p_init_declarator_list(p):
     #p[0] = {}
     #p[0]['line'] = p[1]['line']
     p[0] = copy.deepcopy(p[1])
+    p[0]['initial_value'] = {} # will overwrite if p[1] had 'initial_value' attribute
     NAMES=[]
     if(len(p)==2):
-        #p[0]['exp'] = p[1]['exp']
         p[0]['name'] = [p[1]['name']]
         if('initial_value' in p[1]):
-            p[0]['initial_value'] = {p[1]['name']:p[1]['initial_value']} #overwriting value got from p[0]=copy.deepcopy(p[1])
+            p[0]['initial_value'] = {p[1]['name']:p[1]['initial_value']} 
     elif(len(p)==4):
         p[0]['exp'] = p[1]['exp'] + [ p[2] ] + p[3]['exp']
         p[0]['name'] = p[1]['name'] + [p[3]['name']]
+        p[0]['initial_value'] = p[1]['initial_value']
         if('initial_value' in p[3]):
             p[0]['initial_value'][p[3]['name']] = p[3]['initial_value']
     else:
