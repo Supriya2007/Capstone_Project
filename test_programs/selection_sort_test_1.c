@@ -6,7 +6,7 @@ void swap(int* x, int* y){
     *x = *y;
     *y = temp;
 }
-
+//says selection_sort not followed as the swap steps are in another function
 void selection_sort(int a[], int n){
     int i, min, j;
     for(i=0; i<n-1; i++){
