@@ -1,0 +1,47 @@
+STATE before_parse
+    CREATE struct_name None
+    CREATE self_ref_pointers 0
+    CREATE function_line_number 1
+END_STATE
+
+STATE type_specifier
+    USE_GLOBAL self_ref_pointers
+    USE_GLOBAL struct_name
+    IF self_ref_pointers EQUALTO 0
+        IF EXP[0] EQUALTO "struct"
+            SET c EXP.count('*')
+            IF c EQUALTO 2
+                SET c1 EXP.index('*')
+                SET c2 EXP[::-1].index('*')
+                SET c1_name EXP[c1-1]
+                SET c2_name EXP[::-1][c2+1]
+                SET struct_name NAME
+                IF c1_name EQUALTO struct_name
+                    IF c2_name EQUALTO struct_name
+                        SET self_ref_pointers 2
+                    END_IF
+                END_IF
+            END_IF 
+        END_IF
+    END_IF
+END_STATE
+
+STATE function_end
+    GLOBAL_SET function_line_number LINE
+    USE_GLOBAL self_ref_pointers
+    IF self_ref_pointers EQUALTO 2
+        IF EXP.count(NAME) EQUALTO 2
+            IF EXP.count('->') LESS_THAN 2
+                PRINT function_line_number
+                VIOLATION Tree data structure not used
+            END_IF
+        END_IF
+    END_IF
+END_STATE
+
+STATE after_parse
+	IF self_ref_pointers NOTEQUALTO 2
+        PRINT function_line_number
+		VIOLATION Tree data structure not used
+	END_IF
+END_STATE
