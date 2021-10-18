@@ -1335,6 +1335,7 @@ def p_jump_statement(p):
         p[0]['exp'] = [p[1]] + [p[2]]
     elif(len(p) == 4):
         p[0]['exp'] = [p[1]] + [p[2]] + [p[3]]
+    EXP = p[0]['exp']
     #ADD
 
 def p_translation_unit(p):
