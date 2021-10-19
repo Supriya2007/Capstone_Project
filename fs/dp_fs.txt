@@ -1,0 +1,226 @@
+STATE before_parse
+    CREATE found_array_init 0
+    CREATE found_array_param 0
+    CREATE array_names_init []
+    CREATE array_names_param []
+    CREATE found_array_lhs 0
+    CREATE found_array_rhs 0
+    CREATE found_array_lhs_rhs 0
+    CREATE found_if 0
+    CREATE found_loop 0
+    CREATE recursion_used 0
+    CREATE function_line_number 1
+    CREATE dp_used 0
+    CREATE array_dict {}
+END_STATE
+
+STATE variable_declaration
+    USE_GLOBAL array_names_init
+    USE_GLOBAL found_array_init 
+    FOR i IN range(0,len(EXP))
+        IF EXP[i] EQUALTO '['
+            SET found_array_init 1
+            APPEND array_names_init EXP[i-1]
+        END_IF
+    END_FOR
+END_STATE
+
+STATE function_header
+    USE_GLOBAL array_names_param
+    USE_GLOBAL found_array_param
+    FOR i IN FUNC_PARAMS
+        IF '*' IN i 
+            SET found_array_param 1
+            APPEND array_names_param i[-1]
+        END_IF
+    END_FOR
+END_STATE
+
+STATE if_stmt
+    USE_GLOBAL found_if
+    IF 'if' IN EXP
+        SET found_if 1
+    END_IF
+END_STATE
+
+STATE loop_header
+    USE_GLOBAL found_loop
+    IF 'while' IN EXP
+        SET found_loop 1
+    END_IF
+    IF 'for' IN EXP
+        SET found_loop 1
+    END_IF
+END_STATE
+
+STATE variable_assignments
+    USE_GLOBAL found_array_init
+    USE_GLOBAL found_array_param
+    USE_GLOBAL found_array_lhs
+    USE_GLOBAL found_array_rhs
+    USE_GLOBAL found_array_lhs_rhs
+    USE_GLOBAL array_names_init
+    USE_GLOBAL array_names_param
+    USE_GLOBAL dp_used
+    USE_GLOBAL array_dict
+    IF found_array_init EQUALTO 1
+        FOR i IN array_names_init
+            IF i NOTIN array_dict
+                SET array_dict[i] {}
+                SET array_dict[i]["found_array_lhs_rhs"] 0
+                SET array_dict[i]["found_array_lhs"] 0
+                SET array_dict[i]["found_array_rhs"] 0
+            END_IF
+            IF LHS NOTEQUALTO []
+                IF i IN LHS
+                    IF i IN RHS 
+                        SET array_dict[i]["found_array_lhs_rhs"] 1
+                    END_IF
+                END_IF
+                IF i NOTIN LHS
+                    IF i IN RHS 
+                        SET array_dict[i]["found_array_rhs"] 1
+                    END_IF
+                END_IF
+                IF i NOTIN RHS
+                    IF i IN LHS 
+                        SET array_dict[i]["found_array_lhs"] 1
+                    END_IF
+                END_IF
+            END_IF
+        END_FOR
+    END_IF
+    IF found_array_init EQUALTO 0
+        IF array_names_param EQUALTO 1
+            FOR i IN array_names_param
+                IF LHS NOTEQUALTO []
+                    IF i IN LHS
+                        IF i IN RHS 
+                            SET array_dict[i]["found_array_lhs_rhs"] 1
+                        END_IF
+                    END_IF
+                END_IF
+                IF i NOTIN LHS
+                    IF i IN RHS 
+                        SET array_dict[i]["found_array_rhs"] 1
+                    END_IF
+                END_IF
+                IF i NOTIN RHS
+                    IF i IN LHS 
+                        SET array_dict[i]["found_array_lhs"] 1
+                    END_IF
+                END_IF
+            END_FOR
+        END_IF
+    END_IF
+    IF found_array_rhs EQUALTO 0
+        IF '?' IN EXP
+            FOR i IN array_names_init
+                IF i IN EXP
+                    SET dp_used 1
+                END_IF
+            END_FOR
+            FOR i IN array_names_param
+                IF i IN EXP
+                    SET dp_used 1
+                END_IF
+            END_FOR
+        END_IF
+    END_IF
+END_STATE
+
+STATE function_end
+    USE_GLOBAL found_array_init
+    USE_GLOBAL found_array_param
+    USE_GLOBAL array_names_init
+    USE_GLOBAL array_names_param
+    USE_GLOBAL found_array_lhs
+    USE_GLOBAL found_array_rhs
+    USE_GLOBAL found_array_lhs_rhs
+    USE_GLOBAL found_if
+    USE_GLOBAL found_loop
+    USE_GLOBAL recursion_used
+    USE_GLOBAL function_line_number
+    USE_GLOBAL dp_used
+    USE_GLOBAL array_dict
+    SET function_line_number LINE
+    IF EXP.count(NAME) GREATER_THAN 1
+        SET recursion_used 1
+    END_IF
+    IF found_if EQUALTO 1
+        IF recursion_used EQUALTO 1
+            IF found_array_init EQUALTO 1
+                FOR i IN array_dict
+                    IF array_dict[i]["found_array_lhs_rhs"] EQUALTO 1
+                        SET dp_used 1
+                    END_IF
+                    IF array_dict[i]["found_array_lhs"] EQUALTO 1
+                        IF array_dict[i]["found_array_rhs"] EQUALTO 1
+                            SET dp_used 1
+                        END_IF
+                    END_IF
+                END_FOR
+            END_IF
+            IF found_array_init EQUALTO 0
+                IF found_array_param EQUALTO 1
+                    FOR i IN array_dict
+                        IF array_dict[i]["found_array_lhs_rhs"] EQUALTO 1
+                            SET dp_used 1
+                        END_IF
+                        IF array_dict[i]["found_array_lhs"] EQUALTO 1
+                            IF array_dict[i]["found_array_rhs"] EQUALTO 1
+                                SET dp_used 1
+                            END_IF
+                        END_IF
+                    END_FOR
+                END_IF
+            END_IF
+        END_IF
+    END_IF
+    IF found_loop EQUALTO 1
+        IF found_array_init EQUALTO 1
+            FOR i IN array_dict
+                IF array_dict[i]["found_array_lhs_rhs"] EQUALTO 1
+                    SET dp_used 1
+                END_IF
+                IF array_dict[i]["found_array_lhs"] EQUALTO 1
+                    IF array_dict[i]["found_array_rhs"] EQUALTO 1
+                        SET dp_used 1
+                    END_IF
+                END_IF
+            END_FOR
+        END_IF
+        IF found_array_init EQUALTO 0
+            IF found_array_param EQUALTO 1
+                FOR i IN array_dict
+                    IF array_dict[i]["found_array_lhs_rhs"] EQUALTO 1
+                        SET dp_used 1
+                    END_IF
+                    IF array_dict[i]["found_array_lhs"] EQUALTO 1
+                        IF array_dict[i]["found_array_rhs"] EQUALTO 1
+                            SET dp_used 1
+                        END_IF
+                    END_IF
+                END_FOR
+            END_IF
+        END_IF
+    END_IF
+    SET found_array_init 0
+    SET found_array_param 0
+    SET array_names_init []
+    SET array_names_param []
+    SET found_array_lhs 0
+    SET found_array_rhs 0
+    SET found_array_lhs_rhs 0
+    SET found_if 0
+    SET found_loop 0
+    SET recursion_used 0
+    SET array_dict {}
+END_STATE
+
+STATE after_parse
+    IF dp_used EQUALTO 0
+        PRINT function_line_number
+        VIOLATION Dynamic programming not used
+    END_IF
+END_STATE

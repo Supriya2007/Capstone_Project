@@ -10,7 +10,6 @@ states = {
     'function_parameters' : ['p_parameter_type_list', 907],
     'parameter_declaration' : ['p_parameter_declaration', 1004],
     'func_statements' : ['p_statement', 1131],
-    #'function_end' : ['p_function_definition', 1246],
     'function_end' : ['p_function_definition', 1402],
     'var_declares' : ['p_variable_declaration1', 867],
     'variable_declaration' : ['p_variable_declaration', 852],
@@ -47,8 +46,6 @@ states = {
     'structures_and_unions':['p_struct_or_union_specifier',640],
     'struct_declaration_list':['p_struct_declaration_list',686],
     'type_specifier':['p_type_specifier',627],
-
-    
 }
 
 filename = "C_Parser.py"
