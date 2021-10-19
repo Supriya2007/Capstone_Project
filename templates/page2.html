@@ -10,8 +10,8 @@
 .button {
   border: none;
   color: blue;
-  border-radius: 20px;
-  padding: 15px 32px;
+  border-radius: 15px;
+  padding: 10px 20px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
@@ -118,11 +118,9 @@
   position: absolute;
   z-index: 1;
   bottom: 125%;
-  left: 50%;
-  margin-left: -60px;
+  left: 0%;
   opacity: 0;
   transition: opacity 0.3s;
-  overflow:auto;
 }
 
 .tooltip .tooltiptext::after {
@@ -134,7 +132,6 @@
   border-width: 5px;
   border-style: solid;
   border-color: #555 transparent transparent transparent;
-  overflow:auto;
 }
 
 .tooltip:hover .tooltiptext {
@@ -161,15 +158,14 @@ mark:hover{
 position: absolute;
   top: 10px;
   right: 50px;
-  font-size: 18px;
-  padding: 9px 0;
+  font-size: 15px;
+  padding: 10px 20px;
 background: #428713;
 color: #fff;
 font-weight: 500;
-font-size: 18px;
 max-width: 170px;
 width: 100%;
-border-radius: 30px;
+border-radius: 10px;
 text-transform: uppercase;
 transition: all 0.3s ease-in;
 }
@@ -192,7 +188,7 @@ transition: all 0.3s ease-in;
 </div>
 </div>
 
-<body onload="contents()" class="full" style="background-image: url(static/images/banner2.png);background-repeat: no-repeat;background-size: cover;color:black; margin-top:5%;font-size:30px">
+<body onload="contents()" class="full" style="background-image: url(static/images/banner2.png);background-repeat: no-repeat;background-size: cover;color:black; margin-top:5%;font-size:15px">
 
 <div id="file_names">
 <!-- input type="button" onclick="get_file_contents('gf.c')" value="gf.c" -->
@@ -309,21 +305,21 @@ function get_file_contents(fname){
       text=text+"<div class=\"tooltip\"><mark>"+(i+1)+" "+f_contents[i]+"</mark><span class=\"tooltiptext\">";
       while(i+1 == a[j])
       {
-        text=text+v_1[j]+"<br>";
+        text=text+g_1[j]+"<br>";
         //if(g_1[j]==g_1[j+1] && a[j]==a[j+1]);
-        if(g_1[j]==g_1[j+1] && a[j]==a[j+1])
+        if(v_1[j]==v_1[j+1] && a[j]==a[j+1])
         {
-          guidelines = guidelines+"    "+(i+1)+" : "+g_1[j]+"<br>";
+          guidelines = guidelines+"    "+(i+1)+" : "+v_1[j]+"<br>";
           j=j+2;
         }
         else if(a[j]==a[j-1])
         {
-          guidelines = guidelines+"    "+"   : "+g_1[j]+"<br>";
+          guidelines = guidelines+"    "+"   : "+v_1[j]+"<br>";
           j=j+1;
         }
         else
         {
-          guidelines = guidelines+"    "+(i+1)+" : "+g_1[j]+"<br>";
+          guidelines = guidelines+"    "+(i+1)+" : "+v_1[j]+"<br>";
           j=j+1;
         }
       }
