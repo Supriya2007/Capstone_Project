@@ -17,7 +17,7 @@ struct iterator
 	struct student* ptr_stud_;
 };
 
-//search without iterator on student list: v-4; without has_next() function
+//search without iterator on student list: v-5; without next() function
 
 void init_iterator(struct iterator* ptr_it, struct list* ptr_list)
 {
@@ -29,9 +29,9 @@ char* get(struct iterator* ptr_it) // gets the key
 	return ptr_it->ptr_stud_->srn_; //valid addr returned as struct has been malloced
 }
 
-void next(struct iterator* ptr_it)
+int has_next(struct iterator* ptr_it)
 {
-	ptr_it->ptr_stud_ = ptr_it->ptr_stud_->link_;
+	return ptr_it->ptr_stud_ != NULL;
 }
 
 void init(struct list *ptr_list)
@@ -81,8 +81,8 @@ void insert(struct list *ptr_list, char* name, char* srn, int sem, char sec)
 struct iterator search(struct list *ptr_list, char* key){
     struct iterator it;
     init_iterator(&it, ptr_list);
-    while(it.ptr_stud_ && strcmp(get(&it), key)){
-        next(&it);
+    while(has_next(&it) && strcmp(it.ptr_stud_->srn_, key)){
+        it.ptr_stud_ = it.ptr_stud_->link_;
     }
     return it; //it points to NULL if val not found in list.
 }
@@ -106,6 +106,7 @@ int main()
 	char *srns[14] = {"PES2201800032", "PES2201800270", "PES2201800680"};
 	int sems[] = {7, 7, 7};
 	int secs[] = {'D', 'B', 'B'};
+	
 	int n = 3, i;
 	struct iterator it;
 	
@@ -117,13 +118,13 @@ int main()
 	
 	it = search(&l, "PES2201800032");
 
-	printf("%s\n", get(&it));
+	printf("%s\n", it.ptr_stud_->srn_);
 	it = search(&l, "PES2201800270");
-	printf("%s\n", get(&it));
+	printf("%s\n", it.ptr_stud_->srn_);
 	it = search(&l, "PES2201800680");
-	printf("%s\n", get(&it));
+	printf("%s\n", it.ptr_stud_->srn_);
 	it = search(&l, "PES2201800000");
-	printf("has_next() is %d\n", it.ptr_stud_!=NULL);
+	printf("has_next() is %d\n", has_next(&it));
 	deinit(&l);
 }
 

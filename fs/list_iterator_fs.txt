@@ -5,22 +5,25 @@ STATE before_parse
     CREATE iter_struct_name ""
     CREATE iter_ptr_name ""
     CREATE struct_count 0
-    CREATE non_self_ref_structs {}
     CREATE func_params {}
     CREATE iter_get_found False
     CREATE iter_has_next_found False    
+    CREATE node_ptr_name ""
+    CREATE iter_next_found False
 END_STATE
 
 STATE structures_and_unions
     USE_GLOBAL self_referential_struct_name
     USE_GLOBAL self_referential_ptr
     USE_GLOBAL struct_count
+    USE_GLOBAL iter_struct_name
+    USE_GLOBAL iter_ptr_name
     CREATE is_self_ref False
     IF '{' IN EXP
         COMMENT Checks if line matched is a structure declaration. Prodn matched for all uses of keyword struct.
         IF 'struct' IN EXP
             COMMENT Checking only struct declarations, not unions.
-            
+            SET struct_count struct_count+1
             FOR memb IN STRUCT_MEMBERS
                 SET t "type"
                 SET d "declarators"
@@ -41,8 +44,17 @@ STATE structures_and_unions
             END_FOR
             
             IF is_self_ref EQUALTO False
-                DICT_APPEND non_self_ref_structs NAME copy.deepcopy(STRUCT_MEMBERS)
-            ELSE
+                COMMENT DICT_APPEND non_self_ref_structs NAME copy.deepcopy(STRUCT_MEMBERS)
+                 IF struct_count EQUALTO 3
+                    COMMENT If struct_count < 3, iterator not used
+                    SET iter_struct_name NAME
+                    FOR term IN STRUCT_MEMBERS[0]['declarators']
+                        IF term.isidentifier() EQUALTO True
+                            SET iter_ptr_name term
+                        END_IF
+                    END_FOR
+                END_IF
+            ELSE            
                 FOR memb IN STRUCT_MEMBERS
                     IF self_referential_struct_name NOTIN memb['type']
                         FOR i IN range(len(memb['declarators']))
@@ -54,9 +66,7 @@ STATE structures_and_unions
                         END_FOR
                     END_IF
                 END_FOR
-            END_IF
-            SET struct_count struct_count+1
-            COMMENT If struct_count < 3, iterator not used
+            END_IF            
         END_IF
     END_IF
 END_STATE
@@ -64,29 +74,63 @@ END_STATE
 
 STATE function_header
     USE_GLOBAL func_params
+    USE_GLOBAL node_ptr_name
+    USE_GLOBAL new_node_name
+    USE_GLOBAL new_node_in_lhs
+    USE_GLOBAL new_node_in_rhs
     SET func_params FUNC_PARAMS
+    SET node_ptr_name ""
+    SET new_node_name ""
+    SET new_node_in_lhs False
+    SET new_node_in_rhs False
+END_STATE
+
+STATE if_stmt
+    USE_GLOBAL iter_has_next_found
+    IF '->' IN CONDITION
+        IF iter_ptr_name IN CONDITION
+            SET iter_has_next_found True    
+        END_IF
+    END_IF
 END_STATE
 
 STATE variable_assignments
     USE_GLOBAL func_params
     USE_GLOBAL iter_struct_name
     USE_GLOBAL iter_ptr_name
+    USE_GLOBAL node_ptr_name
+    USE_GLOBAL iter_get_found
+    USE_GLOBAL iter_next_found
+    
+    IF iter_struct_name NOTEQUALTO ""
+        IF '->' IN RHS
+            IF iter_ptr_name IN RHS
+                SET node_ptr_name NAME
+            END_IF
+        END_IF
+    END_IF
+    
     IF '->' IN LHS
-        COMMENT Above check is required as otherwise prev=prev->link_ is matched too
-        IF RHS EQUALTO LHS+['->',self_referential_ptr]
-            FOR param IN func_params
-                IF LHS[0] IN param
-                    INDEX func_params param
-                    SET iter_struct_name func_params_param[1]
-                    COMMENT Type must 'struct X' as it is on LHS of '->'
-                    FOR term IN non_self_ref_structs[iter_struct_name][0]['declarators']
-                        COMMENT [0] as iterator has only one member
-                        IF term.isidentifier() EQUALTO True
-                            SET iter_ptr_name term
-                        END_IF
-                    END_FOR 
+        IF iter_ptr_name IN LHS
+            IF '->' IN RHS
+                IF iter_ptr_name IN RHS
+                    IF self_referential_ptr IN RHS
+                        SET iter_next_found True
+                    END_IF
                 END_IF
-            END_FOR
+            END_IF
+        END_IF
+    END_IF
+    
+END_STATE
+
+STATE initialized_declaration
+    USE_GLOBAL node_ptr_name
+    IF iter_struct_name NOTEQUALTO ""
+        IF '->' IN RHS
+            IF iter_ptr_name IN RHS
+                SET node_ptr_name NAME
+            END_IF
         END_IF
     END_IF
 END_STATE
@@ -94,17 +138,28 @@ END_STATE
 STATE jump_statement
     USE_GLOBAL iter_get_found
     USE_GLOBAL iter_has_next_found
+    USE_GLOBAL node_ptr_name
+    
     SET key_found False
+   
     IF 'return' IN EXP
-        IF ['->', iter_ptr_name] IN EXP
+        IF '->' IN EXP
             FOR key IN node_keys
                 IF key IN EXP
                     SET key_found True
                     BREAK
                 END_IF
             END_FOR
+            
             IF key_found EQUALTO True
-                SET iter_get_found True
+                COMMENT '->key' found
+                IF iter_ptr_name IN EXP
+                    SET iter_get_found True
+                ELSE
+                    IF node_ptr_name IN EXP
+                        SET iter_get_found True
+                    END_IF
+                END_IF                
             ELSE
                 IF 'NULL' IN EXP
                     SET iter_has_next_found True
@@ -119,20 +174,20 @@ STATE after_parse
         PRINT 1
         VIOLATION Expected at least 3 structures: list node, list and iterator structures
     END_IF
-
-    IF iter_struct_name EQUALTO ""
-        PRINT 1
-        VIOLATION iterator has not been initialized to list head.
-    END_IF
     
     IF iter_get_found EQUALTO False
         PRINT 1
-        VIOLATION iterator get() function not found.
+        VIOLATION function to return iterator value not found.
+    END_IF
+    
+    IF iter_next_found EQUALTO False
+        PRINT 1
+        VIOLATION function to forward iterator not found.
     END_IF
     
     IF iter_has_next_found EQUALTO False
         PRINT 1
-        VIOLATION iterator has_next() function not found.
+        VIOLATION function to check if iterator is at end not found.
     END_IF
 END_STATE
     

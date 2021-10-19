@@ -17,7 +17,7 @@ struct iterator
 	struct student* ptr_stud_;
 };
 
-//search without iterator: v-2; on student list: without next() function
+//search without iterator: v-3; on student list: without get() function
 
 void init_iterator(struct iterator* ptr_it, struct list* ptr_list)
 {
