@@ -2,6 +2,9 @@ int isSubsetSum(int set[], int n, int sum)
 {
     int *subset[sum + 1];
     int i,j;
+    for(i=0; i<n+1; i++){
+        subset[i] = (int *) malloc(sizeof(int)*(sum+1));
+    }
     for (i = 0; i <= n; i++)
         subset[i][0] = 1;
     for (i = 1; i <= sum; i++)

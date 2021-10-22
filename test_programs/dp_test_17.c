@@ -1,3 +1,9 @@
+
+int max(int a, int b)
+{
+    return (a > b) ? a : b;
+}
+
 int knapSackRec(int W, int wt[],
                 int val[], int i,
                 int** dp)
@@ -30,6 +36,11 @@ int knapSack(int W, int wt[], int val[], int n)
 {
     int* dp[n];
     int i,j;
+    
+    for(i=0; i<n; i++){
+        dp[i] = (int *) malloc(sizeof(int)*(W+1));
+    }
+    
     for (i = 0; i < n; i++)
         for (j = 0; j < W + 1; j++)
             dp[i][j] = -1;
@@ -42,6 +53,6 @@ int main()
     int wt[] = { 10, 20, 30 };
     int W = 50;
     int n = sizeof(val) / sizeof(val[0]);
-    printf(knapSack(W, wt, val, n));
+    printf("%d", knapSack(W, wt, val, n));
     return 0;
 }

@@ -6,7 +6,11 @@ int max(int a, int b)
 int knapSack(int W, int wt[], int val[], int n)
 {
     int i, w;
-    int *K[W + 1];
+    int *K[n+1];
+    for(i=0; i<=n; i++){
+        K[i] = (int *) malloc(sizeof(int)*(W+1));
+    }
+        
     for (i = 0; i <= n; i++)
     {
         for (w = 0; w <= W; w++)

@@ -1,5 +1,12 @@
 int subsetSum(int a[], int n, int sum)
 {
+    int** tab  = (int **) malloc(sizeof(int *) * (2000));
+    int i;
+    
+    for(i=0; i<2000; i++){
+        tab[i] = (int *) malloc(sizeof(int) * 2000);
+    }
+    
     if (sum == 0)
         return 1;
          
