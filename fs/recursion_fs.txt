@@ -1,6 +1,19 @@
+STATE before_parse
+    CREATE recursion_found 0
+    CREATE line_number 1
+END_STATE
+
 STATE function_end
+    GLOBAL_SET line_number LINE
+    USE_GLOBAL recursion_found
     IF EXP.count(NAME) GREATER_THAN 1
-            PRINT LINE
-            VIOLATION Recursion used
+        SET recursion_found 1
+    END_IF
+END_STATE
+
+STATE after_parse
+    IF recursion_found EQUALTO 0
+        PRINT line_number
+        VIOLATION Recursion not used
     END_IF
 END_STATE
