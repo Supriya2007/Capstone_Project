@@ -57,7 +57,6 @@ lib_rules = {
 'Check if tree data structure is used ' : 'tree_fs.txt',
 'Check if list iterator is used': 'list_iterator_fs.txt',
 'Check if bottom-up dynamic programming has been used' : 'dp_fs.txt',
-'Check if memoization is used' : 'memoization_fs.txt',
 }
 
 #Even code files without errors inserted into violations. Will have an empty list as value
