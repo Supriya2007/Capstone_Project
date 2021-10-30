@@ -1,35 +1,21 @@
-int square(int x)
-{
-    return x*x;
-}
-
 int fib(int n)
 {
-    // Stop condition
-    if (n == 0)
-        return 0;
- 
-    // Stop condition
-    if (n == 1 || n == 2)
-        return 1;
- 
-    // Recursion function
-    else
-        return (fib(n - 1) + fib(n - 2));
+  int a = 0, b = 1, c, i;
+  if( n == 0)
+    return a;
+  for (i = 2; i <= n; i++)
+  {
+     c = a + b;
+     a = b;
+     b = c;
+  }
+  return b;
 }
  
-// Driver Code
-int main()
+int main ()
 {
-    // Initialize variable n.
-    int n = 5;
-    //printf("Fibonacci series of %d numbers is: ",n);
- 
-    
-    // for loop to print the fiboancci series.
-    int i;
-    for (i = 0; i < n; i++) {
-        printf("%d ", fib(i));
-    }
-    return 0;
+  int n = 9;
+  printf("%d", fib(n));
+  getchar();
+  return 0;
 }

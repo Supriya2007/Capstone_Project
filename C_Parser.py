@@ -828,6 +828,7 @@ def p_declarator(p):
     declarator : pointer direct_declarator 
     | direct_declarator
     '''
+    POINTER = 0
     if(len(p)==2):
         p[0] = p[1]
     elif(len(p)==3):
@@ -836,6 +837,7 @@ def p_declarator(p):
         p[0]['exp'] = p[1]['exp']+p[2]['exp']
         p[0]['name'] = p[2]['name']
         p[0]['pointer'] = True
+        POINTER = 1
     else:
         print("ERROR in p_declarator: len of p neither 1 nor 3")
     NAME = p[0]['name']

@@ -15,14 +15,14 @@ void bubbleSort(int arr[], int n)
     int arr_sorted[n];
     //copy arr[] into arr_sorted[]
     for(i=0; i<n; i++){
-        arrSorted[i] = arr[i];
+        arr_sorted[i] = arr[i];
     }
     
     for (i = 0; i < n-1; i++)	
         // Last i elements are already in place
     	for (j = 0; j < n-i-1; j++)
-	    	if (arrSorted[j] > arrSorted[j+1])
-	    		swap(&arrSorted[j], &arrSorted[j+1]);
+	    	if (arr_sorted[j] > arr_sorted[j+1])
+	    		swap(&arr_sorted[j], &arr_sorted[j+1]);
 	    		
 	p = arr_sorted;
 	size = n;
