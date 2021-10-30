@@ -1,0 +1,68 @@
+STATE before_parse
+ CREATE queue_var None
+ CREATE queue_vars []
+ CREATE depth 0
+ CREATE lhs_vars []
+ CREATE rhs_vars []
+ CREATE loop_init ""
+ CREATE FLAG 0
+END_STATE
+
+STATE loop_statement
+    IF loop_init NOTEQUALTO None
+		FOR qvar IN queue_vars
+			IF qvar IN loop_init
+				PRINT qvar
+                PRINT loop_init
+                GLOBAL_SET FLAG FLAG+1
+                PRINT "yayy"
+			END_IF
+		END_FOR
+	END_IF
+END_STATE
+
+STATE loop_header
+	GLOBAL_SET depth depth+1
+    CREATE chk 0
+	IF depth EQUALTO 2
+        FOR i IN LOOP_INIT
+            IF chk EQUALTO 1
+                GLOBAL_SET loop_init loop_init+i
+            END_IF
+            IF i EQUALTO '='
+                SET chk 1
+            END_IF
+	END_IF
+END_STATE
+
+STATE loop_body
+	GLOBAL_SET depth depth-1
+	IF depth EQUALTO 0
+		FOR var IN lhs_vars
+			IF var in BLOCK
+				APPEND  queue_vars var
+			END_IF
+		END_FOR
+	END_IF
+	IF depth EQUALTO 1
+		FOR var IN queue_vars
+			IF var IN rhs_vars
+				GLOBAL_SET FLAG 1
+				GLOBAL_SET queue_var var
+			END_IF
+		END_FOR
+	END_IF
+
+END_STATE
+
+STATE variable_assignments
+	GLOBAL_SET lhs_vars lhs_vars+LHS
+	GLOBAL_SET rhs_vars rhs_vars+RHS
+END_STATE
+
+STATE after_parse
+    PRINT FLAG
+    IF FLAG GREATER_THAN 1
+        PRINT "bfs_used"
+    END_IF
+END_STATE
