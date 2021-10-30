@@ -1,6 +1,7 @@
 import ply.yacc as yacc
 from C_Lex import tokens
 import copy
+import re
 
 start = 'translation_unit' #Sets the Start Symbol
 
@@ -1280,6 +1281,7 @@ def p_iteration_statement(p):
     p[0] = {}
     p[0]['line'] = p.lineno(1)
     p[0]['exp'] = p[1]['exp'] + p[2]['exp']
+    EXP = p[0]['exp']
     #ADD
 
 def p_iteration_header(p):
@@ -1310,7 +1312,7 @@ def p_iteration_header(p):
 
 def p_iteration_body(p):
     '''iteration_body : statement '''
-    LINE = p.lineno(1)
+    LINE = p[1]['line']
     p[0] = p[1]
     EXP = p[0]['exp']
     BLOCK = p[1]['exp']
