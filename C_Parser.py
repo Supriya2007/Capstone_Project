@@ -105,7 +105,11 @@ def p_postfix_expression(p):
         p[0] = {}
         p[0]['exp'] = p[1]['exp'] + [ p[2] ] + p[3]['exp'] + [p[4]]
         p[0]['line'] = LINE
-        p[0]['name'] = p[1]['name']
+        try:
+            p[0]['name'] = p[1]['name']
+        except:
+            pass
+        #please check not sure if this is right-Afreen
     else:
         print("ERROR in p_postfix_expression")
     #print("postfix exp:", p[0])
@@ -1288,6 +1292,7 @@ def p_iteration_header(p):
     | FOR L_PAREN expression_statement expression_statement R_PAREN 
     | FOR L_PAREN expression_statement expression_statement expression R_PAREN 
     '''
+    print(p[1])
     LINE = p.lineno(1)
     p[0] = {}
     p[0]['line'] = LINE
@@ -1296,15 +1301,17 @@ def p_iteration_header(p):
         p[0]['type']='while'
         p[0]['exp'] = [p[1]] + [p[2]] + p[3]['exp'] + [p[4]]
     elif(len(p) == 6):
+        LOOP_INIT=p[3]['exp']
         CONDITION=p[4]['exp']
         p[0]['type']='for'
         p[0]['exp'] = [p[1]] + [p[2]] + p[3]['exp'] + p[4]['exp'] + [p[5]]
     elif(len(p) == 7):
+        LOOP_INIT=p[3]['exp']
         CONDITION=p[4]['exp']
         p[0]['type']='for'
         p[0]['exp'] = [p[1]] + [p[2]] + p[3]['exp'] + p[4]['exp'] + p[5]['exp'] + [p[6]]
     EXP = p[0]['exp']
-    #print("iteration header", EXP)
+    print("iteration header", EXP)
     #do while not supported
     #ADD
 
