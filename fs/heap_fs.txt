@@ -1,0 +1,190 @@
+STATE before_parse
+    CREATE parent_var 'ZZZ'
+    CREATE child_var 'ZZZ'
+    COMMENT Setting to an unlikely value, so that pat1, pat2 or pat3 don't match unless 
+    CREATE line 0
+    CREATE pat1_found False
+    CREATE pat2_found False
+    CREATE pat3_found False
+    CREATE pat4_found False
+    CREATE parent_found False 
+END_STATE
+
+STATE variable_assignments
+    USE_GLOBAL parent_var
+    USE_GLOBAL child_var
+    USE_GLOBAL parent_found
+    IF '=' IN EXP
+        IF '2' IN RHS
+            IF '/' IN RHS           
+                FOR term IN RHS
+                COMMENT isidentifier() used to find the variable name in RHS ( (var-1)/2 or var/2)
+                    IF term.isidentifier() IS_TRUE
+                        IF term NOTEQUALTO NAME
+                            COMMENT parent_var and child_var must be different. Should not match 'parent_ind = parent_ind/2'
+                            SET parent_var NAME
+                            SET child_var term
+                            SET parent_found True
+                        END_IF
+                    END_IF
+                END_FOR
+            ELSE
+                IF '*' IN RHS
+                    FOR term IN RHS
+                    COMMENT isidentifier() used to find the variable name in RHS ( (var-1)/2 or var/2)
+                        IF term.isidentifier() IS_TRUE
+                            IF term NOTEQUALTO NAME
+                                COMMENT parent_var and child_var must be different. Should not match 'parent_ind = parent_ind/2'
+                                SET child_var NAME
+                                SET parent_var term
+                                SET parent_found True
+                            END_IF
+                        END_IF
+                    END_FOR
+                END_IF
+            END_IF
+        END_IF
+    END_IF
+END_STATE
+
+STATE initialized_declaration
+    USE_GLOBAL parent_var
+    USE_GLOBAL child_var
+    USE_GLOBAL parent_found
+    IF '=' IN EXP
+        IF '2' IN RHS
+            IF '/' IN RHS           
+                FOR term IN RHS
+                COMMENT isidentifier() used to find the variable name in RHS ( (var-1)/2 or var/2)
+                    IF term.isidentifier() IS_TRUE
+                        IF term NOTEQUALTO NAME
+                            COMMENT parent_var and child_var must be different. Should not match 'parent_ind = parent_ind/2'
+                            SET parent_var NAME
+                            SET child_var term
+                            SET parent_found True
+                        END_IF
+                    END_IF
+                END_FOR
+            ELSE
+                IF '*' IN RHS
+                    FOR term IN RHS
+                    COMMENT isidentifier() used to find the variable name in RHS ( (var-1)/2 or var/2)
+                        IF term.isidentifier() IS_TRUE
+                            IF term NOTEQUALTO NAME
+                                COMMENT parent_var and child_var must be different. Should not match 'parent_ind = parent_ind/2'
+                                SET child_var NAME
+                                SET parent_var term
+                                SET parent_found True
+                            END_IF
+                        END_IF
+                    END_FOR
+                END_IF
+            END_IF
+        END_IF
+    END_IF
+END_STATE
+
+
+STATE loop_header
+    USE_GLOBAL pat1_found 
+    USE_GLOBAL pat2_found 
+    USE_GLOBAL pat3_found 
+    USE_GLOBAL pat4_found   
+    
+    CREATE pat1 r'.*\[{child}]=.*\[{parent}]'.format(child=child_var,parent=parent_var)
+    CREATE pat2 r'{child}={parent}'.format(child=child_var,parent=parent_var)
+    CREATE pat3 r'{parent}=.*{parent}.*/2'.format(parent=parent_var)
+    CREATE pat4 r'{parent}=.*{child}.*/2'.format(parent=parent_var,child=child_var)
+        
+    SET m re.search("for\((.*)\)","".join(EXP))
+    IF m IS_TRUE
+        SET loop_header_str m.groups()[0]
+    ELSE
+        SET m re.search("while\((.*)\)","".join(EXP))
+        SET loop_header_str m.groups()[0]
+    END_IF
+    
+    SET loop_stmnts re.split(";|,",loop_header_str)
+    FOR stmnt IN loop_stmnts
+        IF re.search(pat1,stmnt) IS_TRUE
+            SET pat1_found True
+        END_IF
+        IF re.search(pat2,stmnt) IS_TRUE
+            SET pat2_found True
+        END_IF
+        IF re.search(pat3,stmnt) IS_TRUE
+            SET pat3_found True
+        END_IF  
+        IF re.search(pat4,stmnt) IS_TRUE
+            SET pat4_found True
+        END_IF 
+    END_FOR
+    
+END_STATE
+
+STATE loop_body
+    USE_GLOBAL pat1_found 
+    USE_GLOBAL pat2_found 
+    USE_GLOBAL pat3_found 
+    USE_GLOBAL pat4_found 
+
+    CREATE pat1 r'.*\[{child}]=.*\[{parent}]'.format(child=child_var,parent=parent_var)
+    CREATE pat2 r'{child}={parent}'.format(child=child_var,parent=parent_var)
+    CREATE pat3 r'{parent}=.*{parent}.*/2'.format(parent=parent_var)
+    CREATE pat4 r'{parent}=.*{child}.*/2'.format(parent=parent_var,child=child_var)
+        
+    SET loop_stmnts re.split(";|{|}|,","".join(EXP))        
+        
+    FOR stmnt IN loop_stmnts
+        IF re.search(pat1,stmnt) IS_TRUE
+            SET pat1_found True
+        END_IF
+        IF re.search(pat2,stmnt) IS_TRUE
+            SET pat2_found True
+        END_IF
+        IF re.search(pat3,stmnt) IS_TRUE
+            SET pat3_found True
+        END_IF  
+        IF re.search(pat4,stmnt) IS_TRUE
+            SET pat4_found True
+        END_IF 
+    END_FOR
+      
+END_STATE
+
+
+STATE function_end
+    USE_GLOBAL line
+    GLOBAL_SET parent_var 'ZZZ'
+    GLOBAL_SET child_var 'ZZZ'
+    COMMENT The parent and child vars should be found in the same function as pat1, pat2 and pat3,
+    IF NAME EQUALTO 'main'
+        SET line LINE
+    END_IF
+END_STATE
+
+STATE after_parse
+    IF parent_found EQUALTO False
+        PRINT line
+        VIOLATION Expected a variable to be assigned to i/2 or (i-1)/2.
+    ELSE
+        IF pat1_found EQUALTO False
+            PRINT line
+            VIOLATION Expected statement \'heap[node] = heap[parent of node]\' inside a loop
+        ELSE
+            IF pat2_found EQUALTO False
+                PRINT line
+                VIOLATION Expected statement \'node index = index of parent of node\' inside a loop
+            ELSE
+                IF pat3_found EQUALTO False
+                    IF pat4_found EQUALTO False
+                        PRINT line
+                        VIOLATION Expected statement \'parent node index = child node index / 2\' or \'parent node index = parent node index / 2\' inside a loop
+                    END_IF
+                END_IF
+            END_IF
+        END_IF
+    END_IF
+END_STATE
+
+

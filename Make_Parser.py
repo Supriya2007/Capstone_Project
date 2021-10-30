@@ -147,7 +147,10 @@ while(True):
                 var2_name = get_next_word()
                 py_cmd = "%sif (%s <= %s) :\n"%(cur_tab, var_name, var2_name)    
             #Add LESS_EQUAL, GREATER_EQUAL later   
-                
+            elif(cond == "IS_TRUE"):
+                py_cmd = "%sif (%s) :\n"%(cur_tab, var_name)    
+            elif(cond == "IS_FALSE"):
+                 py_cmd = "%sif (not %s) :\n"%(cur_tab, var_name)               
             cur_tab+=tab  
         elif(cmd=="ELSE"):
             #cur_tab-=tab
