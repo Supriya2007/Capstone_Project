@@ -3,13 +3,18 @@ struct node
 	int key_;
 	struct node* link_;
 };
+struct list
+{
+	struct  node *head_;
+};
 
-void init(struct list_t *ptr_list)
+
+void init(struct list *ptr_list)
 {
 	ptr_list->head_ = NULL;
 }
 
-void deinit(struct list_t *ptr_list)
+void deinit(struct list *ptr_list)
 {
 	struct node * prev = NULL;
 	struct node * pres = ptr_list->head_;
@@ -27,7 +32,7 @@ void deinit(struct list_t *ptr_list)
 // insert in the beginning
 // insert in middle
 // insert in end
-void insert(struct list_t *ptr_list, int key)
+void insert(struct list *ptr_list, int key)
 {
 	struct node * temp ;
     struct node * prev = NULL;
@@ -63,8 +68,8 @@ void insert(struct list_t *ptr_list, int key)
 	}
 }
 
-// void delete(struct list_t *ptr_list, int key); // not implemented
-void disp(struct list_t *ptr_list)
+// void delete(struct list *ptr_list, int key); // not implemented
+void disp(struct list *ptr_list)
 {
 	struct node * temp = ptr_list->head_;
 	while(temp)

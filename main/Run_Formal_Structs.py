@@ -58,6 +58,7 @@ lib_rules = {
 'Check if list iterator is used': 'list_iterator_fs.txt',
 'Check if bottom-up dynamic programming has been used' : 'dp_fs.txt',
 'Check if heap is used' : 'heap_fs.txt',
+'Check if top-down dynamic programming(Memoization) has been used' : 'memoization_fs.txt',
 }
 
 #Even code files without errors inserted into violations. Will have an empty list as value

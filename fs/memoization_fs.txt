@@ -5,6 +5,7 @@ STATE before_parse
     CREATE recursion_used 0
     CREATE function_line_number 1
     CREATE dp_used 0
+    CREATE memoization_used 0
     CREATE array_dict {}
 END_STATE
 
@@ -91,6 +92,7 @@ STATE function_end
     USE_GLOBAL function_line_number
     USE_GLOBAL dp_used
     USE_GLOBAL array_dict
+    USE_GLOBAL memoization_used
     SET function_line_number LINE
     IF EXP.count(NAME) GREATER_THAN 1
         SET recursion_used 1
@@ -102,18 +104,12 @@ STATE function_end
                     IF array_dict[i]["found_array_rhs"] EQUALTO 1
                         SET dp_used 1
                     END_IF
+                    IF array_dict[i]["found_array_rhs"] EQUALTO 0
+                            SET memoization_used 1
+                    END_IF
                 END_IF
             END_FOR
         END_IF
-    END_IF
-    IF found_loop EQUALTO 1
-        FOR i IN array_dict
-            IF array_dict[i]["found_array_lhs"] EQUALTO 1
-                IF array_dict[i]["found_array_rhs"] EQUALTO 1
-                    SET dp_used 1
-                END_IF
-            END_IF
-        END_FOR
     END_IF
     SET array_names []
     SET found_if 0
@@ -123,8 +119,8 @@ STATE function_end
 END_STATE
 
 STATE after_parse
-    IF dp_used EQUALTO 0
+    IF memoization_used EQUALTO 0
         PRINT function_line_number
-        VIOLATION Dynamic programming not used
+        VIOLATION Memoization not used
     END_IF
 END_STATE
