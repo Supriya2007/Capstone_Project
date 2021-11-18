@@ -60,6 +60,7 @@ lib_rules = {
 'Check if heap is used' : 'heap_fs.txt',
 'Check if top-down dynamic programming(Memoization) has been used' : 'memoization_fs.txt',
 'Check if stack is used' : 'stack_fs.txt',
+'Check if graph is used' : 'graph_fs.txt',
 }
 
 #Even code files without errors inserted into violations. Will have an empty list as value
