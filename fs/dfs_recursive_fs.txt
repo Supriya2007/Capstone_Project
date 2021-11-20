@@ -1,0 +1,254 @@
+STATE before_parse
+    CREATE array_names []
+    CREATE depth 0
+    CREATE inside_loop 0
+    CREATE found_graph 0
+    CREATE function_line_number 1
+    CREATE struct_name None
+    CREATE sel_ref_struct None
+    CREATE ptr None
+    CREATE found_self_ref_struct 0
+    CREATE graph_used 0
+    CREATE newnode None
+    CREATE found_loop 0
+    CREATE found_if 0
+    CREATE inside_loop_dfs 0
+    CREATE recursion_found 0
+    CREATE lhs_variables []
+    CREATE count 0
+    CREATE dfs_used 0
+END_STATE
+
+STATE type_specifier
+    USE_GLOBAL struct_name
+    IF EXP[0] EQUALTO "struct"
+        SET struct_name NAME
+    END_IF
+END_STATE
+
+STATE struct_declaration_list
+    USE_GLOBAL struct_name
+    USE_GLOBAL ptr
+    USE_GLOBAL sel_ref_struct
+    USE_GLOBAL found_self_ref_struct
+    IF struct_name IN EXP
+        CREATE ind EXP.index(struct_name)
+        IF EXP[ind+1] EQUALTO '*'
+            SET ptr EXP[ind+2]
+            SET sel_ref_struct struct_name
+            SET found_self_ref_struct 1
+        END_IF
+    END_IF
+END_STATE
+
+STATE declaration_stmt
+    USE_GLOBAL array_names
+    IF '=' IN EXP
+        SET ind EXP.index('=')
+    ELSE
+        SET ind len(EXP)
+    END_IF
+    IF EXP[0:ind].count('*') EQUALTO 2
+        FOR i IN NAME
+            APPEND array_names i
+        END_FOR
+    END_IF
+    IF EXP[0:ind].count('*') EQUALTO 1
+        IF EXP[0:ind].count('[') EQUALTO 1
+            FOR i IN NAME
+                APPEND array_names i
+            END_FOR
+        END_IF
+    END_IF
+    IF EXP[0:ind].count('[') EQUALTO 2
+        FOR i IN NAME
+            APPEND array_names i
+        END_FOR
+    END_IF
+END_STATE
+
+STATE if_stmt
+    USE_GLOBAL found_if
+    USE_GLOBAL inside_loop_dfs
+    USE_GLOBAL lhs_variables
+    USE_GLOBAL count 
+    FOR i IN lhs_variables
+        SET count count+1
+    END_FOR
+    IF 'if' IN EXP
+        IF inside_loop_dfs EQUALTO 1
+            SET found_if 1
+        END_IF
+    END_IF
+END_STATE
+
+STATE function_header
+    USE_GLOBAL array_names
+    FOR i IN FUNC_PARAMS
+        IF '*' IN i 
+            APPEND array_names i[-1]
+        END_IF
+        IF '[' IN i 
+            APPEND array_names i[-1]
+        END_IF
+    END_FOR
+END_STATE
+
+STATE loop_header
+    USE_GLOBAL depth
+    USE_GLOBAL inside_loop
+    USE_GLOBAL found_loop
+    USE_GLOBAL inside_loop_dfs
+    SET inside_loop 1
+	SET depth depth+1
+    IF 'while' IN EXP
+        SET found_loop 1
+        SET inside_loop_dfs 1
+    END_IF
+    IF 'for' IN EXP
+        SET found_loop 1
+        SET inside_loop_dfs 1
+    END_IF
+END_STATE
+
+STATE loop_body
+    USE_GLOBAL depth
+    USE_GLOBAL inside_loop
+    USE_GLOBAL inside_loop_dfs
+    SET depth depth-1
+    IF depth EQUALTO 0
+        SET inside_loop 0
+    END_IF
+    SET inside_loop_dfs 0
+END_STATE
+
+STATE initialized_declaration
+    USE_GLOBAL depth
+    USE_GLOBAL array_names
+    USE_GLOBAL found_graph
+    USE_GLOBAL graph_used
+    USE_GLOBAL newnode
+    USE_GLOBAL lhs_variables
+    IF len(LHS) GREATER_THAN 0
+        APPEND lhs_variables LHS
+    END_IF
+    FOR i IN array_names
+        IF i IN LHS
+            IF depth EQUALTO 2
+                SET found_graph 1
+            END_IF
+        END_IF
+    END_FOR
+    IF 'malloc' IN RHS
+        SET newnode NAME
+    END_IF
+    IF newnode IN LHS
+        IF '->' IN LHS
+            IF ptr IN LHS
+                SET graph_used graph_used+1
+            END_IF
+        END_IF
+    END_IF
+    IF newnode IN RHS
+        SET graph_used graph_used+1
+    ELSE 
+        IF newnode EQUALTO RHS
+            SET graph_used graph_used+1
+        END_IF
+    END_IF
+END_STATE
+
+STATE variable_assignments
+    USE_GLOBAL depth
+    USE_GLOBAL array_names
+    USE_GLOBAL found_graph
+    USE_GLOBAL graph_used
+    USE_GLOBAL newnode
+    USE_GLOBAL lhs_variables
+    IF len(LHS) GREATER_THAN 0
+        APPEND lhs_variables LHS
+    END_IF
+    FOR i IN array_names
+        IF i IN LHS
+            IF depth EQUALTO 2
+                SET found_graph 1
+            END_IF
+        END_IF
+    END_FOR
+    IF 'malloc' IN RHS
+        SET newnode NAME
+    END_IF
+    IF newnode IN LHS
+        IF '->' IN LHS
+            IF ptr IN LHS
+                SET graph_used graph_used+1
+            END_IF
+        END_IF
+    END_IF
+    IF newnode IN RHS
+        SET graph_used graph_used+1
+    ELSE 
+        IF newnode EQUALTO RHS
+            SET graph_used graph_used+1
+        END_IF
+    END_IF
+END_STATE
+
+STATE function_end
+    USE_GLOBAL depth
+    USE_GLOBAL array_names
+    USE_GLOBAL inside_loop
+    USE_GLOBAL function_line_number
+    USE_GLOBAL newnode
+    USE_GLOBAL found_loop
+    USE_GLOBAL found_if
+    USE_GLOBAL inside_loop_dfs
+    USE_GLOBAL recursion_found
+    USE_GLOBAL lhs_variables
+    USE_GLOBAL count
+    USE_GLOBAL dfs_used
+    SET function_line_number LINE
+    IF EXP.count(NAME) GREATER_THAN 1
+        SET recursion_found 1
+    END_IF
+    IF recursion_found EQUALTO 1
+        IF found_if EQUALTO 1
+            IF count GREATER_THAN 0
+                SET dfs_used 1
+            END_IF
+        END_IF
+    END_IF
+    SET depth 0
+    SET array_names []
+    SET inside_loop 0
+    SET newnode None
+    SET found_loop 0
+    SET found_if 0
+    SET inside_loop_dfs 0
+    SET recursion_found 0
+    SET lhs_variables []
+    SET count 0
+END_STATE
+
+STATE after_parse
+    IF dfs_used EQUALTO 0
+        IF found_graph EQUALTO 0
+            IF found_self_ref_struct EQUALTO 0
+                PRINT function_line_number
+                VIOLATION Graph not used
+            ELSE
+                IF graph_used LESS_EQUAL 1 
+                    PRINT function_line_number
+                    VIOLATION Graph not used
+                ELSE
+                    PRINT function_line_number
+                    VIOLATION Recursive dfs not used
+                END_IF
+            END_IF
+        END_IF
+        IF found_graph EQUALTO 1
+            PRINT function_line_number
+            VIOLATION Recursive dfs not used
+        END_IF
+    END_IF
+END_STATE
