@@ -62,6 +62,7 @@ lib_rules = {
 'Check if stack is used' : 'stack_fs.txt',
 'Check if indirect recursion is used' : 'indirect_recursion_fs.txt',
 'Check if graph is used' : 'graph_fs.txt',
+'Check if recursive dfs has been used' : 'dfs_recursive_fs.txt'
 }
 
 #Even code files without errors inserted into violations. Will have an empty list as value
