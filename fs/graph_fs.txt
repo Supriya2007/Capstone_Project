@@ -1,0 +1,180 @@
+STATE before_parse
+    CREATE array_names []
+    CREATE depth 0
+    CREATE inside_loop 0
+    CREATE found_graph 0
+    CREATE function_line_number 1
+    CREATE struct_name None
+    CREATE sel_ref_struct None
+    CREATE ptr None
+    CREATE found_self_ref_struct 0
+    CREATE graph_used 0
+    CREATE newnode None
+END_STATE
+
+STATE type_specifier
+    USE_GLOBAL struct_name
+    IF EXP[0] EQUALTO "struct"
+        SET struct_name NAME
+    END_IF
+END_STATE
+
+STATE struct_declaration_list
+    USE_GLOBAL struct_name
+    USE_GLOBAL ptr
+    USE_GLOBAL sel_ref_struct
+    USE_GLOBAL found_self_ref_struct
+    IF struct_name IN EXP
+        CREATE ind EXP.index(struct_name)
+        IF EXP[ind+1] EQUALTO '*'
+            SET ptr EXP[ind+2]
+            SET sel_ref_struct struct_name
+            SET found_self_ref_struct 1
+        END_IF
+    END_IF
+END_STATE
+
+STATE declaration_stmt
+    USE_GLOBAL array_names
+    IF '=' IN EXP
+        SET ind EXP.index('=')
+    ELSE
+        SET ind len(EXP)
+    END_IF
+    IF EXP[0:ind].count('*') EQUALTO 2
+        FOR i IN NAME
+            APPEND array_names i
+        END_FOR
+    END_IF
+    IF EXP[0:ind].count('*') EQUALTO 1
+        IF EXP[0:ind].count('[') EQUALTO 1
+            FOR i IN NAME
+                APPEND array_names i
+            END_FOR
+        END_IF
+    END_IF
+    IF EXP[0:ind].count('[') EQUALTO 2
+        FOR i IN NAME
+            APPEND array_names i
+        END_FOR
+    END_IF
+END_STATE
+
+STATE function_header
+    USE_GLOBAL array_names
+    FOR i IN FUNC_PARAMS
+        IF '*' IN i 
+            APPEND array_names i[-1]
+        END_IF
+        IF '[' IN i 
+            APPEND array_names i[-1]
+        END_IF
+    END_FOR
+END_STATE
+
+STATE loop_header
+    USE_GLOBAL depth
+    USE_GLOBAL inside_loop
+    SET inside_loop 1
+	SET depth depth+1
+END_STATE
+
+STATE loop_body
+    USE_GLOBAL depth
+    USE_GLOBAL inside_loop
+    SET depth depth-1
+    IF depth EQUALTO 0
+        SET inside_loop 0
+    END_IF
+END_STATE
+
+STATE initialized_declaration
+    USE_GLOBAL depth
+    USE_GLOBAL array_names
+    USE_GLOBAL found_graph
+    USE_GLOBAL graph_used
+    USE_GLOBAL newnode
+    FOR i IN array_names
+        IF i IN LHS
+            IF depth EQUALTO 2
+                SET found_graph 1
+            END_IF
+        END_IF
+    END_FOR
+    IF 'malloc' IN RHS
+        SET newnode NAME
+    END_IF
+    IF newnode IN LHS
+        IF '->' IN LHS
+            IF ptr IN LHS
+                SET graph_used graph_used+1
+            END_IF
+        END_IF
+    END_IF
+    IF newnode IN RHS
+        SET graph_used graph_used+1
+    ELSE 
+        IF newnode EQUALTO RHS
+            SET graph_used graph_used+1
+        END_IF
+    END_IF
+END_STATE
+
+STATE variable_assignments
+    USE_GLOBAL depth
+    USE_GLOBAL array_names
+    USE_GLOBAL found_graph
+    USE_GLOBAL graph_used
+    USE_GLOBAL newnode
+    FOR i IN array_names
+        IF i IN LHS
+            IF depth EQUALTO 2
+                SET found_graph 1
+            END_IF
+        END_IF
+    END_FOR
+    IF 'malloc' IN RHS
+        SET newnode NAME
+    END_IF
+    IF newnode IN LHS
+        IF '->' IN LHS
+            IF ptr IN LHS
+                SET graph_used graph_used+1
+            END_IF
+        END_IF
+    END_IF
+    IF newnode IN RHS
+        SET graph_used graph_used+1
+    ELSE 
+        IF newnode EQUALTO RHS
+            SET graph_used graph_used+1
+        END_IF
+    END_IF
+END_STATE
+
+STATE function_end
+    USE_GLOBAL depth
+    USE_GLOBAL array_names
+    USE_GLOBAL inside_loop
+    USE_GLOBAL function_line_number
+    USE_GLOBAL newnode
+    SET function_line_number LINE
+    SET depth 0
+    SET array_names []
+    SET inside_loop 0
+    SET newnode None
+END_STATE
+
+STATE after_parse
+    IF found_graph EQUALTO 0
+        IF found_self_ref_struct EQUALTO 0
+            PRINT function_line_number
+            VIOLATION Graph not used
+        ELSE
+            IF graph_used LESS_EQUAL 1 
+                PRINT function_line_number
+                VIOLATION Graph not used
+            END_IF
+        END_IF
+    END_IF
+END_STATE

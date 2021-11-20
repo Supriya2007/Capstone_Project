@@ -106,7 +106,8 @@ def p_postfix_expression(p):
         p[0] = {}
         p[0]['exp'] = p[1]['exp'] + [ p[2] ] + p[3]['exp'] + [p[4]]
         p[0]['line'] = LINE
-        p[0]['name'] = p[1]['name']
+        if 'name' in p[1]:
+            p[0]['name'] = p[1]['name']
     else:
         print("ERROR in p_postfix_expression")
     #print("postfix exp:", p[0])
