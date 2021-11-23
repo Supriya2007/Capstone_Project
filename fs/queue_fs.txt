@@ -21,6 +21,7 @@ STATE before_parse
     CREATE loop_count 0
     CREATE rear_set_to_new False
     CREATE rear_updated False
+    CREATE func_params []
     COMMENT CREATE new_node_next_is_null False
 END_STATE
 
@@ -226,7 +227,18 @@ STATE variable_assignments
                     END_IF
                 END_IF
             END_IF
-            
+        END_IF
+        
+        IF q_indices IS_FALSE
+            IF '+' IN EXP
+                IF '1' IN RHS
+                    FOR param IN func_params
+                        IF NAME IN param
+                            SET deletion_at_begin_func cur_func_name
+                        END_IF
+                    END_FOR
+                END_IF
+            END_IF
         END_IF
         
     END_IF
@@ -240,6 +252,7 @@ STATE function_header
     USE_GLOBAL loop_count
     USE_GLOBAL rear_set_to_new
     USE_GLOBAL rear_updated
+    USE_GLOBAL func_params
     SET cur_func_name NAME
     IF NAME EQUALTO 'main'
         SET main_func_lineno LINE
@@ -250,6 +263,7 @@ STATE function_header
     SET new_node_next_is_null False
     SET rear_set_to_new False
     SET rear_updated False
+    SET func_params ORDERED_NAMES
 END_STATE
 
 
@@ -349,13 +363,17 @@ STATE function_end
     IF var_indexed IS_TRUE
         IF var_incremented IS_TRUE
             IF var_incremented IN var_indexed
-                FOR each IN q_indices
-                    IF each IN var_incremented
-                        IF loop_count LESS_EQUAL 1
-                            SET insertion_at_end_func NAME
-                            BREAK
+                IF q_indices IS_FALSE
+                    SET insertion_at_end_func NAME
+                ELSE
+                    FOR each IN q_indices
+                        IF each IN var_incremented
+                            IF loop_count LESS_EQUAL 1
+                                SET insertion_at_end_func NAME
+                                BREAK
+                            END_IF
                         END_IF
-                    END_IF
+                    END_FOR
                 END_IF
             END_IF
         END_IF
