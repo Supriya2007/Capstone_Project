@@ -33,6 +33,8 @@ def p_const_or_parenthesis(p):
         LINE = p.lineno(1)
         p[0]['line'] = p[2]['line']
         p[0]['exp'] = [ p[1] ] + p[2]['exp'] + [ p[3] ]
+        if('name' in p[2]):
+            p[0]['name'] = p[2]['name']
     else:
         print("ERROR in p_const_or_parenthesis")
     #print("p_const_or_parenthesis:",p[0])
@@ -92,8 +94,9 @@ def p_postfix_expression(p):
         LINE = p.lineno(2)
         p[0] = {}
         p[0]['line'] = LINE
-        p[0]['name'] = p[1]['exp']
         p[0]['exp'] = p[1]['exp'] + [p[2]]
+        if('name' in p[1]):
+             p[0]['name'] = p[1]['name']
     elif(len(p)==4): #DOT and PTR (->)
         LINE = p.lineno(2)
         p[0] = {}
@@ -101,6 +104,7 @@ def p_postfix_expression(p):
         p[0]['rhs'] = [p[3]]
         p[0]['exp'] = p[0]['lhs'] + [ p[2] ] + p[0]['rhs']
         p[0]['line'] = LINE
+        p[0]['name'] = p[3] #setting name to var following '->'
     elif(len(p)==5): #ARRAY
         LINE = p.lineno(2)
         p[0] = {}
@@ -143,6 +147,7 @@ def p_unary_expression(p):
     | SIZEOF unary_expression
     | SIZEOF L_PAREN type_name R_PAREN
     '''
+    NAME = ""
     if(len(p) == 2):
         p[0] = p[1] #NAME is empty in this case
     elif(len(p) == 3):
@@ -151,6 +156,8 @@ def p_unary_expression(p):
         #line can also be got as p.lineno(1). Will be the same.
         #p[0]['name'] = p[2]['exp']
         p[0]['exp'] = [ p[1] ] + p[2]['exp']
+        if('name' in p[2]):
+            p[0]['name'] = p[2]['name']
     elif(len(p) == 5):
         p[0] = {}
         p[0]['line'] = p[3]['line']
@@ -158,8 +165,10 @@ def p_unary_expression(p):
     else:
         print("ERROR in p_unary_expression")
     #print("p_unary_expression:", p[0])    
-        
-    NAME = p[1] 
+    if('name' in p[0]):
+        NAME = p[0]['name']
+        #print("name =", NAME)
+    EXP = p[0]['exp']
     #Can handle name better, now that we have attribute grammar - check
     #ADD
     

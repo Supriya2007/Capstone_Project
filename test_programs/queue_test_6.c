@@ -1,10 +1,8 @@
 
-
 //linked list impl
 //only front pointer
 //enqueue - loop to get last node
 //dequeue - l->head = l->head->next
-//dequeue does not free, returns first node
 
 struct Node{
     int val;
@@ -13,12 +11,14 @@ struct Node{
 
 struct Queue{
     struct Node* front;
+    struct Node* rear;
 };
 
 struct Queue* createQueue(void){
     struct Queue* q = malloc(sizeof(struct Queue)); 
     if (q != NULL)
         q->front = NULL; 
+        q->rear = NULL;
     return q;        
 }
 
@@ -27,23 +27,30 @@ void enQueue(struct Queue *q, int data){
 	struct Node* cur = q->front;
 	new_node->val = data;
 	new_node->link = NULL;
-	if(!q->front){
-	    q->front = new_node; 
-	}
-	else{
-	    while(cur->link){
-	        cur = cur->link;
-	    }
-	    cur->link = new_node;
-	}
+	
+	if (q->rear == NULL) 
+    { 
+        q->front = q->rear = new_node; 
+    } 
+    else{
+        q->rear->link = new_node; 
+        q->rear = new_node; 
+    }
 }
 
-struct Node* deQueue(struct Queue *q){
+int deQueue(struct Queue *q){
     struct Node* first = q->front;
-    if(q->front){
-        q->front = q->front->link;
+    int val=-1;
+    if(!q->front){
+        return -1;
     }
-    return first;
+    q->front = q->front->link;
+    val = first->val;
+    free(first);    
+    if(q->front == NULL){
+            q->rear = NULL;
+    }
+    return val;
 }
 
 void show_queue (struct Queue *q)
@@ -73,13 +80,13 @@ int main(){
     show_queue(q);
     
     printf("dequeue:\n");
-    deQueue(q);
+    val = deQueue(q);
     show_queue(q);
-    deQueue(q);
+    val = deQueue(q);
     show_queue(q);
-    deQueue(q);
+    val = deQueue(q);
     show_queue(q);
-    deQueue(q);
+    val = deQueue(q);
     show_queue(q);
 }
 

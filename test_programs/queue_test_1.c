@@ -1,5 +1,9 @@
-#include <stdio.h>
-#include <stdlib.h>
+
+
+//linked list impl
+//only front pointer
+//enqueue - loop to get last node
+//dequeue - l->head = l->head->next
 
 struct Node{
     int val;

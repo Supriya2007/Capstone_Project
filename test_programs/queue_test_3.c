@@ -1,5 +1,6 @@
-#include <stdio.h>
-#include <stdlib.h>
+
+
+//linked list impl
 //rough test file
 //test-1: Comment Node struct
 //test-2: Comment Queue struct

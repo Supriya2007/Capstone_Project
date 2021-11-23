@@ -1,3 +1,4 @@
+//linked list impl
 //Stack used
 
 struct StackNode{
