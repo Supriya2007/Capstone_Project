@@ -303,6 +303,7 @@ def p_equality_expression(p):
         p[0]['rhs'] = p[3]['exp']
         p[0]['exp'] = p[0]['lhs'] + [ p[2] ] + p[0]['rhs']
     #print("p_equality_expression:", p[0])
+    EXP = p[0]['exp']
     #ADD   
 
 def p_equality_exp_lhs(p):
