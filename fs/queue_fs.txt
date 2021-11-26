@@ -1,0 +1,392 @@
+STATE before_parse
+    CREATE self_ref_struct ""
+    CREATE self_ref_ptr ""
+    CREATE key_name ""
+    COMMENT Assuming just one self-refer pointer and one key in list node
+    CREATE new_node_name ""
+    CREATE last_node_name ""
+    CREATE insertion_at_end_func ""
+    CREATE q_struct_name ""
+    CREATE q_head_name ""
+    CREATE q_tail_name ""
+    CREATE deletion_at_begin_func ""
+    CREATE deq_params []
+    CREATE enq_params []
+    CREATE cur_func_name ""
+    CREATE main_func_lineno -1
+    CREATE common_arg False
+    CREATE var_incremented ""
+    CREATE var_indexed ""
+    CREATE q_indices []
+    CREATE loop_count 0
+    CREATE rear_set_to_new False
+    CREATE rear_updated False
+    CREATE func_params []
+    COMMENT CREATE new_node_next_is_null False
+END_STATE
+
+STATE structures_and_unions
+    USE_GLOBAL self_ref_struct
+    USE_GLOBAL self_ref_ptr
+    USE_GLOBAL key_name
+    USE_GLOBAL q_struct_name
+    USE_GLOBAL q_head_name
+    USE_GLOBAL q_indices
+    USE_GLOBAL q_tail_name
+    IF 'struct' IN EXP
+        COMMENT Checking only struct declarations, not unions.
+        IF self_ref_struct EQUALTO ""
+            FOR memb IN STRUCT_MEMBERS
+                SET t "type"
+                SET d "declarators"
+                COMMENT 'INDEX memb "type"' is invalid as memb_"type" is not a valid identifier
+                INDEX memb t
+                INDEX memb d
+                IF self_ref_ptr NOTEQUALTO ""
+                    FOR i IN range(len(memb_d))
+                        INDEX memb_d i
+                        IF memb_d_i.isidentifier() EQUALTO True
+                            SET key_name memb_d_i
+                            BREAK
+                        END_IF
+                    END_FOR
+                END_IF
+                IF NAME IN memb_t
+                    SET self_ref_struct NAME
+                    FOR i IN range(len(memb_d))
+                        INDEX memb_d i
+                        IF memb_d_i.isidentifier() EQUALTO True
+                            SET self_ref_ptr memb_d_i
+                            BREAK
+                        END_IF
+                    END_FOR
+                END_IF
+            END_FOR
+            
+            IF self_ref_struct EQUALTO ""
+                FOR memb IN STRUCT_MEMBERS
+                    IF '*' IN memb['declarators']
+                        SET q_struct_name NAME
+                    END_IF
+                    IF '[' IN memb['declarators']
+                        IF ']' IN memb['declarators']
+                        SET q_struct_name NAME
+                        END_IF
+                    END_IF
+                END_FOR
+                
+                IF q_struct_name IS_TRUE
+                    FOR memb IN STRUCT_MEMBERS
+                        IF 'int' IN memb['type']
+                            IF '*' NOTIN memb['declarators']
+                                FOR memb_var IN memb['declarators']
+                                    IF memb_var.isidentifier() IS_TRUE
+                                        APPEND q_indices memb_var
+                                    END_IF
+                                END_FOR
+                            END_IF
+                        END_IF
+                    END_IF
+                END_IF
+            END_IF
+            
+        ELSE
+            IF q_struct_name EQUALTO ""
+                IF self_ref_struct NOTEQUALTO ""
+                    FOR memb IN STRUCT_MEMBERS
+                        SET t "type"
+                        SET d "declarators"
+                        INDEX memb t
+                        INDEX memb d
+                        IF self_ref_struct IN memb_t
+                            SET q_struct_name NAME
+                            FOR i IN range(len(memb_d))
+                                INDEX memb_d i
+                                IF memb_d_i.isidentifier() EQUALTO True
+                                    SET q_head_name memb_d_i
+                                    BREAK
+                                END_IF
+                            END_FOR
+                            BREAK
+                        END_IF
+                    END_FOR
+                END_IF
+                
+                IF q_struct_name NOTEQUALTO ""
+                    COMMENT Current struct is queue struct, setting q_tail_name
+                    FOR memb IN STRUCT_MEMBERS
+                        SET t "type"
+                        SET d "declarators"
+                        INDEX memb t
+                        INDEX memb d
+                        IF self_ref_struct IN memb_t
+                            FOR i IN range(len(memb_d))
+                                INDEX memb_d i
+                                IF memb_d_i.isidentifier() EQUALTO True
+                                    IF memb_d_i NOTEQUALTO q_head_name
+                                        SET q_tail_name memb_d_i
+                                    END_IF
+                                END_IF
+                            END_FOR
+                        END_IF
+                    END_FOR
+                END_IF
+            END_IF
+        END_IF
+    END_IF
+END_STATE
+
+STATE variable_assignments
+    USE_GLOBAL new_node_name
+    USE_GLOBAL insertion_at_end_func
+    USE_GLOBAL deletion_at_begin_func
+    USE_GLOBAL var_incremented
+    USE_GLOBAL var_indexed
+    USE_GLOBAL last_node_name
+    USE_GLOBAL rear_set_to_new
+    USE_GLOBAL rear_updated
+    IF '=' IN EXP
+        IF new_node_name EQUALTO ""
+            IF 'malloc' IN RHS
+                SET new_node_name NAME    
+            ELSE
+                IF 'calloc' IN RHS
+                    SET new_node_name NAME
+                END_IF
+            END_IF  
+        END_IF 
+        IF last_node_name IS_TRUE
+            IF last_node_name IN LHS
+                IF '->' IN LHS
+                    IF self_ref_ptr IN LHS
+                        IF new_node_name IN RHS
+                            SET insertion_at_end_func cur_func_name
+                        END_IF
+                    END_IF
+                END_IF
+            END_IF
+        END_IF
+        
+        IF q_tail_name IN LHS
+            IF new_node_name IN RHS
+                IF self_ref_ptr IN LHS
+                    SET rear_set_to_new True
+                END_IF
+            END_IF
+        END_IF
+        
+        IF new_node_name IN RHS
+            IF self_ref_ptr NOTIN LHS
+                IF q_tail_name IN LHS
+                    SET rear_updated True
+                END_IF
+            END_IF
+        END_IF
+        
+        IF '->' IN LHS
+            IF q_head_name IN LHS
+                IF q_head_name IN RHS
+                    IF '->' IN RHS
+                        IF self_ref_ptr IN RHS
+                            SET deletion_at_begin_func cur_func_name
+                        END_IF
+                    END_IF
+                END_IF
+            END_IF
+        END_IF
+        
+        IF var_incremented IS_FALSE
+            IF NAME IN RHS
+                IF '+' IN EXP
+                    IF '1' IN RHS
+                        SET var_incremented "".join(LHS)
+                    END_IF
+                END_IF
+            END_IF
+        END_IF
+        
+        IF '[' IN LHS
+            IF ']' IN LHS
+                SET m re.search(r"\[(.*)\]","".join(LHS))
+                IF m IS_TRUE
+                    SET var_indexed m.groups()[0]
+                END_IF
+            END_IF
+        END_IF
+        
+        IF '->' IN LHS
+            IF '+' IN EXP
+                IF '1' IN RHS
+                    IF q_head_name IN LHS
+                        SET deletion_at_begin_func cur_func_name
+                    ELSE
+                        IF set(LHS)-set(q_indices) IS_TRUE
+                            COMMENT Check if there is some var in q_indices thats also there on LHS
+                            SET deletion_at_begin_func cur_func_name
+                        END_IF
+                    END_IF
+                END_IF
+            END_IF
+        END_IF
+        
+        IF q_indices IS_FALSE
+            IF '+' IN EXP
+                IF '1' IN RHS
+                    FOR param IN func_params
+                        IF NAME IN param
+                            SET deletion_at_begin_func cur_func_name
+                        END_IF
+                    END_FOR
+                END_IF
+            END_IF
+        END_IF
+        
+    END_IF
+END_STATE
+
+STATE function_header
+    USE_GLOBAL cur_func_name
+    USE_GLOBAL main_func_lineno
+    USE_GLOBAL var_incremented
+    USE_GLOBAL var_indexed
+    USE_GLOBAL loop_count
+    USE_GLOBAL rear_set_to_new
+    USE_GLOBAL rear_updated
+    USE_GLOBAL func_params
+    SET cur_func_name NAME
+    IF NAME EQUALTO 'main'
+        SET main_func_lineno LINE
+    END_IF
+    SET var_incremented ""
+    SET var_indexed ""
+    SET loop_count 0
+    SET new_node_next_is_null False
+    SET rear_set_to_new False
+    SET rear_updated False
+    SET func_params ORDERED_NAMES
+END_STATE
+
+
+STATE initialized_declaration
+    USE_GLOBAL new_node_name
+    IF 'malloc' IN RHS
+        SET new_node_name NAME    
+    ELSE
+        IF 'calloc' IN RHS
+            SET new_node_name NAME
+        END_IF
+    END_IF  
+END_STATE
+
+STATE function_call
+    USE_GLOBAL insertion_at_end_func
+    USE_GLOBAL deletion_at_begin_func
+    USE_GLOBAL enq_params
+    USE_GLOBAL deq_params
+    USE_GLOBAL common_arg
+    IF NAME EQUALTO insertion_at_end_func
+        SET enq_params FUNC_ARGS
+        IF deq_params IS_TRUE
+            IF set(enq_params)-set(deq_params) NOTEQUALTO enq_params
+                COMMENT enQueue() and deQueue() have a common argument
+                SET common_arg True
+            END_IF
+        END_IF
+    END_IF   
+    IF NAME EQUALTO deletion_at_begin_func  
+        SET deq_params FUNC_ARGS
+        IF enq_params IS_TRUE
+            IF set(enq_params)-set(deq_params) NOTEQUALTO enq_params
+                COMMENT enQueue() and deQueue() have a common argument
+                SET common_arg True
+            END_IF
+        END_IF
+    END_IF
+END_STATE
+
+
+STATE loop_statement
+    USE_GLOBAL self_ref_ptr
+    USE_GLOBAL last_node_name
+    USE_GLOBAL deletion_at_begin_func
+    USE_GLOBAL loop_count
+    SET m re.search(r"(.*)=(\1)->{}".format(self_ref_ptr),"".join(EXP))
+    IF m IS_TRUE
+        SET last_node_name m.groups()[0]
+    END_IF
+    SET m re.search(r"(.*)\[(.*)\]=(\1)\[(\2)\+1\]","".join(EXP))
+    IF m IS_TRUE
+        SET deletion_at_begin_func cur_func_name
+    END_IF
+    SET loop_count loop_count+1
+END_STATE
+
+STATE after_parse
+    IF insertion_at_end_func IS_FALSE
+        PRINT main_func_lineno
+        VIOLATION Function for insertion at end not found
+    END_IF
+    IF deletion_at_begin_func IS_FALSE
+            PRINT main_func_lineno
+            VIOLATION Function for deletion at beginning not found
+        END_IF
+    END_IF
+    
+    IF insertion_at_end_func IS_TRUE
+        IF deletion_at_begin_func IS_TRUE
+            IF common_arg IS_FALSE
+                PRINT main_func_lineno
+                VIOLATION Could not find a variable on which insertion at end AND deletion at beginning are performed
+            END_IF
+        END_IF
+    END_IF
+END_STATE
+
+
+STATE unary_expression
+    USE_GLOBAL var_incremented
+    USE_GLOBAL deletion_at_begin_func
+    IF '++' IN EXP
+        SET var_incremented NAME
+    END_IF
+    
+    IF '++' IN EXP
+        IF q_head_name IN EXP
+            SET deletion_at_begin_func cur_func_name
+        END_IF
+    END_IF
+    
+END_STATE
+
+STATE function_end
+    USE_GLOBAL insertion_at_end_func
+    IF var_indexed IS_TRUE
+        IF var_incremented IS_TRUE
+            IF var_incremented IN var_indexed
+                IF q_indices IS_FALSE
+                    SET insertion_at_end_func NAME
+                ELSE
+                    FOR each IN q_indices
+                        IF each IN var_incremented
+                            IF loop_count LESS_EQUAL 1
+                                SET insertion_at_end_func NAME
+                                BREAK
+                            END_IF
+                        END_IF
+                    END_FOR
+                END_IF
+            END_IF
+        END_IF
+    END_IF
+    IF rear_set_to_new IS_TRUE
+        IF rear_updated IS_TRUE
+            SET insertion_at_end_func NAME
+        END_IF
+    END_IF
+END_STATE
+
+
+
+
+
+
