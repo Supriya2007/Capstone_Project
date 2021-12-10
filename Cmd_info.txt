@@ -1,8 +1,101 @@
+STATE <state>
+Tells for which program element the statements should be applied to
+
+END_STATE
+Marks end of STATE clause
+
 CREATE <var_name> <initial_val>
 Create variable
+<var_name> = <initial_val>
 
-SET <name> <value>
+SET <name> <value> 
 Setting value for a variable
+<name> = <value>
+
+GLOBAL_SET <name> <value> 
+Setting value for a global variable
+global <name>
+<name> = <value>
+
+USE_GLOBAL <name>
+Declares a variable as global
+global <name>
 
 PRINT <value>
-Prints a single value.
+Prints a single value. May be a variable or a constant.
+print(<value>)
+
+VIOLATION <msg>
+Flags the violation. Prints the string provided.
+
+IF <var> EQUALTO <value>
+Add if condition of form if( <var> == <value> )
+if( <var> == <value> ):
+cur_tab=cur_tab+tab
+
+IF <var> NOTEQUALTO <value>
+Add if condition of form if( <var> != <value> )
+if( <var> != <value> ):
+cur_tab=cur_tab+tab
+
+IF <var> IN <list>
+Add if condition of form if( <var> in <list> )
+if( <var> in <list> ):
+cur_tab=cur_tab+tab
+ 
+IF <var> NOTIN <list>
+Add if condition of form if( <var> not in <list> )
+if( <var> not in <list> )
+cur_tab=cur_tab+tab
+
+IF <var> GREATER_THAN <var>
+Add if condition of form if( <var> > <var> )
+if( <var> > <var> )
+cur_tab=cur_tab+tab
+
+IF <var> LESS_THAN <var>
+Add if condition of form if( <var> > <var> )
+if( <var> > <var> )
+cur_tab=cur_tab+tab
+
+ENDIF
+End of if statement
+cur_tab=cur_tab-tab
+
+APPEND <var_list> <value>
+Append value to the list
+var_list.append(value)
+
+REMOVE <var_list> <value>
+Removes first occurrence of value from the list
+var_list.remove(value)
+
+
+POP <var_list> <index>
+Removes element at given index from the list
+var_list.pop(index)
+
+DICT_APPEND <dict_name> <key> <value>
+Adds a key-value pair to a dictionary.
+dict_name[key] = value
+
+DICT_REMOVE <dict_name> <key>
+Removes the key-value pair from the dictionary.
+del dict_name[key]
+
+INPUT <var_name>
+To take the variable var_name as input from the user.
+Can only be used for guidelines in the library.
+
+INDEX <var_name> index
+Used to access values in a list or dictionary.
+In the case of lists, index must be an integer.
+In the case of dictionaries, index must be a valid key in the dictionary.
+The value is stored to a variable names var_name_index.
+var_name_index = var_name[index]
+
+FOR <var_name> IN <var_name>
+For loop through a list or dictionary.
+In case of a list, var_name takes the values of the list elements.
+In case of a dictionary, var_name takes the values of the dictionary’s keys.
+for var_name in var_name
