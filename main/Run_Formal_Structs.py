@@ -19,7 +19,7 @@ if 'Linux' in os_name:
 parser_creator = "Make_Parser.py"
 parser="C_Parser_new.py"
 err_msgs_file = "Violations.txt"
-formal_struct_dir = "fs"
+formal_struct_dir = "formal_structures"
 #NOTE: Space not allowed in 'INPUT:<var_name>'
 lib_rules = { 
 'Check for global variables' : 'global_fs.txt', 
