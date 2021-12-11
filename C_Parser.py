@@ -156,12 +156,15 @@ def p_unary_expression(p):
         #line can also be got as p.lineno(1). Will be the same.
         #p[0]['name'] = p[2]['exp']
         p[0]['exp'] = [ p[1] ] + p[2]['exp']
-        if('name' in p[2]):
+        if(p[1] == 'sizeof'):
+             p[0]['name'] = 'sizeof'
+        elif('name' in p[2]):
             p[0]['name'] = p[2]['name']
     elif(len(p) == 5):
         p[0] = {}
         p[0]['line'] = p[3]['line']
         p[0]['exp'] = [ p[1] ] + [ p[2] ] + p[3]['exp'] + [ p[4] ]
+        p[0]['name'] = "sizeof"
     else:
         print("ERROR in p_unary_expression")
     #print("p_unary_expression:", p[0])    
