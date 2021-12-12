@@ -223,12 +223,12 @@ transition: all 0.3s ease-in;
 <script>
 function contents() {
     var file_contents = {{content|safe}};
-    console.log(file_contents);
+    //console.log(file_contents);
     fnames = []
     for (f in file_contents){
         fnames.push(f);
     }
-    console.log(fnames);
+    //console.log(fnames);
     create_file_buttons(fnames);
 }
 function create_file_buttons(f_list){
@@ -267,9 +267,9 @@ function get_file_contents(fname){
         }
       }
     }
-    console.log(a);
-    console.log(g_1);
-    console.log(v_1);
+    //console.log(a);
+    //console.log(g_1);
+    //console.log(v_1);
     var done = false;
     while (!done) 
     {
@@ -291,9 +291,9 @@ function get_file_contents(fname){
         }
       }
     }
-    console.log(a);
-    console.log(g_1);
-    console.log(v_1);
+    //console.log(a);
+    //console.log(g_1);
+    //console.log(v_1);
     var i=0,text="",j=0,guidelines="";
     for(i=0;i<(f_contents.length);i++)
     {
@@ -306,7 +306,8 @@ function get_file_contents(fname){
       while(i+1 == a[j])
       {
         //if(g_1[j]!=g_1[j-1])
-        text=text+g_1[j]+"<br>";
+        if(g_1[j]!=g_1[j+1] || a[j]!=a[j+1])
+          text=text+g_1[j]+"<br>";
         //if(g_1[j]==g_1[j+1] && a[j]==a[j+1]);
         if(v_1[j]==v_1[j+1] && a[j]==a[j+1])
         {

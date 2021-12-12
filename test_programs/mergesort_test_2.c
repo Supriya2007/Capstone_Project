@@ -4,7 +4,7 @@
 
 //#define SIZE 100
 
-void mergeSortedHalfs(int *a, int start, int mid, int end){ //love you, mergesort
+void mergeSortedHalfs(int *a, int start, int mid, int end){ 
 	int i, j, k, size=end-start+1;
 	int *a_copy=(int *) malloc(sizeof(int)*(end+1));
 	//allocating (end+1) elements. So, that array values can be stored in same indices in copy as in a. 
