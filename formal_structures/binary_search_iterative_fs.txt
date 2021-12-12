@@ -101,6 +101,8 @@ STATE function_end
     USE_GLOBAL no_of_if_else
     USE_GLOBAL assign_inside_while
     USE_GLOBAL count_mid
+    USE_GLOBAL if_else
+    USE_GLOBAL for_while_block
     SET function_line_number LINE
     IF no_of_if_else GREATER_THAN 3
         IF found_while_for EQUALTO False
