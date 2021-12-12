@@ -307,4 +307,13 @@ STATE function_call
     END_IF
 END_STATE
 
+STATE after_parse
+    IF self_referential_struct_name IS_FALSE
+        PRINT 1
+        VIOLATION Linked list is not used, self-referential structure not found.
+    END_IF
+END_STATE
+
+
+
 
