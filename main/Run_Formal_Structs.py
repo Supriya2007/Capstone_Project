@@ -64,6 +64,7 @@ lib_rules = {
 'Check if graph is used' : 'graph_fs.txt',
 'Check if recursive dfs has been used' : 'dfs_recursive_fs.txt',
 'Check if queue is used': 'queue_fs.txt',
+'Check if bfs has been used' : 'bfs_fs.txt'
 }
 
 #Even code files without errors inserted into violations. Will have an empty list as value
