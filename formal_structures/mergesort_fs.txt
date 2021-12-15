@@ -62,10 +62,10 @@ STATE translation_unit
         IF merge_found EQUALTO False
             PRINT LINE
             IF assign_in_if_in_loop EQUALTO False
-                VIOLATION Expected a loop containing an if-else statement with assignments in both clauses
+                VIOLATION Merge sort not used
             ELSE
                 IF loop_count_after_compares NOTEQUALTO 2
-                    VIOLATION Expected two loops after the merging loop
+                    VIOLATION Merge sort not used
                 END_IF
             END_IF
         END_IF
