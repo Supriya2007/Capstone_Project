@@ -1162,6 +1162,7 @@ def p_statement(p):
     | selection_statement
     | iteration_statement
     | jump_statement
+    | declaration_list
     '''
     p[0] = p[1]
     EXP = p[0]['exp']
