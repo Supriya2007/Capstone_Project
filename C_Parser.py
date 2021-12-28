@@ -1162,7 +1162,7 @@ def p_statement(p):
     | selection_statement
     | iteration_statement
     | jump_statement
-    | declaration_list
+    | declaration
     '''
     p[0] = p[1]
     EXP = p[0]['exp']
@@ -1190,8 +1190,6 @@ def p_compound_statement(p):
     '''
     compound_statement : compound_statement_begin R_BRACE
     | compound_statement_begin statement_list R_BRACE
-    | compound_statement_begin declaration_list R_BRACE
-    | compound_statement_begin declaration_list statement_list R_BRACE
     '''
     p[0] = {}
     p[0]['line'] = p[1]['line']
