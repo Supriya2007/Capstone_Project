@@ -16,6 +16,7 @@ tokens = (
     'MUL_ASSIGN', 'DIV_ASSIGN', 'MOD_ASSIGN', 'ADD_ASSIGN', 'SUB_ASSIGN',
     'LEFT_ASSIGN', 'RIGHT_ASSIGN', 'AND_ASSIGN',
     'XOR_ASSIGN', 'OR_ASSIGN', 'ELLIPSIS', 'AUTO', 'REGISTER', 'GOTO',
+    'USER_DEFINED_TYPE',
 )
 
 reserved = {
@@ -55,6 +56,8 @@ reserved = {
     "register" : "REGISTER",
     "goto" : "GOTO",
 }
+
+user_defined_types = []
 
 D = r'[0-9]'
 L = r'[a-zA-Z_]'
@@ -136,7 +139,10 @@ def t_CHARACTER(t):
 
 @lex.TOKEN(identifier)
 def t_IDENTIFIER(t):
-     t.type = reserved.get(t.value,'IDENTIFIER')    # Check for reserved words
+     if (t.value in user_defined_types):
+        t.type = 'USER_DEFINED_TYPE'
+     else:
+        t.type = reserved.get(t.value,'IDENTIFIER')    # Check for reserved words
      #print(t)
      return t
      

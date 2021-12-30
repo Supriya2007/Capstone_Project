@@ -1,5 +1,6 @@
 import ply.yacc as yacc
 from C_Lex import tokens
+from C_Lex import user_defined_types
 import copy
 import re
 
@@ -522,6 +523,8 @@ def p_declaration(p):
         NAME = p[0]['name']
     EXP = p[0]['exp']
     TYPE = p[1]['exp'] #not part of p[0]
+    if ('typedef' in EXP):
+        user_defined_types.append(NAME[0]) #NAME will be a list containing the user defined type name
     #ADD
 
 def p_declaration_specifiers(p):
@@ -634,6 +637,7 @@ def p_type(p):
     | DOUBLE
     | SIGNED
     | UNSIGNED
+    | USER_DEFINED_TYPE
     '''
     p[0] = {}
     p[0]['line'] = p.lineno(1)
