@@ -1303,7 +1303,8 @@ def p_iteration_header(p):
     '''
     iteration_header : WHILE L_PAREN expression R_PAREN 
     | FOR L_PAREN expression_statement expression_statement R_PAREN 
-    | FOR L_PAREN expression_statement expression_statement expression R_PAREN 
+    | FOR L_PAREN expression_statement expression_statement expression R_PAREN
+    | FOR L_PAREN declaration expression_statement expression R_PAREN 
     '''
     LINE = p.lineno(1)
     p[0] = {}
