@@ -124,6 +124,11 @@ t_GREATER = r'>'
 t_PIPE = r'\|'
 t_QUEST = r'\?'
 
+def t_HEADER(t):
+    r'\#include[ ]*(<|\").*(>|\")'
+    #print("Header file")
+    pass
+
 def t_CHARACTER(t):
     ''' \'[^\']\' '''
     t.value = t.value[1:-1]
